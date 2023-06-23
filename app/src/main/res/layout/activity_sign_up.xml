@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.SignUp"
+    android:padding="50dp">
+
+    <TextView
+        android:id="@+id/signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_an_account"
+        android:textColor="@color/blue1"
+        android:textSize="40sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/firstName"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/firstName"
+        android:hint="@string/first_name"
+        app:layout_constraintTop_toBottomOf="@id/signup"
+        app:layout_constraintBottom_toTopOf="@id/lastName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/blue1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_firstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lastName"
+        android:hint="@string/last_name"
+        app:layout_constraintTop_toBottomOf="@id/firstName"
+        app:layout_constraintBottom_toTopOf="@id/email"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/blue1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_lastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email"
+        android:hint="@string/email"
+        app:layout_constraintTop_toBottomOf="@id/lastName"
+        app:layout_constraintBottom_toTopOf="@id/phoneNumber"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/blue1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/phoneNumber"
+        android:hint="@string/phone_number"
+        app:layout_constraintTop_toBottomOf="@id/email"
+        app:layout_constraintBottom_toTopOf="@id/password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/blue1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_phoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password"
+        android:hint="@string/sign_up_password"
+        app:layout_constraintTop_toBottomOf="@id/phoneNumber"
+        app:layout_constraintBottom_toTopOf="@id/repeat_password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/blue1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/repeat_password"
+        android:hint="@string/repeat_password"
+        app:layout_constraintTop_toBottomOf="@id/password"
+        app:layout_constraintBottom_toTopOf="@id/btn_signUp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:endIconMode="password_toggle"
+        app:endIconTint="@color/blue1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_repeatPass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_signUp"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:cornerRadius="10dp"
+        android:textSize="20sp"
+        android:text="@string/sign_up"
+        app:layout_constraintTop_toBottomOf="@id/repeat_password"
+        app:layout_constraintBottom_toTopOf="@id/btn_signIn"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_signIn"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:cornerRadius="10dp"
+        android:textSize="20sp"
+        android:text="@string/sign_in_instead"
+        app:layout_constraintTop_toBottomOf="@id/btn_signUp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
