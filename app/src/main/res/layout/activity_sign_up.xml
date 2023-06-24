@@ -117,7 +117,7 @@
         android:id="@+id/repeat_password"
         android:hint="@string/repeat_password"
         app:layout_constraintTop_toBottomOf="@id/password"
-        app:layout_constraintBottom_toTopOf="@id/btn_signUp"
+        app:layout_constraintBottom_toTopOf="@id/btn_voice_next"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -133,12 +133,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_signUp"
+        android:id="@+id/btn_voice_next"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         app:cornerRadius="10dp"
         android:textSize="20sp"
-        android:text="@string/sign_up"
+        android:text="@string/sign_up_next"
         app:layout_constraintTop_toBottomOf="@id/repeat_password"
         app:layout_constraintBottom_toTopOf="@id/btn_signIn"/>
 
@@ -149,6 +149,6 @@
         app:cornerRadius="10dp"
         android:textSize="20sp"
         android:text="@string/sign_in_instead"
-        app:layout_constraintTop_toBottomOf="@id/btn_signUp"
+        app:layout_constraintTop_toBottomOf="@id/btn_voice_next"
         app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

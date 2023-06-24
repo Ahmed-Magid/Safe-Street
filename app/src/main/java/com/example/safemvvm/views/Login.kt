@@ -1,6 +1,5 @@
 package com.example.safemvvm.views
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,12 +13,8 @@ import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.LoginViewModel
 import com.example.safemvvm.viewmodels.LoginViewModelFactory
-import com.example.safemvvm.viewmodels.RegistrationViewModel
-import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
-import java.lang.Exception
-import kotlin.reflect.KClass
 
 class Login : AppCompatActivity() {
     private lateinit var viewModel: LoginViewModel
@@ -71,7 +66,7 @@ class Login : AppCompatActivity() {
 
 
         }
-        val buttonSignUp = findViewById<Button>(R.id.btn_signUp)
+        val buttonSignUp = findViewById<Button>(R.id.btn_voice_next)
         buttonSignUp.setOnClickListener {
             val intent = Intent(this, SignUp::class.java)
             startActivity(intent)

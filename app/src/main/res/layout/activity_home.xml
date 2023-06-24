@@ -54,6 +54,6 @@
         android:backgroundTint="@color/green1"
         />
 
-
+<!--    TODO PROFILE, FIRE EMERGENCY , LOGOUT, view reports-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

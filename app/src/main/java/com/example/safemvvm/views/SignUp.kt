@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
 import com.example.safemvvm.models.User
@@ -22,7 +20,7 @@ class SignUp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        val buttonSignUp = findViewById<Button>(R.id.btn_signUp)
+        val buttonSignUp = findViewById<Button>(R.id.btn_voice_next)
 
         val repository = Repository()
         val viewModelFactory = RegistrationViewModelFactory(repository)
@@ -35,7 +33,7 @@ class SignUp : AppCompatActivity() {
                 if(responseMessage == "Created Successfully"){
                     Toast.makeText(this, "account created successfully", Toast.LENGTH_SHORT).show()
                     Log.d("Arwa success reg", responseMessage)
-                    Intent(this,Login::class.java).also { startActivity(it) }
+                    Intent(this,VoiceSampleActivity::class.java).also { startActivity(it) }
                 }else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     Log.d(
@@ -64,16 +62,9 @@ class SignUp : AppCompatActivity() {
             val phoneNumber = findViewById<TextInputEditText>(R.id.et_phoneNumber).text.toString()
             val password = findViewById<TextInputEditText>(R.id.et_password).text.toString()
             val repeatedPassword = findViewById<TextInputEditText>(R.id.et_repeatPass).text.toString()
-
             viewModel.register(User(firstname,lastname,password,repeatedPassword,phoneNumber,email))
-
-
-        }
-
-        val buttonSignIn = findViewById<Button>(R.id.btn_signIn)
-        buttonSignIn.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
-            startActivity(intent)
         }
     }
+    //TODO: add toast to tell user to confirm email before login
+    //TODO: ask for voice sample after registration
 }
