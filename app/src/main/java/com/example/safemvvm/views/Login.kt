@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.models.LoginResponse
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.LoginViewModel
@@ -16,6 +17,8 @@ import com.example.safemvvm.viewmodels.LoginViewModelFactory
 import com.example.safemvvm.viewmodels.RegistrationViewModel
 import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
+import java.lang.Exception
 import kotlin.reflect.KClass
 
 class Login : AppCompatActivity() {
@@ -34,7 +37,12 @@ class Login : AppCompatActivity() {
 
                 if(responseMessage == "Executed Successfully") {
                     Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show()
-                    Log.d("Arwa success reg", response.body()!!.data.toString())
+                    val data = Gson().fromJson(response.body()?.data.toString(), LoginResponse::class.java)
+                    val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+                    localDB.edit().apply {
+                        putString("token", data.token)
+                        apply()
+                    }
                     Intent(this,HomeActivity::class.java).also { startActivity(it) }
                 }else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
@@ -58,13 +66,6 @@ class Login : AppCompatActivity() {
         buttonSignIn.setOnClickListener {
             val email = findViewById<TextInputEditText>(R.id.loginEmail).text.toString()
             val password = findViewById<TextInputEditText>(R.id.loginPassword).text.toString()
-
-//            val pref = getSharedPreferences("localDB", Context.MODE_PRIVATE)
-//            val editor = pref.edit()
-//            editor.apply {
-//                putString("token", "This is the user token")
-//                apply()
-//            }
 
             viewModel.login(LoginUser(password, email))
 
