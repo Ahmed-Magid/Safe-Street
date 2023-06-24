@@ -24,9 +24,17 @@
         map:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
         />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        map:layout_constraintBottom_toBottomOf="parent"
+        android:padding="10dp"
+        >
+
         <Button
             android:id="@+id/CurrLocation"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="Location"
             map:layout_constraintBottom_toBottomOf="parent"
@@ -36,7 +44,7 @@
 
         <Button
             android:id="@+id/reset_button"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="Clear"
             android:layout_toEndOf="@+id/CurrLocation"
@@ -49,7 +57,7 @@
 
         <Button
             android:id="@+id/confirm_button"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="OK"
             android:layout_toEndOf="@+id/reset_button"
@@ -64,14 +72,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             map:layout_constraintLeft_toLeftOf="parent"
-            android:background="@color/green1"
+            android:background="@drawable/textview_bg"
             android:text="Time: "
             android:textColor="@color/white"
             map:layout_constraintBottom_toTopOf="@id/walk_button"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_marginLeft="5dp"
+
+            />
         <Button
             android:id="@+id/walk_button"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="walking"
             map:layout_constraintBottom_toTopOf="@id/CurrLocation"
@@ -81,7 +92,7 @@
             />
         <Button
             android:id="@+id/driving_button"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="Driving"
             android:layout_toEndOf="@id/walk_button"
@@ -93,7 +104,7 @@
 
         <Button
             android:id="@+id/mode"
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="D"
             android:layout_toEndOf="@id/driving_button"
@@ -102,4 +113,5 @@
             map:layout_constraintLeft_toRightOf="@id/driving_button"
             android:backgroundTint="@color/green1"
             />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
