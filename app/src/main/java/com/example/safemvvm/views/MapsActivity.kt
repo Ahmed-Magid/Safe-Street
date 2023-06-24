@@ -40,6 +40,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private var source: LatLng? = null
     private var destination: LatLng? = null
+    private var time: Double? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var autocompleteFragment: AutocompleteSupportFragment
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -127,8 +128,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (location != null) {
                     source = LatLng(location.latitude, location.longitude)
                     mMap.addMarker(MarkerOptions().position(source!!))
-
-                    // Move the camera to the user's current location
                     val cameraUpdate = CameraUpdateFactory.newLatLngZoom(source!!, 18f)
                     mMap.animateCamera(cameraUpdate)
                 }
@@ -178,7 +177,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
-                val estimatedTime = findViewById<TextView>(R.id.timeTextView).text.toString()
+                time = findViewById<TextView>(R.id.timeTextView).text.toString().toDouble()
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_SHORT).show()
@@ -232,7 +231,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
 
 
     private fun calculateDistance() {

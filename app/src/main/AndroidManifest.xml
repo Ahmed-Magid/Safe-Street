@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Safemvvm"
         tools:targetApi="33">
         <activity
+            android:name=".views.AddTrustedActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.VoiceSampleActivity"
             android:exported="false" />
         <!--

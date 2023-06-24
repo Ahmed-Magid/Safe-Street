@@ -66,4 +66,13 @@
             map:layout_constraintRight_toRightOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/back"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/baseline_arrow_back_ios_24"
+        map:layout_constraintLeft_toLeftOf="parent"
+        map:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
+        tools:ignore="SpeakableTextPresentCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
