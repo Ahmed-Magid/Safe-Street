@@ -4,6 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
+import com.example.map.MapsActivity
+import com.example.safemvvm.R
 import com.example.safemvvm.R.*
 
 class HomeActivity : AppCompatActivity() {
@@ -23,6 +26,16 @@ class HomeActivity : AppCompatActivity() {
         val buttonAddReport = findViewById<Button>(id.btn_reportLocation)
         buttonAddReport.setOnClickListener {
             val intent = Intent(this, AddReportActivity::class.java)
+            startActivity(intent)
+        }
+        val imageViewLogo = findViewById<ImageView>(id.logo)
+        imageViewLogo.setOnClickListener {
+            val intent = Intent(this, Profile::class.java)
+            startActivity(intent)
+        }
+        val buttonCreatetrip = findViewById<Button>(R.id.btn_createTrip)
+        buttonCreatetrip.setOnClickListener {
+            val intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
     }

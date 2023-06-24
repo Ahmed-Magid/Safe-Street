@@ -75,4 +75,5 @@
         <item>Accident</item>
         <item>Robbery</item>
     </string-array>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.map.MapsActivity">
+
+    <fragment
+        android:id="@+id/autocomplete_fragment"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        map:cameraZoom="14"
+        android:layout_below="@id/autocomplete_fragment"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="50dp">
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="5dp"
+            />
+
+        <Button
+            android:id="@+id/reset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/button"
+            android:layout_marginEnd="5dp"
+            />
+
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@+id/reset_button"
+            android:layout_marginEnd="16dp"
+            />
+
+        <TextView
+            android:id="@+id/distanceTextView"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/button"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_toEndOf="@id/timeTextView"
+            android:background="@android:color/black"
+            android:padding="8dp"
+            android:text="Distance: "
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/timeTextView"
+            android:layout_width="102dp"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/button"
+            android:layout_marginEnd="70dp"
+            android:background="@android:color/black"
+            android:padding="8dp"
+            android:text="Time: "
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp">
+        <Button
+            android:id="@+id/walk_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="walking"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="16dp"
+            />
+        <Button
+            android:id="@+id/driving_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driving"
+            android:layout_toEndOf="@id/walk_button"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="16dp"
+            />
+
+        <Button
+            android:id="@+id/mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="D"
+            android:layout_toEndOf="@id/driving_button"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="16dp"
+            />
+    </RelativeLayout>
+</RelativeLayout>
