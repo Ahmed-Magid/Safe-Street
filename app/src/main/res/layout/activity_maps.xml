@@ -50,7 +50,6 @@
             android:layout_toEndOf="@+id/CurrLocation"
             map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintLeft_toRightOf="@id/CurrLocation"
-            android:layout_marginStart="5dp"
             map:layout_constraintRight_toLeftOf="@id/confirm_button"
             android:backgroundTint="@color/green1"
             />
@@ -77,8 +76,7 @@
             android:textColor="@color/white"
             map:layout_constraintBottom_toTopOf="@id/walk_button"
             android:textSize="20sp"
-            android:layout_marginLeft="5dp"
-
+            android:padding="5dp"
             />
         <Button
             android:id="@+id/walk_button"
@@ -87,7 +85,6 @@
             android:text="walking"
             map:layout_constraintBottom_toTopOf="@id/CurrLocation"
             map:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="5dp"
             android:backgroundTint="@color/green1"
             />
         <Button
