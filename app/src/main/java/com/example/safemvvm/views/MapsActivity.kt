@@ -1,4 +1,4 @@
-package com.example.map
+package com.example.safemvvm.views
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.safemvvm.R
-import com.example.safemvvm.views.HomeActivity
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -37,7 +36,7 @@ import org.json.JSONObject
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private val TAG = "com.example.map.MapsActivity"
+    private val TAG = "com.example.safemvvm.views.MapsActivity"
     private lateinit var mMap: GoogleMap
     private var source: LatLng? = null
     private var destination: LatLng? = null
@@ -107,7 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         //works ok
-        val button = findViewById<Button>(R.id.button)
+        val button = findViewById<Button>(R.id.CurrLocation)
         button.setOnClickListener {
             // Get the user's current location and set it as the source
             if (ActivityCompat.checkSelfPermission(
@@ -140,8 +139,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         resetButton.setOnClickListener {
             mMap.clear()
             destination = null
-            val distanceTextView = findViewById<TextView>(R.id.distanceTextView)
-            distanceTextView.text = "Distance: "
             val timeTextView = findViewById<TextView>(R.id.timeTextView)
             timeTextView.text = "Time: "
             mMap.addMarker(MarkerOptions().position(source!!))
@@ -159,6 +156,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
             }
         }
+
         val driving = findViewById<Button>(R.id.driving_button)
         driving.setOnClickListener {
             mode = "driving"
@@ -180,6 +178,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
+                val estimatedTime = findViewById<TextView>(R.id.timeTextView).text.toString()
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_SHORT).show()
@@ -266,8 +265,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                         runOnUiThread {
                             val distance = legs.getJSONObject(j).getJSONObject("distance").getString("text")
                             val time = legs.getJSONObject(j).getJSONObject("duration").getString("text")
-                            val distanceTextView = findViewById<TextView>(R.id.distanceTextView)
-                            distanceTextView.text = "Distance: $distance"
                             val timeTextView = findViewById<TextView>(R.id.timeTextView)
                             timeTextView.text = "Time: $time"
 

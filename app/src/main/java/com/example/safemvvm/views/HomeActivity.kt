@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
-import com.example.map.MapsActivity
 import com.example.safemvvm.R
 import com.example.safemvvm.R.*
 
