@@ -76,4 +76,5 @@
         <item>Robbery</item>
     </string-array>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_report_location_map">ReportLocationMap</string>
 </resources>

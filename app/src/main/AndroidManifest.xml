@@ -33,6 +33,10 @@
             android:value="AIzaSyBF-bd0QTq7yWmkjyir04aH8OjtICyFw6c" />
 
         <activity
+            android:name=".views.ReportLocationMap"
+            android:exported="false"
+            android:label="@string/title_activity_report_location_map" />
+        <activity
             android:name=".views.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />

@@ -22,11 +22,6 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, ViewTrustedContacts::class.java)
             startActivity(intent)
         }
-        val buttonAddReport = findViewById<Button>(id.btn_reportLocation)
-        buttonAddReport.setOnClickListener {
-            val intent = Intent(this, AddReportActivity::class.java)
-            startActivity(intent)
-        }
         val imageViewLogo = findViewById<ImageView>(id.logo)
         imageViewLogo.setOnClickListener {
             val intent = Intent(this, Profile::class.java)
@@ -35,6 +30,11 @@ class HomeActivity : AppCompatActivity() {
         val buttonCreatetrip = findViewById<Button>(R.id.btn_createTrip)
         buttonCreatetrip.setOnClickListener {
             val intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
+        }
+        val buttonReportActivity = findViewById<Button>(R.id.btn_reportLocation)
+        buttonReportActivity.setOnClickListener {
+            val intent = Intent(this, ReportLocationMap::class.java)
             startActivity(intent)
         }
     }
