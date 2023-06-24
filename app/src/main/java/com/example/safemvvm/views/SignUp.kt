@@ -65,12 +65,6 @@ class SignUp : AppCompatActivity() {
             val password = findViewById<TextInputEditText>(R.id.et_password).text.toString()
             val repeatedPassword = findViewById<TextInputEditText>(R.id.et_repeatPass).text.toString()
 
-//            val pref = getSharedPreferences("localDB", MODE_PRIVATE)
-//            val token = pref.getString("token", "Not retrieved")
-//            if (token != null) {
-//                Log.d("Arwa token", token)
-//            }
-
             viewModel.register(User(firstname,lastname,password,repeatedPassword,phoneNumber,email))
 
 
