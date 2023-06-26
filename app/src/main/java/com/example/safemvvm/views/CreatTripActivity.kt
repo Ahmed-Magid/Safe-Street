@@ -53,7 +53,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.activity_create_trip)
 
         // Initialize the Places SDK
         Places.initialize(applicationContext, "AIzaSyBF-bd0QTq7yWmkjyir04aH8OjtICyFw6c")
