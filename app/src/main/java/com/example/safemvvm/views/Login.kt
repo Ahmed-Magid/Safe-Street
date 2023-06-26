@@ -34,8 +34,13 @@ class Login : AppCompatActivity() {
                     Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show()
                     val data = Gson().fromJson(response.body()?.data.toString(), LoginResponse::class.java)
                     val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+                    Log.d(
+                        "Arwa success to login",
+                        "${data.id}"
+                    )
                     localDB.edit().apply {
                         putString("token", data.token)
+                        putInt("userId",data.id)
                         apply()
                     }
                     Intent(this,HomeActivity::class.java).also { startActivity(it) }

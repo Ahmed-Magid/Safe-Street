@@ -19,13 +19,24 @@
         android:contentDescription="@string/logo" />
 
     <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:cornerRadius="10dp"
+        android:textSize="15sp"
+        android:text="Log Out"
+        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintBottom_toTopOf="@id/btn_createTrip"
+        android:backgroundTint="@color/green1"
+        />
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_createTrip"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         app:cornerRadius="10dp"
         android:textSize="15sp"
         android:text="@string/create_trip"
-        app:layout_constraintTop_toBottomOf="@id/logo"
+        app:layout_constraintTop_toBottomOf="@id/btn_logout"
         app:layout_constraintBottom_toTopOf="@id/btn_viewTrusted"
         android:backgroundTint="@color/green1"
         />

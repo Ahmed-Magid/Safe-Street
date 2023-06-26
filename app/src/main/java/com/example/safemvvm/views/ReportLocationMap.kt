@@ -130,11 +130,11 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback {
             }
 
         }
-        val back = findViewById<Button>(R.id.back)
+        /*val back = findViewById<Button>(R.id.back)
         back.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
-        }
+        }*/
         val resetButton = findViewById<Button>(R.id.reset_button)
         resetButton.setOnClickListener {
             mMap.clear()
