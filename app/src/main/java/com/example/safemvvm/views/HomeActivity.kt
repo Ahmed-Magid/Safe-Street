@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
 import com.example.safemvvm.R.*
+import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.HomeViewModel
 import com.example.safemvvm.viewmodels.HomeViewModelFactory
@@ -46,8 +47,9 @@ class HomeActivity : AppCompatActivity() {
         buttonLogout.setOnClickListener {
             val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
             val token = localDB.getString("token","empty")
+            val userId = localDB.getInt("userId",-1)
             if (token != null) {
-                viewModel.logout("Bearer $token")
+                viewModel.logout("Bearer $token", IdBody(userId))
             }
         }
 

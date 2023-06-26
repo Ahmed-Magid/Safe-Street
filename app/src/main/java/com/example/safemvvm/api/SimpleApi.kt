@@ -22,7 +22,7 @@ interface SimpleApi {
     @POST("customer/checkTokenAvailability")
     suspend fun checkToken(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>
 
-    @GET("auth/logout")
-    suspend fun logout(@Header("Authorization") token: String): Response<Unit>
+    @POST("auth/logout")
+    suspend fun logout(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>
 
 }

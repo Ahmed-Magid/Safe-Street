@@ -20,7 +20,7 @@ class Repository {
         return  RetrofitInstance.api.checkToken(token, idBody)
     }
 
-    suspend fun logout(token:String): Response<Unit>{
-        return  RetrofitInstance.api.logout(token)
+    suspend fun logout(token:String, idBody: IdBody): Response<MainResponse>{
+        return  RetrofitInstance.api.logout(token, idBody)
     }
 }
