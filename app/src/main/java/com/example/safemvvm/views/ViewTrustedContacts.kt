@@ -3,11 +3,15 @@ package com.example.safemvvm.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.safemvvm.R
 import com.example.safemvvm.adapters.AddTrustedAdapter
+import com.example.safemvvm.models.TrustedContact
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import okhttp3.internal.notify
 
 class ViewTrustedContacts : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -19,40 +23,32 @@ class ViewTrustedContacts : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val data = listOf(
-            "Name 1",
-            "Name 2",
-            "Name 3",
-            "Name 4",
-            "Name 5",
-            "Name 6",
-            "Name 7",
-            "Name 8",
-            "Name 9",
-            "Name 10",
-            "Name 11",
-            "Name 12",
-            "Name 13",
-            "Name 14",
-            "Name 15",
-            "Name 16",
-            "Name 17",
-            "Name 18",
-            "Name 19",
-            "Name 20",
-            "Name 21",
-            "Name 22",
-            "Name 23",
-            "Name 24",
-            "Name 25"
+        // contact list will be from API
+        var contactList = mutableListOf(
+            TrustedContact("Arwa Hazem","arwa@gmail.com"),
+            TrustedContact("Yara","yara@gmail.com"),
+            TrustedContact("magid","magid@gmail.com")
         )
-        val adapter = AddTrustedAdapter(data)
+
+        val adapter = AddTrustedAdapter(contactList)
         recyclerView.adapter = adapter
 
         val buttonAddTrusted = findViewById<FloatingActionButton>(R.id.addButton)
         buttonAddTrusted.setOnClickListener {
-            val intent = Intent(this, AddTrustedActivity::class.java)
-            startActivity(intent)
+            val etcontactEmail = findViewById<EditText>(R.id.et_contactEmail)
+            val etcontactName = findViewById<EditText>(R.id.et_contactName)
+
+            val contactEmail = etcontactEmail.text.toString()
+            val contactName = etcontactName.text.toString()
+
+            val trustedContact = TrustedContact(contactName,contactEmail)
+            contactList.add(trustedContact)
+            //modify the recycler view with the new added contact
+            adapter.notifyItemInserted(contactList.size - 1)
+            // clear edit views
+                etcontactEmail.text = null
+                etcontactName.text = null
+
         }
     }
 }

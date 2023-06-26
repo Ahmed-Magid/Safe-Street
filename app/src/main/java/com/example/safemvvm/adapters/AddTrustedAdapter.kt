@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.safemvvm.R
+import com.example.safemvvm.models.TrustedContact
 
-class AddTrustedAdapter (private val data: List<String>) :
+class AddTrustedAdapter(private var contacts: List<TrustedContact>) :
     RecyclerView.Adapter<AddTrustedAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.name)
+        val contactName: TextView = itemView.findViewById(R.id.name)
+        val contactEmail: TextView = itemView.findViewById(R.id.email)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -20,10 +22,11 @@ class AddTrustedAdapter (private val data: List<String>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.textView.text = data[position]
+        holder.contactName.text = contacts[position].name
+        holder.contactEmail.text = contacts[position].email
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return contacts.size
     }
 }

@@ -8,22 +8,41 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/et_contactName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+
+        android:id="@+id/et_contactEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Contact Email"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/et_contactName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Contact Name"
+        app:layout_constraintBottom_toTopOf="@+id/et_contactEmail"
+        app:layout_constraintEnd_toStartOf="@+id/addButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/add"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="add"
         app:backgroundTint="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:contentDescription="add" />
+        app:srcCompat="@drawable/add" />
 </androidx.constraintlayout.widget.ConstraintLayout>
