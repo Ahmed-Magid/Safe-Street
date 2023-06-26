@@ -34,9 +34,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private val TAG = "com.example.safemvvm.views.MapsActivity"
+    private val TAG = "com.example.safemvvm.views.CreateTripActivity"
     private lateinit var mMap: GoogleMap
     private var source: LatLng? = null
     private var destination: LatLng? = null
@@ -100,7 +100,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onError(status: Status) {
                 // Handle the error
                 Log.i(TAG, "An error occurred: $status")
-                Toast.makeText(this@MapsActivity, "Error: ${status.statusMessage}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CreateTripActivity, "Error: ${status.statusMessage}", Toast.LENGTH_SHORT).show()
             }
         })
 

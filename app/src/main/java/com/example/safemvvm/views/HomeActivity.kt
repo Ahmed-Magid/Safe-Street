@@ -14,8 +14,6 @@ import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.HomeViewModel
 import com.example.safemvvm.viewmodels.HomeViewModelFactory
-import com.example.safemvvm.viewmodels.RegistrationViewModel
-import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var viewModel: HomeViewModel
@@ -70,7 +68,7 @@ class HomeActivity : AppCompatActivity() {
         }
         val buttonCreatetrip = findViewById<Button>(R.id.btn_createTrip)
         buttonCreatetrip.setOnClickListener {
-            val intent = Intent(this, MapsActivity::class.java)
+            val intent = Intent(this, CreateTripActivity::class.java)
             startActivity(intent)
         }
         val buttonReportActivity = findViewById<Button>(R.id.btn_reportLocation)

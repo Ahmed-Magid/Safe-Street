@@ -42,7 +42,7 @@
             android:exported="false"
             android:label="@string/title_activity_report_location_map" />
         <activity
-            android:name=".views.MapsActivity"
+            android:name=".views.CreateTripActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
