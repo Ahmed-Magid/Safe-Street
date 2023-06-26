@@ -16,8 +16,6 @@ import com.example.safemvvm.models.Trip
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.CreateTripViewModel
 import com.example.safemvvm.viewmodels.CreateTripViewModelFactory
-import com.example.safemvvm.viewmodels.RegistrationViewModel
-import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices

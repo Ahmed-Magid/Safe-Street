@@ -9,13 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.repository.Repository
-import com.example.safemvvm.viewmodels.LoginViewModel
-import com.example.safemvvm.viewmodels.LoginViewModelFactory
 import com.example.safemvvm.viewmodels.MainViewModel
 import com.example.safemvvm.viewmodels.MainViewModelFactory
 import com.example.safemvvm.views.HomeActivity
 import com.example.safemvvm.views.Login
-import com.example.safemvvm.views.VoiceSampleActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -84,9 +81,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }
-
-            //val intent = Intent(this, Login::class.java)
-            //startActivity(intent)
         }
     }
 }

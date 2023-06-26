@@ -12,6 +12,7 @@ import com.example.safemvvm.models.User
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.RegistrationViewModel
 import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
+import com.example.safemvvm.voicesample.VoiceParagraphs
 import com.google.android.material.textfield.TextInputEditText
 
 class SignUp : AppCompatActivity() {
@@ -33,7 +34,7 @@ class SignUp : AppCompatActivity() {
                 if(responseMessage == "Created Successfully"){
                     Toast.makeText(this, "account created successfully", Toast.LENGTH_SHORT).show()
                     Log.d("Arwa success reg", responseMessage)
-                    Intent(this,VoiceSampleActivity::class.java).also { startActivity(it) }
+                    Intent(this,VoiceParagraphs::class.java).also { startActivity(it) }
                 }else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     Log.d(

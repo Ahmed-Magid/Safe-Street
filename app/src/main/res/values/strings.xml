@@ -77,4 +77,5 @@
     </string-array>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_activity_report_location_map">ReportLocationMap</string>
+    <string name="title_activity_create_trip">CreateTripActivity</string>
 </resources>
