@@ -3,9 +3,11 @@ package com.example.safemvvm.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
-data class Trip(
-    val source: String,
-    val destination: String,
-    @PrimaryKey val id: Int? = null
+data class Trip (
+    val customerId: Int,
+    val estimatedTime: String,
+    val sourceLongitude: Double,
+    val sourceLatitude: Double,
+    val destinationLongitude: Double,
+    val destinationLatitude: Double
 )

@@ -3,6 +3,7 @@ package com.example.safemvvm.api
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
+import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -21,6 +22,9 @@ interface SimpleApi {
 
     @POST("customer/checkTokenAvailability")
     suspend fun checkToken(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>
+
+    @POST("/trip/addTrip")
+    suspend fun addTrip(@Header("Authorization") token: String, @Body trip: Trip): Response<MainResponse>
 
     @POST("auth/logout")
     suspend fun logout(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>

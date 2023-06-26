@@ -10,7 +10,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.models.Trip
+import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.viewmodels.CreateTripViewModel
+import com.example.safemvvm.viewmodels.CreateTripViewModelFactory
+import com.example.safemvvm.viewmodels.RegistrationViewModel
+import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,7 +42,7 @@ import okhttp3.Request
 import org.json.JSONObject
 
 class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
-
+    private lateinit var viewModel: CreateTripViewModel
     private val TAG = "com.example.safemvvm.views.CreateTripActivity"
     private lateinit var mMap: GoogleMap
     private var source: LatLng? = null
@@ -169,6 +176,19 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+        val repository = Repository()
+        val viewModelFactory = CreateTripViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(CreateTripViewModel::class.java)
+
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token", null)
+        val userId = localDB.getInt("userId", -1)
+
+        viewModel.addTripResponse.observe(this) { response ->
+            if (response.isSuccessful && response.body() != null) {
+                // TODO
+            }
+        }
 
         val confirm = findViewById<Button>(R.id.confirm_button)
         confirm.setOnClickListener {
@@ -178,6 +198,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
                 time = findViewById<TextView>(R.id.timeTextView).text.toString().toDouble()
+                viewModel.addTrip("Bearer $token", Trip(userId, time.toString(), source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_SHORT).show()
