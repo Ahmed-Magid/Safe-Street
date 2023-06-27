@@ -1,5 +1,7 @@
 package com.example.safemvvm.models
 
+import java.io.Serializable
+
 data class User(
     var firstname: String,
     var lastname: String,
@@ -7,4 +9,4 @@ data class User(
     var confirmationPassword: String,
     var phoneNumber: String,
     var email: String
-)
+) : Serializable

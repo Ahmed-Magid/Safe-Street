@@ -6,16 +6,24 @@ import android.media.MediaRecorder
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.example.safemvvm.R
+import com.example.safemvvm.models.User
+import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.viewmodels.RegistrationViewModel
+import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
 import com.example.safemvvm.views.HomeActivity
+import com.example.safemvvm.views.Login
 import com.example.voiceparagraphs.Paragraph1
 import com.example.voiceparagraphs.Paragraph2
 import com.example.voiceparagraphs.Paragraph3
@@ -23,6 +31,7 @@ import com.example.voiceparagraphs.Paragraph4
 import java.io.File
 
 class VoiceParagraphs : AppCompatActivity() {
+    private lateinit var viewModel: RegistrationViewModel
     private val fragmentList = listOf(Paragraph1(), Paragraph2(), Paragraph3(), Paragraph4())
     private var isRecording = false
     private lateinit var mediaRecorder: MediaRecorder
@@ -41,6 +50,9 @@ class VoiceParagraphs : AppCompatActivity() {
         val adapter = MyPagerAdapter(supportFragmentManager)
         viewPager.adapter = adapter
 
+        val permission = Manifest.permission.RECORD_AUDIO
+        ActivityCompat.requestPermissions(this, arrayOf(permission), 1001)
+
         val recordButton = findViewById<Button>(R.id.record)
         recordButton.setOnClickListener {
 
@@ -56,6 +68,41 @@ class VoiceParagraphs : AppCompatActivity() {
 
         }
 
+        val user = intent.getSerializableExtra("userInfo") as User
+        val repository = Repository()
+        val viewModelFactory = RegistrationViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(RegistrationViewModel::class.java)
+        //TODO remove tags in logs with names at end of the project
+        viewModel.registerResponse.observe(this) { response ->
+            if (response.isSuccessful && response.body() != null) {
+                val responseMessage = response.body()?.message
+
+                if (responseMessage == "Created Successfully") {
+                    Toast.makeText(
+                        this,
+                        "Please check your email for account activation.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    Log.d("Arwa success reg", responseMessage)
+                    Intent(this, Login::class.java).also { startActivity(it) }
+                } else {
+                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    Log.d(
+                        "Arwa success reach but error in fields",
+                        responseMessage.toString()
+                    )
+
+                }
+            } else {
+                Toast.makeText(
+                    this,
+                    "something went wrong please try again later",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d("Arwa not success", response.errorBody().toString())
+                Log.d("Arwa not success", "${response.code()}")
+            }
+        }
 
         nextButton.setOnClickListener {
             nextButton.isEnabled = false
@@ -64,21 +111,27 @@ class VoiceParagraphs : AppCompatActivity() {
             val currentItem = viewPager.currentItem
             if (currentItem < fragmentList.size - 1) {
                 viewPager.currentItem = currentItem + 1
-            }
-            else if(currentItem == fragmentList.size - 1){
-                val intent = Intent(this, HomeActivity::class.java)
+            } else if (currentItem == fragmentList.size - 1) {
+                viewModel.register(user)
+                val intent = Intent(this, Login::class.java)
                 startActivity(intent)
             }
         }
 
         val progressText = findViewById<TextView>(R.id.progress)
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
                 // Not needed for this task
             }
+
             override fun onPageSelected(position: Int) {
                 progressText.text = "${position + 1}/${fragmentList.size}"
             }
+
             override fun onPageScrollStateChanged(state: Int) {
                 // Not needed for this task
             }
@@ -87,8 +140,6 @@ class VoiceParagraphs : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun startRecording() {
-        val permission = Manifest.permission.RECORD_AUDIO
-        ActivityCompat.requestPermissions(this, arrayOf(permission), 1001)
         mediaRecorder = MediaRecorder(this)
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)

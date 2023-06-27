@@ -196,7 +196,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
                 time = findViewById<TextView>(R.id.timeTextView).text.toString().toDouble()
-                viewModel.addTrip("Bearer $token", Trip(userId, time.toString(), source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
+                viewModel.addTrip("Bearer $token", Trip(userId, time!!.toInt(), source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_SHORT).show()

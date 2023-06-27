@@ -16,43 +16,11 @@ import com.example.safemvvm.voicesample.VoiceParagraphs
 import com.google.android.material.textfield.TextInputEditText
 
 class SignUp : AppCompatActivity() {
-    private lateinit var viewModel: RegistrationViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
         val buttonSignUp = findViewById<Button>(R.id.btn_voice_next)
-
-        val repository = Repository()
-        val viewModelFactory = RegistrationViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(RegistrationViewModel::class.java)
-        //TODO remove tags in logs with names at end of the project
-        viewModel.registerResponse.observe(this) { response ->
-            if (response.isSuccessful && response.body() != null) {
-                val responseMessage = response.body()?.message
-
-                if(responseMessage == "Created Successfully"){
-                    Toast.makeText(this, "account created successfully", Toast.LENGTH_SHORT).show()
-                    Log.d("Arwa success reg", responseMessage)
-                    Intent(this,VoiceParagraphs::class.java).also { startActivity(it) }
-                }else {
-                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
-                    Log.d(
-                        "Arwa success reach but error in fields",
-                        responseMessage.toString()
-                    )
-
-                }
-            } else {
-                Toast.makeText(
-                    this,
-                    "something went wrong please try again later",
-                    Toast.LENGTH_LONG
-                ).show()
-                Log.d("Arwa not success", response.errorBody().toString())
-                Log.d("Arwa not success", "${response.code()}")
-            }
-        }
 
         buttonSignUp.setOnClickListener {
 
@@ -63,7 +31,11 @@ class SignUp : AppCompatActivity() {
             val phoneNumber = findViewById<TextInputEditText>(R.id.et_phoneNumber).text.toString()
             val password = findViewById<TextInputEditText>(R.id.et_password).text.toString()
             val repeatedPassword = findViewById<TextInputEditText>(R.id.et_repeatPass).text.toString()
-            viewModel.register(User(firstname,lastname,password,repeatedPassword,phoneNumber,email))
+            val user = User(firstname,lastname,password,repeatedPassword,phoneNumber,email)
+            Intent(this,VoiceParagraphs::class.java).also {
+                it.putExtra("userInfo", user)
+                startActivity(it)
+            }
         }
     }
     //TODO: add toast to tell user to confirm email before login

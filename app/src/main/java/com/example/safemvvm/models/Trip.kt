@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 data class Trip (
     val customerId: Int,
-    val estimatedTime: String,
+    val estimatedTime: Int,
     val sourceLongitude: Double,
     val sourceLatitude: Double,
     val destinationLongitude: Double,
