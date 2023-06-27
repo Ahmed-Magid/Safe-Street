@@ -1,9 +1,11 @@
 package com.example.safemvvm.api
 
+import com.example.safemvvm.models.AddContactBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
 import com.example.safemvvm.models.Trip
+import com.example.safemvvm.models.TrustedContact
 import com.example.safemvvm.models.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -28,7 +30,7 @@ interface SimpleApi {
 
     @POST("auth/logout")
     suspend fun logout(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>
-//////
+///////////////////////////
     @GET("customer/getNumOfTrusted")
     suspend fun getNumOfTrusted(
         @Header("Authorization") token: String,
@@ -41,4 +43,6 @@ interface SimpleApi {
         @Query("id") id: Int
     ): Response<MainResponse>
 
+    @POST("customer/addTrustedContact")
+    suspend fun addTrustedContact(@Header("Authorization") token: String, @Body addContactBody: AddContactBody): Response<MainResponse>
 }
