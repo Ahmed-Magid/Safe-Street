@@ -61,7 +61,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_create_trip)
 
         // Initialize the Places SDK
-        Places.initialize(applicationContext, "AIzaSyBF-bd0QTq7yWmkjyir04aH8OjtICyFw6c")
+        Places.initialize(applicationContext, "AIzaSyBoWcDz55Ut6dobNhBk6Yby1b1pX6xjGwk")
 
         val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
 
