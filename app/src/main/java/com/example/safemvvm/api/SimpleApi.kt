@@ -20,13 +20,25 @@ interface SimpleApi {
     @POST("auth/authenticate")
     suspend fun login(@Body loginUser: LoginUser): Response<MainResponse>
 
-    @POST("customer/checkTokenAvailability")
-    suspend fun checkToken(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>
+    @GET("customer/checkTokenAvailability")
+    suspend fun checkToken(@Header("Authorization") token: String, @Query("id") id: Int): Response<MainResponse>
 
-    @POST("/trip/addTrip")
+    @POST("trip/addTrip")
     suspend fun addTrip(@Header("Authorization") token: String, @Body trip: Trip): Response<MainResponse>
 
     @POST("auth/logout")
     suspend fun logout(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>
+//////
+    @GET("customer/getNumOfTrusted")
+    suspend fun getNumOfTrusted(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Response<MainResponse>
+
+    @GET("customer/getPersonalInfo")
+    suspend fun getPersonalInfo(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Response<MainResponse>
 
 }

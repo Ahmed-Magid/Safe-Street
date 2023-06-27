@@ -13,9 +13,9 @@ import retrofit2.Response
 class MainViewModel(private val repository: Repository): ViewModel() {
     val tokenCheckResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
 
-    fun checkToken(token:String , idBody: IdBody){
+    fun checkToken(token:String ,id: Int){
         viewModelScope.launch {
-            val response = repository.checkToken(token, idBody)
+            val response = repository.checkToken(token, id)
             tokenCheckResponse.value = response
         }
     }

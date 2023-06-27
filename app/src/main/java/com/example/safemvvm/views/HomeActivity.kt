@@ -14,6 +14,7 @@ import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.HomeViewModel
 import com.example.safemvvm.viewmodels.HomeViewModelFactory
+import com.google.gson.Gson
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var viewModel: HomeViewModel
@@ -21,9 +22,46 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_home)
 
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token","empty")
+        val userId = localDB.getInt("userId",-1)
+
         val repository = Repository()
         val viewModelFactory = HomeViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
+
+        viewModel.getNumOfTrusted("Bearer $token",userId)
+
+        viewModel.numOfContactsResponse.observe(this) { response ->
+            if (response.isSuccessful && response.body() != null) {
+                val responseMessage = response.body()?.message
+
+                if(responseMessage == "Executed Successfully") {
+                    val data = Gson().fromJson(response.body()?.data.toString(), Int::class.java)
+                    Log.d("Arwa success to num of contacts","$data")
+                    if(data > 0) Intent(this,HomeActivity::class.java).also { startActivity(it) }
+                    else {
+                        Toast.makeText(this, "please add trusted contacts", Toast.LENGTH_LONG).show()
+                        Intent(this,ViewTrustedContacts::class.java).also { startActivity(it) }
+                    }
+                }else {
+                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    Log.d(
+                        "Arwa num of contacts auth error",
+                        responseMessage.toString()
+                    )
+
+                }
+            } else {
+                Toast.makeText(
+                    this,
+                    "something went wrong please try again later",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d("Arwa not success noc", response.errorBody().toString())
+                Log.d("Arwa not success noc", "${response.code()}")
+            }
+        }
 
         viewModel.logoutResponse.observe(this) { response ->
             if (response.isSuccessful || response.code()==403 || response.code()==410) {
@@ -43,9 +81,7 @@ class HomeActivity : AppCompatActivity() {
 
         val buttonLogout = findViewById<Button>(id.btn_logout)
         buttonLogout.setOnClickListener {
-            val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
-            val token = localDB.getString("token","empty")
-            val userId = localDB.getInt("userId",-1)
+
             if (token != null) {
                 viewModel.logout("Bearer $token", IdBody(userId))
             }

@@ -12,11 +12,19 @@ import retrofit2.Response
 
 class HomeViewModel(private val repository: Repository): ViewModel() {
     val logoutResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+    val numOfContactsResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+
 
     fun logout(token : String, idBody: IdBody){
         viewModelScope.launch {
             val response = repository.logout(token, idBody)
             logoutResponse.value = response
+        }
+    }
+    fun getNumOfTrusted(token:String , id: Int){
+        viewModelScope.launch {
+            val response = repository.getNumOfTrusted(token, id)
+            numOfContactsResponse.value = response
         }
     }
 }

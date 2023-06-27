@@ -73,9 +73,9 @@ class MainActivity : AppCompatActivity() {
                 Log.d("007","id is not -1")
                 Log.d("007",token.toString())
                 Log.d("007", "$userId")
-                val idBody = IdBody(userId)
+                //val idBody = IdBody(userId)
                 if (token != null) {
-                    viewModel.checkToken("Bearer $token",idBody)
+                    viewModel.checkToken("Bearer $token",userId)
                 }else{
                     val intent = Intent(this, Login::class.java)
                     startActivity(intent)

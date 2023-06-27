@@ -17,8 +17,8 @@ class Repository {
         return  RetrofitInstance.api.login(loginUser)
     }
 
-    suspend fun checkToken(token:String, idBody: IdBody): Response<MainResponse>{
-        return  RetrofitInstance.api.checkToken(token, idBody)
+    suspend fun checkToken(token:String, id: Int): Response<MainResponse>{
+        return  RetrofitInstance.api.checkToken(token, id)
     }
 
     suspend fun addTrip(token: String, trip: Trip): Response<MainResponse> {
@@ -27,5 +27,11 @@ class Repository {
 
     suspend fun logout(token:String, idBody: IdBody): Response<MainResponse>{
         return  RetrofitInstance.api.logout(token, idBody)
+    }
+    suspend fun getNumOfTrusted(token:String, id:Int): Response<MainResponse>{
+        return  RetrofitInstance.api.getNumOfTrusted(token, id)
+    }
+    suspend fun getPersonalInfo(token:String, id:Int): Response<MainResponse>{
+        return  RetrofitInstance.api.getPersonalInfo(token, id)
     }
 }
