@@ -42,7 +42,8 @@ class ViewTrustedContacts : AppCompatActivity() {
         var contactList = mutableListOf(
             TrustedContact("Arwa Hazem","arwa@gmail.com"),
             TrustedContact("Yara","yara@gmail.com"),
-            TrustedContact("magid","magid@gmail.com")
+            TrustedContact("magid","magid@gmail.com"),
+            TrustedContact("Rahma","rahmanaderm@gmail.com")
         )
 
 

@@ -32,7 +32,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBF-bd0QTq7yWmkjyir04aH8OjtICyFw6c" />
+            android:value="AIzaSyBoWcDz55Ut6dobNhBk6Yby1b1pX6xjGwk" />
 
         <activity
             android:name=".views.CreateTripActivity"
