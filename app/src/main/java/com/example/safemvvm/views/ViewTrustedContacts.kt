@@ -74,7 +74,7 @@ class ViewTrustedContacts : AppCompatActivity() {
                 }else{
                     Toast.makeText(
                         this,
-                        "something went wrong please try again later",
+                        "something went wrong please try again laterr",
                         Toast.LENGTH_LONG
                     ).show()
                     Log.d("Trusted004", response.errorBody().toString())
