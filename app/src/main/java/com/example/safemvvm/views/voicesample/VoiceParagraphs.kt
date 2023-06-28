@@ -1,4 +1,4 @@
-package com.example.safemvvm.voicesample
+package com.example.safemvvm.views.voicesample
 
 import android.Manifest
 import android.content.Intent
@@ -22,12 +22,7 @@ import com.example.safemvvm.models.User
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.RegistrationViewModel
 import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
-import com.example.safemvvm.views.HomeActivity
 import com.example.safemvvm.views.Login
-import com.example.voiceparagraphs.Paragraph1
-import com.example.voiceparagraphs.Paragraph2
-import com.example.voiceparagraphs.Paragraph3
-import com.example.voiceparagraphs.Paragraph4
 import java.io.File
 
 class VoiceParagraphs : AppCompatActivity() {

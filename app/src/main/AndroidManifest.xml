@@ -42,7 +42,7 @@
             android:name=".views.AddTrustedActivity"
             android:exported="false" />
         <activity
-            android:name=".voicesample.VoiceParagraphs"
+            android:name=".views.voicesample.VoiceParagraphs"
             android:exported="false">
         </activity>
         <activity

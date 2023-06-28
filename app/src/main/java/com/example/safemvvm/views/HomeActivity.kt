@@ -39,8 +39,7 @@ class HomeActivity : AppCompatActivity() {
                 if(responseMessage == "Executed Successfully") {
                     val data = Gson().fromJson(response.body()?.data.toString(), Int::class.java)
                     Log.d("Arwa success to num of contacts","$data")
-                    if(data > 0) Intent(this,HomeActivity::class.java).also { startActivity(it) }
-                    else {
+                    if(data == 0) {
                         Toast.makeText(this, "please add trusted contacts", Toast.LENGTH_LONG).show()
                         Intent(this,ViewTrustedContacts::class.java).also { startActivity(it) }
                     }

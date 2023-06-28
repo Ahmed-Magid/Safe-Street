@@ -1,4 +1,4 @@
-package com.example.voiceparagraphs
+package com.example.safemvvm.views.voicesample
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

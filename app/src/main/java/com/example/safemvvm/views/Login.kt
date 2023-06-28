@@ -76,6 +76,7 @@ class Login : AppCompatActivity() {
         val buttonSignUp = findViewById<Button>(R.id.btn_voice_next)
         buttonSignUp.setOnClickListener {
             val intent = Intent(this, SignUp::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
         }
     }
