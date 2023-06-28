@@ -61,7 +61,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_create_trip)
 
         // Initialize the Places SDK
-        Places.initialize(applicationContext, "AIzaSyBoWcDz55Ut6dobNhBk6Yby1b1pX6xjGwk")
+        Places.initialize(applicationContext, "AIzaSyBCJXuU6WB-ARQgtiDBl7KRhZsSrvwdYvk")
 
         val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
 
@@ -255,7 +255,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun calculateDistance() {
         // Define the API endpoint and API key
         val endpoint = "https://maps.googleapis.com/maps/api/directions/json"
-        val apiKey = "AIzaSyBF-bd0QTq7yWmkjyir04aH8OjtICyFw6c"
+        val apiKey = "AIzaSyBCJXuU6WB-ARQgtiDBl7KRhZsSrvwdYvk"
 
         // Build the Directions API request URL
         val url = "$endpoint?origin=${source!!.latitude},${source!!.longitude}&destination=${destination!!.latitude},${destination!!.longitude}&mode=$mode&departure_time=$departureTime&traffic_model=$trafficModel&key=$apiKey"
