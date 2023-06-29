@@ -4,6 +4,7 @@ import com.example.safemvvm.models.AddContactBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
+import com.example.safemvvm.models.Report
 import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.TrustedContact
 import com.example.safemvvm.models.User
@@ -45,4 +46,7 @@ interface SimpleApi {
 
     @POST("customer/addTrustedContact")
     suspend fun addTrustedContact(@Header("Authorization") token: String, @Body addContactBody: AddContactBody): Response<MainResponse>
+
+    @POST("report/addReport")
+    suspend fun addReport(@Header("Authorization") token: String, @Body report: Report): Response<MainResponse>
 }

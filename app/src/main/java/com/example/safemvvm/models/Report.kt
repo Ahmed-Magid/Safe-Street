@@ -1,13 +1,13 @@
 package com.example.safemvvm.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity
+
+
 data class Report(
-    val location: String,
+    val customerId: Int,
     val reportText: String,
-    val reportType: String,
-    @PrimaryKey val id: Int? = null
+    val category: String,
+    val longitude: String,
+    val latitude: String,
 )
 

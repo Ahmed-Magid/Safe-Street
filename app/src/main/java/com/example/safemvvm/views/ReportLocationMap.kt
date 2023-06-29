@@ -123,6 +123,7 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback {
                 mMap.clear()
                 mMap.addMarker(MarkerOptions().position(reportLocation!!).title("Reported Location"))
                 val intent = Intent(this, AddReportActivity::class.java)
+                intent.putExtra("location", reportLocation)
                 startActivity(intent)
             }
             else{

@@ -5,6 +5,7 @@ import com.example.safemvvm.models.AddContactBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
+import com.example.safemvvm.models.Report
 import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.User
 import retrofit2.Response
@@ -38,6 +39,10 @@ class Repository {
 
     suspend fun addTrustedContact(token:String, addContactBody: AddContactBody): Response<MainResponse>{
         return  RetrofitInstance.api.addTrustedContact(token, addContactBody)
+    }
+
+    suspend fun addReport(token:String, report: Report): Response<MainResponse> {
+        return  RetrofitInstance.api.addReport(token, report)
     }
 
 }

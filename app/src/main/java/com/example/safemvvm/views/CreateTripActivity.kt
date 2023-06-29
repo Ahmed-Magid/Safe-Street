@@ -46,6 +46,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
     private var source: LatLng? = null
     private var destination: LatLng? = null
     private var time: Double? = null
+    private var timeInSeconds = 0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var autocompleteFragment: AutocompleteSupportFragment
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -145,6 +146,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             destination = null
             val timeTextView = findViewById<TextView>(R.id.timeTextView)
             timeTextView.text = "Time: "
+            timeInSeconds = 0
             mMap.addMarker(MarkerOptions().position(source!!))
         }
 
@@ -196,7 +198,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
                 time = findViewById<TextView>(R.id.timeTextView).text.toString().toDouble()
-                viewModel.addTrip("Bearer $token", Trip(userId, time!!.toInt(), source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
+                viewModel.addTrip("Bearer $token", Trip(userId, timeInSeconds / 60, source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_SHORT).show()
@@ -282,6 +284,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                         runOnUiThread {
                             val distance = legs.getJSONObject(j).getJSONObject("distance").getString("text")
                             val time = legs.getJSONObject(j).getJSONObject("duration").getString("text")
+                            timeInSeconds = legs.getJSONObject(j).getJSONObject("duration").getInt("value")
                             val timeTextView = findViewById<TextView>(R.id.timeTextView)
                             timeTextView.text = "Time: $time"
 
