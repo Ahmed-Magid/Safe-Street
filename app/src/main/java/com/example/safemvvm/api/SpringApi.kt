@@ -48,4 +48,10 @@ interface SpringApi {
 
     @POST("report/addReport")
     suspend fun addReport(@Header("Authorization") token: String, @Body report: Report): Response<MainResponse>
+    //////////////////////////////
+    @GET("customer/getAllTrusted")
+    suspend fun getAllTrusted(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Response<MainResponse>
 }

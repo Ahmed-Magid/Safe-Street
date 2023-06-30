@@ -55,4 +55,7 @@ class Repository {
         return RetrofitInstanceFlask.api.predict(record, userId)
     }
 
+    suspend fun getAllTrusted(token:String, id:Int): Response<MainResponse>{
+        return  RetrofitInstanceSpring.api.getAllTrusted(token, id)
+    }
 }

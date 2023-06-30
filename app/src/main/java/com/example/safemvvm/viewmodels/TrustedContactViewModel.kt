@@ -12,11 +12,18 @@ import retrofit2.Response
 
 class TrustedContactViewModel (private val repository: Repository): ViewModel() {
     val addContactResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+    val getContactsResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
 
     fun addTrustedContact(token: String , addContactBody: AddContactBody){
         viewModelScope.launch {
             val response = repository.addTrustedContact(token, addContactBody)
             addContactResponse.value = response
+        }
+    }
+    fun getAllTrusted(token: String , id : Int){
+        viewModelScope.launch {
+            val response = repository.getAllTrusted(token, id)
+            getContactsResponse.value = response
         }
     }
 

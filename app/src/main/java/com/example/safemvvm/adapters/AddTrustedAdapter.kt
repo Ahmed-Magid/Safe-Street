@@ -22,7 +22,7 @@ class AddTrustedAdapter(private var contacts: List<TrustedContact>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.contactName.text = contacts[position].name
+        holder.contactName.text = contacts[position].firstName +" " + contacts[position].lastName
         holder.contactEmail.text = contacts[position].email
     }
 

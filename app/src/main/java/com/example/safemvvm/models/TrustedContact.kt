@@ -4,7 +4,8 @@ import androidx.room.PrimaryKey
 
 
 data class TrustedContact(
-    val name: String,
+    val firstName: String,
+    val lastName: String,
     val email: String
     //val id: Int? = null
 )
