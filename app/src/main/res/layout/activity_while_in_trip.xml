@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.WhileInTrip"
+    android:padding="50dp"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="25sp"
+            android:gravity="center"
+            android:text="@string/this_is_the_timer"
+            android:id="@+id/timer"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
+            android:id="@+id/IArrived"
+            android:layout_height="65dp"
+            app:cornerRadius="10dp"
+            android:textSize="15sp"
+            android:text="@string/i_arrived"
+            app:layout_constraintTop_toBottomOf="@id/timer"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ExtendTimer"
+            android:backgroundTint="@color/light_green1"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ExtendTimer"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            app:cornerRadius="10dp"
+            android:textSize="15sp"
+            android:text="@string/extend_timer"
+            android:backgroundTint="@color/light_green1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/IArrived"
+            app:layout_constraintBottom_toTopOf="@id/FireEmergency"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/FireEmergency"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            app:cornerRadius="10dp"
+            android:textSize="15sp"
+            android:text="@string/fire_emergency"
+            app:layout_constraintTop_toBottomOf="@id/ExtendTimer"
+            app:layout_constraintBottom_toTopOf="@id/btn_cancel"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:backgroundTint="@color/light_green1"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            app:cornerRadius="10dp"
+            android:textSize="15sp"
+            android:text="@string/cancel"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/FireEmergency"
+            android:backgroundTint="#BC0000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

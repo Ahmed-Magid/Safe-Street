@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/sign_in_to_your_account"
-        android:textColor="@color/blue1"
+        android:textColor="@color/light_blue1"
         android:textSize="40sp"
         app:layout_constraintBottom_toTopOf="@id/email"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,7 +26,7 @@
         android:layout_marginBottom="12dp"
         android:hint="@string/email"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/blue1"
+        app:endIconTint="@color/light_blue1"
         app:layout_constraintBottom_toTopOf="@id/password"
         app:layout_constraintTop_toBottomOf="@id/signIn">
 
@@ -46,7 +46,7 @@
         android:layout_marginBottom="12dp"
         android:hint="@string/password"
         app:endIconMode="password_toggle"
-        app:endIconTint="@color/blue1"
+        app:endIconTint="@color/light_blue1"
         app:layout_constraintBottom_toTopOf="@id/btn_signIn"
         app:layout_constraintTop_toBottomOf="@id/email">
 

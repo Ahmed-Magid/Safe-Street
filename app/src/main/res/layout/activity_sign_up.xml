@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/create_an_account"
-        android:textColor="@color/blue1"
+        android:textColor="@color/light_blue1"
         android:textSize="40sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/firstName"/>
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/blue1">
+        app:endIconTint="@color/light_blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_firstname"
@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/blue1">
+        app:endIconTint="@color/light_blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_lastname"
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/blue1">
+        app:endIconTint="@color/light_blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_email"
@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/blue1">
+        app:endIconTint="@color/light_blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_phoneNumber"
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="password_toggle"
-        app:endIconTint="@color/blue1">
+        app:endIconTint="@color/light_blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_password"
@@ -123,7 +123,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="password_toggle"
-        app:endIconTint="@color/blue1">
+        app:endIconTint="@color/light_blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_repeatPass"

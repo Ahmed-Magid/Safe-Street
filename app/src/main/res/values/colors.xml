@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="green1">#076107</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="blue2">#81ABBC</color>
-    <color name="blue1">#104079</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="green2">#076107</color>
+    <color name="light_green1">#076107</color>
+    <color name="light_black">#FF000000</color>
+    <color name="light_blue2">#81ABBC</color>
+    <color name="light_blue1">#104079</color>
+    <color name="light_teal_700">#FF018786</color>
+    <color name="light_green2">#5CD85A</color>
+    <color name="light_grey1">#B1BBC4</color>
+    <color name="light_white">#CED3CD</color>
+    <color name="light_red">#F80202</color>
+    <color name="dark_green1">#076107</color>
+    <color name="dark_black">#FF000000</color>
+    <color name="dark_blue2">#81ABBC</color>
+    <color name="dark_blue1">#104079</color>
+    <color name="dark_teal_700">#FF018786</color>
+    <color name="dark_green2">#5CD85A</color>
+    <color name="dark_grey1">#B1BBC4</color>
+    <color name="dark_white">#CED3CD</color>
+    <color name="dark_red">#F80202</color>
 </resources>

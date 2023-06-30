@@ -186,7 +186,11 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel.addTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
-                // TODO
+                // TODO: Handle successful response
+                Log.d("CreateTripActivity", "onCreate: ${response.body()}")
+
+            } else {
+                Log.d("CreateTripActivity", "onCreate: ${response.errorBody()}")
             }
         }
 
@@ -197,11 +201,13 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
-                time = findViewById<TextView>(R.id.timeTextView).text.toString().toDouble()
                 viewModel.addTrip("Bearer $token", Trip(userId, timeInSeconds / 60, source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
                 Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_SHORT).show()
+                //pass time in seconds to WhileInTripActivity
+                val intent = Intent(this, WhileInTrip::class.java)
+                intent.putExtra("time", timeInSeconds)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
             else{
                 Toast.makeText(this, "Please select a destination", Toast.LENGTH_SHORT).show()
@@ -287,6 +293,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                             timeInSeconds = legs.getJSONObject(j).getJSONObject("duration").getInt("value")
                             val timeTextView = findViewById<TextView>(R.id.timeTextView)
                             timeTextView.text = "Time: $time"
+                            Log.d("CreateTripActivity", "calculateTime: $timeInSeconds")
 
                             // Draw a polyline that resembles the route between the source and destination
 

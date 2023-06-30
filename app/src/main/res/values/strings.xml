@@ -78,4 +78,16 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_activity_report_location_map">ReportLocationMap</string>
     <string name="title_activity_create_trip">CreateTripActivity</string>
+    <string name="this_is_the_timer">this is the timer</string>
+    <string name="i_arrived">I arrived</string>
+    <string name="extend_timer">Extend Timer</string>
+    <string name="fire_emergency">Fire Emergency</string>
+    <string name="cancel">Cancel</string>
+    <string name="timer_cancelled">Timer cancelled</string>
+    <string name="timer_finished">Timer finished!</string>
+    <string name="timer_stopped">Timer stopped</string>
+    <string name="yes">Yes</string>
+    <string name="time">Time</string>
+    <string name="please_confirm_you_arrived_to_your_destination">Please confirm you arrived to your destination?</string>
+    <string name="danger">Danger</string>
 </resources>

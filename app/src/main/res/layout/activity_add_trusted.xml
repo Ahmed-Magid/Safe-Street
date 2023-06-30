@@ -18,7 +18,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:text="Wrie email of desired trusted contact:"
         android:textSize="20dp"
-        android:textColor="@color/blue1"
+        android:textColor="@color/light_blue1"
         android:textStyle="bold"
         >
 
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
-        app:endIconTint="@color/blue1"
+        app:endIconTint="@color/light_blue1"
         app:layout_constraintTop_toTopOf="@id/text1"
         app:layout_constraintRight_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -50,7 +50,7 @@
         app:cornerRadius="10dp"
         android:textSize="20sp"
         android:text="Add"
-        android:backgroundTint="@color/green1"
+        android:backgroundTint="@color/light_green1"
         app:layout_constraintTop_toBottomOf="@id/email"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="parent"
