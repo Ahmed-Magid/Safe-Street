@@ -23,6 +23,10 @@ import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.RegistrationViewModel
 import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
 import com.example.safemvvm.views.Login
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.File
 
 class VoiceParagraphs : AppCompatActivity() {
@@ -31,8 +35,8 @@ class VoiceParagraphs : AppCompatActivity() {
     private var isRecording = false
     private lateinit var mediaRecorder: MediaRecorder
     private var recordNumber = 1
-    private lateinit var outputFile: String
-    private var recordFilePaths = mutableListOf<String>()
+    private lateinit var outputFile: File
+    private var recordFiles = mutableListOf<File>()
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,13 +106,15 @@ class VoiceParagraphs : AppCompatActivity() {
         nextButton.setOnClickListener {
             nextButton.isEnabled = false
             recordNumber++
-            recordFilePaths.add(outputFile)
+            recordFiles.add(outputFile)
             val currentItem = viewPager.currentItem
             if (currentItem < fragmentList.size - 1) {
                 viewPager.currentItem = currentItem + 1
             } else if (currentItem == fragmentList.size - 1) {
                 viewModel.register(user)
+                recordFiles.forEach { it.delete() }
                 val intent = Intent(this, Login::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             }
         }
@@ -133,15 +139,15 @@ class VoiceParagraphs : AppCompatActivity() {
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
+
     private fun startRecording() {
-        mediaRecorder = MediaRecorder(this)
+        mediaRecorder = MediaRecorder()
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
         val outputDir = getExternalFilesDir(null)
-        outputFile = File.createTempFile("record$recordNumber", ".mp4", outputDir).absolutePath
-        mediaRecorder.setOutputFile(outputFile)
+        outputFile = File.createTempFile("record$recordNumber", ".mp4", outputDir)
+        mediaRecorder.setOutputFile(outputFile.absolutePath)
         mediaRecorder.prepare()
         mediaRecorder.start()
     }

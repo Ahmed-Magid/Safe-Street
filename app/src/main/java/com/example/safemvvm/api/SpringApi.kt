@@ -6,7 +6,6 @@ import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
 import com.example.safemvvm.models.Report
 import com.example.safemvvm.models.Trip
-import com.example.safemvvm.models.TrustedContact
 import com.example.safemvvm.models.User
 import retrofit2.Response
 import retrofit2.http.Body
@@ -15,7 +14,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-interface SimpleApi {
+interface SpringApi {
 
     @POST("auth/register")
     suspend fun register(@Body user: User): Response<MainResponse>

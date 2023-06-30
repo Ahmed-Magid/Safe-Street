@@ -66,6 +66,7 @@ class HomeActivity : AppCompatActivity() {
             if (response.isSuccessful || response.code()==403 || response.code()==410) {
                 Log.d("Home001","${response.code()}")
                 val intent = Intent(this, Login::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             } else {
                 Log.d("Home002","${response.code()}")
