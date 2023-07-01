@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.models.MainResponse
+import com.example.safemvvm.models.Trip
 import com.example.safemvvm.repository.Repository
 import kotlinx.coroutines.launch
 import retrofit2.Response

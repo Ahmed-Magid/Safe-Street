@@ -65,8 +65,8 @@ class Repository {
     }
 
     //end trip
-    suspend fun endTrip(token: String, endTripResponse: EndTripBody): Response<MainResponse>{
-        return RetrofitInstanceSpring.api.endTrip(token, endTripResponse)
+    suspend fun endTrip(token: String, endTripBody: EndTripBody): Response<MainResponse>{
+        return RetrofitInstanceSpring.api.endTrip(token, endTripBody)
     }
 
 }

@@ -1,16 +1,16 @@
 package com.example.safemvvm.views
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.repository.Repository
-import com.example.safemvvm.viewmodels.CreateTripViewModel
-import com.example.safemvvm.viewmodels.CreateTripViewModelFactory
 import com.example.safemvvm.viewmodels.WhileInTripViewModel
 import com.example.safemvvm.viewmodels.WhileInTripViewModelFactory
 import com.google.android.material.button.MaterialButton
@@ -74,16 +74,19 @@ class WhileInTrip : AppCompatActivity() {
         viewModel = ViewModelProvider(this,viewModelFactory).get(WhileInTripViewModel::class.java)
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)
-        val userId = localDB.getInt("userId", -1)
+        val customerId = localDB.getInt("customerId", -1)
+        val id = localDB.getInt("id", -1)
 
         viewModel.endTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
-                Log.d("endTrip", "endTrip: ${response.body()}")
+                Log.d("endTrip", "endTrip: ${response.body()}  success" )
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             } else {
-                Log.d("endTrip", "endTrip: ${response.errorBody()}")
+                Log.d("endTrip", "endTrip: ${response.errorBody()} testing" )
+                //Long Toast
+                Toast.makeText(this, "Error: ${response.errorBody()}", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -95,7 +98,7 @@ class WhileInTrip : AppCompatActivity() {
             cancelButton.isEnabled = false
             extendTimerButton.isEnabled = false
             iArrivedButton.isEnabled = false
-
+            viewModel.endTrip("Bearer $token" , EndTripBody(id, customerId))
         }
 
         // Set click listener for the ExtendTimer button

@@ -88,4 +88,5 @@ interface SpringApi {
         @Header("Authorization") token: String,
         @Body endTripBody: EndTripBody
     ): Response<MainResponse>
+
 }
