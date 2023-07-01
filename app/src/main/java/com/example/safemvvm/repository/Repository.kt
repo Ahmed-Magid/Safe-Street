@@ -3,6 +3,7 @@ package com.example.safemvvm.repository
 import com.example.safemvvm.api.RetrofitInstanceFlask
 import com.example.safemvvm.api.RetrofitInstanceSpring
 import com.example.safemvvm.models.AddContactBody
+import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
@@ -62,4 +63,10 @@ class Repository {
     suspend fun deleteTrustedContact(token: String, id:Int, email:String): Response<MainResponse>{
         return RetrofitInstanceSpring.api.deleteTrustedContact(token, id, email)
     }
+
+    //end trip
+    suspend fun endTrip(token: String, endTripResponse: EndTripBody): Response<MainResponse>{
+        return RetrofitInstanceSpring.api.endTrip(token, endTripResponse)
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.safemvvm.api
 
 import com.example.safemvvm.models.AddContactBody
+import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
@@ -13,6 +14,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Query
 
 interface SpringApi {
@@ -24,14 +26,24 @@ interface SpringApi {
     suspend fun login(@Body loginUser: LoginUser): Response<MainResponse>
 
     @GET("customer/checkTokenAvailability")
-    suspend fun checkToken(@Header("Authorization") token: String, @Query("id") id: Int): Response<MainResponse>
+    suspend fun checkToken(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Response<MainResponse>
 
     @POST("trip/addTrip")
-    suspend fun addTrip(@Header("Authorization") token: String, @Body trip: Trip): Response<MainResponse>
+    suspend fun addTrip(
+        @Header("Authorization") token: String,
+        @Body trip: Trip
+    ): Response<MainResponse>
 
     @POST("auth/logout")
-    suspend fun logout(@Header("Authorization") token: String, @Body idBody: IdBody): Response<MainResponse>
-///////////////////////////
+    suspend fun logout(
+        @Header("Authorization") token: String,
+        @Body idBody: IdBody
+    ): Response<MainResponse>
+
+    ///////////////////////////
     @GET("customer/getNumOfTrusted")
     suspend fun getNumOfTrusted(
         @Header("Authorization") token: String,
@@ -45,10 +57,17 @@ interface SpringApi {
     ): Response<MainResponse>
 
     @POST("customer/addTrustedContact")
-    suspend fun addTrustedContact(@Header("Authorization") token: String, @Body addContactBody: AddContactBody): Response<MainResponse>
+    suspend fun addTrustedContact(
+        @Header("Authorization") token: String,
+        @Body addContactBody: AddContactBody
+    ): Response<MainResponse>
 
     @POST("report/addReport")
-    suspend fun addReport(@Header("Authorization") token: String, @Body report: Report): Response<MainResponse>
+    suspend fun addReport(
+        @Header("Authorization") token: String,
+        @Body report: Report
+    ): Response<MainResponse>
+
     //////////////////////////////
     @GET("customer/getAllTrusted")
     suspend fun getAllTrusted(
@@ -64,5 +83,9 @@ interface SpringApi {
     ): Response<MainResponse>
 
     //////////////////////////////
-
+    @PUT("trip/endTrip")
+    suspend fun endTrip(
+        @Header("Authorization") token: String,
+        @Body endTripBody: EndTripBody
+    ): Response<MainResponse>
 }
