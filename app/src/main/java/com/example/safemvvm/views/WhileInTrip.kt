@@ -74,8 +74,8 @@ class WhileInTrip : AppCompatActivity() {
         viewModel = ViewModelProvider(this,viewModelFactory).get(WhileInTripViewModel::class.java)
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)
-        val customerId = localDB.getInt("customerId", -1)
-        val id = localDB.getInt("id", -1)
+        val customerId = localDB.getInt("userId", -1)
+        val id = localDB.getInt("tripId", -1)
 
         viewModel.endTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {

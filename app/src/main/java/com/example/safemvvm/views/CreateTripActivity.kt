@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.Trip
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.CreateTripViewModel
@@ -32,6 +33,7 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -187,6 +189,11 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.addTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
                 // TODO: Handle successful response
+                val data = Gson().fromJson(response.body()?.data.toString(), IdBody::class.java)
+                localDB.edit().apply {
+                    putInt("tripId",data.id)
+                    apply()
+                }
                 Log.d("CreateTripActivity", "onCreate: ${response.body()}")
 
             } else {
