@@ -4,13 +4,21 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.viewmodels.CreateTripViewModel
+import com.example.safemvvm.viewmodels.CreateTripViewModelFactory
+import com.example.safemvvm.viewmodels.WhileInTripViewModel
+import com.example.safemvvm.viewmodels.WhileInTripViewModelFactory
 import com.google.android.material.button.MaterialButton
 
 class WhileInTrip : AppCompatActivity() {
     // TODO : tell user when they close the app and open it that they're currently in a trip
     // TODO: timer text view isn't working properly
+    private lateinit var viewModel: WhileInTripViewModel
     private lateinit var countdownTimer: CountDownTimer
     private lateinit var timerTextView: TextView
     private lateinit var cancelButton: MaterialButton
@@ -60,6 +68,26 @@ class WhileInTrip : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        val repository = Repository()
+        val viewModelFactory = WhileInTripViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(WhileInTripViewModel::class.java)
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token", null)
+        val userId = localDB.getInt("userId", -1)
+
+        viewModel.endTripResponse.observe(this) { response ->
+            if (response.isSuccessful && response.body() != null) {
+                Log.d("endTrip", "endTrip: ${response.body()}")
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            } else {
+                Log.d("endTrip", "endTrip: ${response.errorBody()}")
+            }
+        }
+
+
         // Set click listener for the IArrived button
         iArrivedButton.setOnClickListener {
             countdownTimer.cancel()
@@ -67,10 +95,6 @@ class WhileInTrip : AppCompatActivity() {
             cancelButton.isEnabled = false
             extendTimerButton.isEnabled = false
             iArrivedButton.isEnabled = false
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            //TODO: code for end trip api here
 
         }
 
