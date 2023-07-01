@@ -43,7 +43,7 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback {
 
         setContentView(R.layout.activity_report_location_map)
 
-        Places.initialize(applicationContext, "AIzaSyBF-bd0QTq7yWmkjyir04aH8OjtICyFw6c")
+        Places.initialize(applicationContext, "AIzaSyBCJXuU6WB-ARQgtiDBl7KRhZsSrvwdYvk")
 
         val fields = listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG)
         // Start the AutocompleteActivity
