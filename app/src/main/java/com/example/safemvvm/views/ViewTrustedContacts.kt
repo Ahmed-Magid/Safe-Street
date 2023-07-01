@@ -1,6 +1,7 @@
 package com.example.safemvvm.views
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -20,17 +21,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class ViewTrustedContacts : AppCompatActivity() {
+class ViewTrustedContacts : AppCompatActivity(),  AddTrustedAdapter.OnItemClickListener  {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewModel: TrustedContactViewModel
+
+    var contactList: MutableList<TrustedContact> = mutableListOf()
+    val adapter = AddTrustedAdapter(contactList,this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_trusted_contacts)
 
-        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val localDB: SharedPreferences = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token","empty")
         val userId = localDB.getInt("userId",-1)
-
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -40,8 +44,8 @@ class ViewTrustedContacts : AppCompatActivity() {
 
         viewModel.getAllTrusted("Bearer $token", userId)
         // contact list will be from API
-        var contactList: MutableList<TrustedContact> = mutableListOf()
-        val adapter = AddTrustedAdapter(contactList)
+
+
         recyclerView.adapter = adapter
 
 
@@ -125,6 +129,48 @@ class ViewTrustedContacts : AppCompatActivity() {
             val contactEmail = etcontactEmail.text.toString()
             viewModel.addTrustedContact("Bearer $token", AddContactBody(userId,contactEmail))
             etcontactEmail.text = null
+        }
+    }
+
+    override fun onDeleteClick(position: Int) {
+
+
+        val localDB: SharedPreferences = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token","empty")
+        val userId = localDB.getInt("userId",-1)
+
+        viewModel.deleteTrustedContact("Bearer $token",userId,contactList[position].email)
+
+        viewModel.deleteContactResponse.observe(this) { response ->
+            if (response.isSuccessful && response.body() != null) {
+                val responseMessage = response.body()?.message
+
+                if(responseMessage == "Deleted Successfully"){
+                    Log.d("deleteTrusted002","deleted")
+                    contactList.removeAt(position) // Assuming 'dataset' is the list of items in your adapter
+                    adapter.notifyItemRemoved(position)
+
+                }else {
+                    Log.d("deleteTrusted003","success but not deleted")
+                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Log.d("deleteTrusted006", response.errorBody().toString())
+                if(response.code()==403 || response.code()==410){
+                    Log.d("deleteTrusted006", "code is 403 or 410")
+                    val intent = Intent(this, Login::class.java)
+                    startActivity(intent)
+                }else{
+                    Toast.makeText(
+                        this,
+                        "something went wrong please try again laterr",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    Log.d("deleteTrusted004", response.errorBody().toString())
+                    Log.d("deleteTrusted005", "${response.code()}")
+                }
+
+            }
         }
     }
 }

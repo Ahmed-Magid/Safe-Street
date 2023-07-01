@@ -9,6 +9,7 @@ import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.User
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -53,5 +54,12 @@ interface SpringApi {
     suspend fun getAllTrusted(
         @Header("Authorization") token: String,
         @Query("id") id: Int
+    ): Response<MainResponse>
+
+    @DELETE("customer/deleteTrustedContact")
+    suspend fun deleteTrustedContact(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("email") email: String
     ): Response<MainResponse>
 }

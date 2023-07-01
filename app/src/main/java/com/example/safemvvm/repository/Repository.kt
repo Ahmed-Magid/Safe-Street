@@ -58,4 +58,8 @@ class Repository {
     suspend fun getAllTrusted(token:String, id:Int): Response<MainResponse>{
         return  RetrofitInstanceSpring.api.getAllTrusted(token, id)
     }
+
+    suspend fun deleteTrustedContact(token: String, id:Int, email:String): Response<MainResponse>{
+        return RetrofitInstanceSpring.api.deleteTrustedContact(token, id, email)
+    }
 }
