@@ -39,7 +39,7 @@
             android:text="Location"
             map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintLeft_toLeftOf="parent"
-            android:backgroundTint="@color/light_green1"
+            android:backgroundTint="@color/green1"
             />
 
         <Button
@@ -51,7 +51,7 @@
             map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintLeft_toRightOf="@id/CurrLocation"
             map:layout_constraintRight_toLeftOf="@id/confirm_button"
-            android:backgroundTint="@color/light_green1"
+            android:backgroundTint="@color/green1"
             />
 
         <Button
@@ -62,7 +62,7 @@
             android:layout_toEndOf="@+id/reset_button"
             map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintLeft_toRightOf="@id/reset_button"
-            android:backgroundTint="@color/light_green1"
+            android:backgroundTint="@color/green1"
             map:layout_constraintRight_toRightOf="parent"
             />
 
@@ -73,7 +73,7 @@
             map:layout_constraintLeft_toLeftOf="parent"
             android:background="@drawable/textview_bg"
             android:text="Time: "
-            android:textColor="@color/light_white"
+            android:textColor="@color/white"
             map:layout_constraintBottom_toTopOf="@id/walk_button"
             android:textSize="20sp"
             android:padding="5dp"
@@ -85,7 +85,7 @@
             android:text="walking"
             map:layout_constraintBottom_toTopOf="@id/CurrLocation"
             map:layout_constraintLeft_toLeftOf="parent"
-            android:backgroundTint="@color/light_green1"
+            android:backgroundTint="@color/green1"
             />
         <Button
             android:id="@+id/driving_button"
@@ -96,7 +96,7 @@
             map:layout_constraintLeft_toRightOf="@id/walk_button"
             map:layout_constraintBottom_toTopOf="@id/reset_button"
             map:layout_constraintRight_toLeftOf="@id/mode"
-            android:backgroundTint="@color/light_green1"
+            android:backgroundTint="@color/green1"
             />
 
         <Button
@@ -108,7 +108,7 @@
             map:layout_constraintRight_toRightOf="parent"
             map:layout_constraintBottom_toTopOf="@id/confirm_button"
             map:layout_constraintLeft_toRightOf="@id/driving_button"
-            android:backgroundTint="@color/light_green1"
+            android:backgroundTint="@color/green1"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

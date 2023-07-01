@@ -2,11 +2,11 @@
 <resources>
     <color name="green1">#076107</color>
     <color name="black">#FF000000</color>
-    <color name="blue2">#81ABBC</color>
-    <color name="blue1">#104079</color>
+    <color name="blue2">#104079</color>
+    <color name="blue1">#81ABBC</color>
     <color name="teal_700">#FF018786</color>
     <color name="green2">#5CD85A</color>
     <color name="grey1">#B1BBC4</color>
-    <color name="white">#CED3CD</color>
+    <color name="white">#FFFFFF</color>
     <color name="red">#F80202</color>
 </resources>

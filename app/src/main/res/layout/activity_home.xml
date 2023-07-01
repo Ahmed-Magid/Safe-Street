@@ -27,7 +27,7 @@
         android:text="Log Out"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintBottom_toTopOf="@id/btn_createTrip"
-        android:backgroundTint="@color/light_green1"
+        android:backgroundTint="@color/green1"
         />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_createTrip"
@@ -38,7 +38,7 @@
         android:text="@string/create_trip"
         app:layout_constraintTop_toBottomOf="@id/btn_logout"
         app:layout_constraintBottom_toTopOf="@id/btn_viewTrusted"
-        android:backgroundTint="@color/light_green1"
+        android:backgroundTint="@color/green1"
         />
 
     <com.google.android.material.button.MaterialButton
@@ -50,7 +50,7 @@
         android:text="@string/trusted_contact"
         app:layout_constraintTop_toBottomOf="@id/btn_createTrip"
         app:layout_constraintBottom_toBottomOf="@id/btn_reportLocation"
-        android:backgroundTint="@color/light_green1"
+        android:backgroundTint="@color/green1"
         />
 
     <com.google.android.material.button.MaterialButton
@@ -62,7 +62,7 @@
         android:text="@string/report_location"
         app:layout_constraintTop_toBottomOf="@id/btn_viewTrusted"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:backgroundTint="@color/light_green1"
+        android:backgroundTint="@color/green1"
         />
 
 <!--    TODO PROFILE, FIRE EMERGENCY , LOGOUT, view reports-->

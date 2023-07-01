@@ -15,7 +15,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:text="@string/what_is_the_type_of_the_emergency"
-        android:textColor="@color/light_black"
+        android:textColor="@color/blue1"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        app:boxStrokeColor="@color/blue1"
         app:layout_constraintTop_toBottomOf="@id/question"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -46,8 +47,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="none"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/blue1"
+            android:background="@drawable/background_dropdown_menu"
             android:text="@string/choose_type_of_emergency"
-            />
+            android:dropDownListViewStyle="@style/CustomDropdownMenuStyle" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,6 +65,7 @@
         android:inputType="textMultiLine"
         android:lines="5"
         android:gravity="top"
+        android:outlineAmbientShadowColor="@color/blue1"
         app:layout_constraintTop_toBottomOf="@id/emergencyDropdown"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -73,7 +78,7 @@
         app:cornerRadius="10dp"
         android:textSize="15sp"
         android:text="@string/submit_report"
-        android:backgroundTint="@color/light_green1"
+        android:backgroundTint="@color/green1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/reportDetails"

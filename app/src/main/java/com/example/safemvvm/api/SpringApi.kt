@@ -62,4 +62,7 @@ interface SpringApi {
         @Query("id") id: Int,
         @Query("email") email: String
     ): Response<MainResponse>
+
+    //////////////////////////////
+
 }
