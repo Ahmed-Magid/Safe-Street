@@ -208,6 +208,9 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 }else if(response.body().toString().contains("There is an ingoing trip")){
                     Toast.makeText(this,"There is an ingoing trip", Toast.LENGTH_LONG).show()
                     Log.d("CreateTripActivity", "onCreate: ${response.errorBody()}")
+                    val intent = Intent(this, WhileInTrip::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                 }
 
             } else {

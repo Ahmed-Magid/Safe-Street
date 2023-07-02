@@ -35,9 +35,8 @@ class WhileInTrip : AppCompatActivity() {
         extendTimerButton = findViewById(R.id.ExtendTimer)
         iArrivedButton = findViewById(R.id.IArrived)
         fireEmergencyButton = findViewById(R.id.FireEmergency)
-
         //take timeInSeconds from CreateTripActivity
-        val timeInSeconds = intent.getIntExtra("timeInSeconds", 0)
+        val timeInSeconds = intent.getIntExtra("time", 0)
 
         countdownTimer = object : CountDownTimer(timeInSeconds * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
@@ -64,10 +63,10 @@ class WhileInTrip : AppCompatActivity() {
 
         // Set click listener for the FireEmergency button
         fireEmergencyButton.setOnClickListener {
-            val intent = Intent(this, Emergencies::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, Emergencies::class.java)
+//            startActivity(intent)
+            Log.d("WhileInTrip", "timeInSeconds:${timeInSeconds}")
         }
-
 
         val repository = Repository()
         val viewModelFactory = WhileInTripViewModelFactory(repository)
@@ -75,7 +74,8 @@ class WhileInTrip : AppCompatActivity() {
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)
         val customerId = localDB.getInt("userId", -1)
-        val id = localDB.getInt("tripId", -1)
+        val tripId = localDB.getInt("tripId", -1)
+
 
         viewModel.endTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
@@ -83,7 +83,15 @@ class WhileInTrip : AppCompatActivity() {
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-            } else {
+            }
+            else if(response.message().toString().contains("Trip not Found") ){
+                Log.d("endTrip", "Trip not Found" )
+                Toast.makeText(this, "Trip not found", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            else {
                 Log.d("endTrip", "endTrip: ${response.errorBody()} testing" )
                 //Long Toast
                 Toast.makeText(this, "Error: ${response.errorBody()}", Toast.LENGTH_LONG).show()
@@ -98,7 +106,7 @@ class WhileInTrip : AppCompatActivity() {
             cancelButton.isEnabled = false
             extendTimerButton.isEnabled = false
             iArrivedButton.isEnabled = false
-            viewModel.endTrip("Bearer $token" , EndTripBody(id, customerId))
+            viewModel.endTrip("Bearer $token" , EndTripBody(tripId, customerId))
         }
 
         // Set click listener for the ExtendTimer button
@@ -108,7 +116,7 @@ class WhileInTrip : AppCompatActivity() {
             val currentTimeLeft = timerTextView.text.toString().split(" ")[2].toInt()
 
             // Add 5 minutes (300 seconds) to the current time left
-            val newTimeLeft = currentTimeLeft + 300
+            val newTimeLeft = currentTimeLeft + 100
 
             // Start a new countdown timer with the updated time left
             countdownTimer = object : CountDownTimer(newTimeLeft * 1000L, 1000) {
@@ -136,6 +144,20 @@ class WhileInTrip : AppCompatActivity() {
             iArrivedButton.isEnabled = true
         }
 
+
+
+        viewModel.cancelTripResponse.observe(this) { response ->
+            if (response.isSuccessful) {
+                Log.d("cancelTrip", "cancelTrip: ${response.body()}  success" )
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            } else {
+                Log.d("cancelTrip", "cancelTrip: ${response.errorBody()} testing" )
+                //Long Toast
+                Toast.makeText(this, "Error: ${response.errorBody()}", Toast.LENGTH_LONG).show()
+            }
+        }
         // Set click listener for the cancel button
         cancelButton.setOnClickListener {
             countdownTimer.cancel()
@@ -143,6 +165,9 @@ class WhileInTrip : AppCompatActivity() {
             cancelButton.isEnabled = false
             extendTimerButton.isEnabled = false
             iArrivedButton.isEnabled = false
+            localDB.getInt("tripId", -1).let { tripId ->
+                viewModel.cancelTrip("Bearer $token" , customerId, tripId )
+            }
         }
 
     }

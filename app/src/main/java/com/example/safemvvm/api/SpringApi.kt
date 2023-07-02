@@ -89,4 +89,16 @@ interface SpringApi {
         @Body endTripBody: EndTripBody
     ): Response<MainResponse>
 
+    @DELETE("trip/cancelTrip")
+    suspend fun cancelTrip(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("tripId") tripId: Int
+    ): Response<MainResponse>
+
+    @GET("trip/checkIngoingTrip")
+    suspend fun checkIngoingTrip(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int
+    ): Response<MainResponse>
 }

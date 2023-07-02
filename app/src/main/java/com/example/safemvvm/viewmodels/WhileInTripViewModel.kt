@@ -12,6 +12,8 @@ import retrofit2.Response
 
 class WhileInTripViewModel (private val repository: Repository): ViewModel() {
     val endTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+    val cancelTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+
 
     //end trip
     fun endTrip(token: String, endTripBody: EndTripBody){
@@ -21,4 +23,10 @@ class WhileInTripViewModel (private val repository: Repository): ViewModel() {
         }
     }
 
+    fun cancelTrip(token: String , id : Int, tripId: Int){
+        viewModelScope.launch {
+            val response = repository.cancelTrip(token, id, tripId)
+            cancelTripResponse.value = response
+        }
+    }
 }

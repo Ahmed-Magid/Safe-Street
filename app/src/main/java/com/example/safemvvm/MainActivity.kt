@@ -7,12 +7,14 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.safemvvm.models.IdBody
+import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.MainViewModel
 import com.example.safemvvm.viewmodels.MainViewModelFactory
 import com.example.safemvvm.views.HomeActivity
 import com.example.safemvvm.views.Login
+import com.example.safemvvm.views.WhileInTrip
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -57,6 +59,31 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+
+        viewModel.checkIngoingTripResponse.observe(this){ response ->
+            if (response.isSuccessful && response.body() != null) {
+                val responseMessage = response.body()?.message
+                if(responseMessage == "Executed Successfully"){
+                    Log.d("MainActivity", "trip is ongoing")
+                    val data = Gson().fromJson(response.body()?.data.toString(), TripResponse::class.java)
+                    localDB.edit().apply {
+                        putInt("tripId",data.id)
+                        apply()
+                    }
+                    val timeInSeconds = (data.remainingTime * 60).toInt()
+                    intent.putExtra("time", timeInSeconds)
+                    val intent = Intent(this, WhileInTrip::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
+            } else{
+                Log.d("MainActivity", "no success")
+            }
+        }
+
+
         buttonClick.setOnClickListener {
             val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
             val token = localDB.getString("token","empty")
@@ -65,7 +92,6 @@ class MainActivity : AppCompatActivity() {
 
             if(userId == -1){
                 Log.d("001","never logged in before")
-
                 val intent = Intent(this, Login::class.java)
                 startActivity(intent)
 
@@ -75,6 +101,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("007", "$userId")
                 //val idBody = IdBody(userId)
                 if (token != null) {
+                    viewModel.checkIngoingTrip("Bearer $token",userId)
                     viewModel.checkToken("Bearer $token",userId)
                 }else{
                     val intent = Intent(this, Login::class.java)
