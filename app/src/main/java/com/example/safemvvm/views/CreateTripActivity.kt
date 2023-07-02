@@ -199,14 +199,14 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                     Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_LONG).show()
                     //pass time in seconds to WhileInTripActivity
-                    val intent = Intent(this, WhileInTrip::class.java)
                     timeInSeconds = (data.remainingTime * 60).toInt()
                     intent.putExtra("time", timeInSeconds)
+                    val intent = Intent(this, WhileInTrip::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                     Log.d("CreateTripActivity", "onCreate: ${response.body()}")
-                }else {
-                    Toast.makeText(this, response.message(), Toast.LENGTH_LONG).show()
+                }else if(response.body().toString().contains("There is an ingoing trip")){
+                    Toast.makeText(this,"There is an ingoing trip", Toast.LENGTH_LONG).show()
                     Log.d("CreateTripActivity", "onCreate: ${response.errorBody()}")
                 }
 
@@ -255,6 +255,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 source = currentLatLng
             }
         }
+
         mMap.setOnMapClickListener { latLng ->
             if (source == null) {
                 Toast.makeText(this, "Please set your current location first", Toast.LENGTH_SHORT).show()
