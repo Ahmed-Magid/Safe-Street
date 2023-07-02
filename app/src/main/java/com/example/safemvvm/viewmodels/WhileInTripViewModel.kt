@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.safemvvm.models.EndTripBody
+import com.example.safemvvm.models.ExtendTripBody
 import com.example.safemvvm.models.MainResponse
 import com.example.safemvvm.models.Trip
 import com.example.safemvvm.repository.Repository
@@ -13,6 +14,7 @@ import retrofit2.Response
 class WhileInTripViewModel (private val repository: Repository): ViewModel() {
     val endTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
     val cancelTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+    val extendTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
 
 
     //end trip
@@ -27,6 +29,13 @@ class WhileInTripViewModel (private val repository: Repository): ViewModel() {
         viewModelScope.launch {
             val response = repository.cancelTrip(token, id, tripId)
             cancelTripResponse.value = response
+        }
+    }
+
+    fun extendTrip(token: String, extendTripBody: ExtendTripBody) {
+        viewModelScope.launch {
+            val response = repository.extendTrip(token, extendTripBody)
+            extendTripResponse.value = response
         }
     }
 }

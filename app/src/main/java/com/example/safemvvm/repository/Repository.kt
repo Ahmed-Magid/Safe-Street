@@ -3,7 +3,9 @@ package com.example.safemvvm.repository
 import com.example.safemvvm.api.RetrofitInstanceFlask
 import com.example.safemvvm.api.RetrofitInstanceSpring
 import com.example.safemvvm.models.AddContactBody
+import com.example.safemvvm.models.EmergencyBody
 import com.example.safemvvm.models.EndTripBody
+import com.example.safemvvm.models.ExtendTripBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
@@ -12,6 +14,9 @@ import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.User
 import okhttp3.MultipartBody
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.Query
 
 class Repository {
     suspend fun register(user: User): Response<MainResponse> {
@@ -76,7 +81,23 @@ class Repository {
         return RetrofitInstanceSpring.api.cancelTrip(token, id, tripId)
     }
 
+    suspend fun extendTrip(token: String, extendTripBody: ExtendTripBody): Response<MainResponse> {
+        return RetrofitInstanceSpring.api.extendTrip(token, extendTripBody)
+    }
+
     suspend fun checkIngoingTrip(token: String, id:Int): Response<MainResponse>{
         return RetrofitInstanceSpring.api.checkIngoingTrip(token, id)
+    }
+
+    suspend fun getLocationReports(token: String, id: Int, longitude: Double, latitude: Double): Response<MainResponse> {
+        return RetrofitInstanceSpring.api.getLocationReports(token, id, longitude, latitude)
+    }
+
+    suspend fun getAllLocationsWithScore(token: String, id: Int): Response<MainResponse> {
+        return RetrofitInstanceSpring.api.getAllLocationsWithScore(token, id)
+    }
+
+    suspend fun fireEmergency(token: String, emergencyBody: EmergencyBody): Response<MainResponse> {
+        return RetrofitInstanceSpring.api.fireEmergency(token, emergencyBody)
     }
 }

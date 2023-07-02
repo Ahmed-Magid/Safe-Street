@@ -1,7 +1,9 @@
 package com.example.safemvvm.api
 
 import com.example.safemvvm.models.AddContactBody
+import com.example.safemvvm.models.EmergencyBody
 import com.example.safemvvm.models.EndTripBody
+import com.example.safemvvm.models.ExtendTripBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
@@ -96,13 +98,34 @@ interface SpringApi {
         @Query("tripId") tripId: Int
     ): Response<MainResponse>
 
+    @PUT("trip/extendTrip")
+    suspend fun extendTrip(
+        @Header("Authorization") token: String,
+        @Body extendTripBody: ExtendTripBody
+    ): Response<MainResponse>
+
     @GET("trip/checkIngoingTrip")
     suspend fun checkIngoingTrip(
         @Header("Authorization") token: String,
         @Query("id") id: Int
     ): Response<MainResponse>
 
+    @GET("report/listLocationReports")
+    suspend fun getLocationReports(
+        @Header("Authorization") token: String,
+        @Query("id") id: Int,
+        @Query("longitude") longitude: Double,
+        @Query("latitude") latitude: Double
+    ): Response<MainResponse>
 
+    @GET("report/listAllLocationWithScore")
+    suspend fun getAllLocationsWithScore(@Header("Authorization") token: String, @Query("id") id: Int): Response<MainResponse>
+
+    @POST("emergency/fireEmergency")
+    suspend fun fireEmergency(
+        @Header("Authorization") token: String,
+        @Body emergencyBody: EmergencyBody
+    ): Response<MainResponse>
 
     @POST("customer/setVoice")
     suspend fun setSaved(@Header("Authorization") token: String,@Query("saved") saved: Int,@Query("id") id: Int): Response<MainResponse>
