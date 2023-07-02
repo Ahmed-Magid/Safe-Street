@@ -55,7 +55,7 @@
         android:textSize="15sp"
         android:text="@string/trusted_contact"
         app:layout_constraintTop_toBottomOf="@id/btn_createTrip"
-        app:layout_constraintBottom_toBottomOf="@id/btn_reportLocation"
+        app:layout_constraintBottom_toTopOf="@id/btn_reportLocation"
         android:backgroundTint="@color/green1"
         />
 

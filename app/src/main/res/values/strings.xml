@@ -60,7 +60,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="home">Home</string>
     <string name="create_trip">Create Trip</string>
-    <string name="trusted_contact">Trusted contact</string>
+    <string name="trusted_contact">Trusted contacts</string>
     <string name="report_location">Report location</string>
     <string name="destination">destination</string>
     <string name="source">source</string>
