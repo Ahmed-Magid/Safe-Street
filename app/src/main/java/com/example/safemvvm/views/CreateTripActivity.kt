@@ -11,9 +11,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.safemvvm.MainActivity
 import com.example.safemvvm.R
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.Trip
+import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.CreateTripViewModel
 import com.example.safemvvm.viewmodels.CreateTripViewModelFactory
@@ -188,16 +190,31 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel.addTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
-                // TODO: Handle successful response
-                val data = Gson().fromJson(response.body()?.data.toString(), IdBody::class.java)
-                localDB.edit().apply {
-                    putInt("tripId",data.id)
-                    apply()
+                if(response.body()!!.data != null){
+                    // TODO: Handle successful response
+                    val data = Gson().fromJson(response.body()?.data.toString(), TripResponse::class.java)
+                    localDB.edit().apply {
+                        putInt("tripId",data.id)
+                        apply()
+                    }
+                    Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_LONG).show()
+                    //pass time in seconds to WhileInTripActivity
+                    val intent = Intent(this, WhileInTrip::class.java)
+                    timeInSeconds = (data.remainingTime * 60).toInt()
+                    intent.putExtra("time", timeInSeconds)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                    Log.d("CreateTripActivity", "onCreate: ${response.body()}")
+                }else {
+                    Toast.makeText(this, response.message(), Toast.LENGTH_LONG).show()
+                    Log.d("CreateTripActivity", "onCreate: ${response.errorBody()}")
                 }
-                Log.d("CreateTripActivity", "onCreate: ${response.body()}")
 
             } else {
                 Log.d("CreateTripActivity", "onCreate: ${response.errorBody()}")
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
         }
 
@@ -209,12 +226,6 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
                 viewModel.addTrip("Bearer $token", Trip(userId, timeInSeconds / 60, source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
-                Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_SHORT).show()
-                //pass time in seconds to WhileInTripActivity
-                val intent = Intent(this, WhileInTrip::class.java)
-                intent.putExtra("time", timeInSeconds)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
             }
             else{
                 Toast.makeText(this, "Please select a destination", Toast.LENGTH_SHORT).show()
