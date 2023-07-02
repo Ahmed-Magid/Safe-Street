@@ -33,7 +33,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:backgroundTint="@color/green1"
-        />
+        tools:ignore="VisualLintButtonSize" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_createTrip"
@@ -45,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@id/FireEmergency"
         app:layout_constraintBottom_toTopOf="@id/btn_viewTrusted"
         android:backgroundTint="@color/green1"
-        />
+        tools:ignore="VisualLintButtonSize" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_viewTrusted"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/btn_createTrip"
         app:layout_constraintBottom_toTopOf="@id/btn_reportLocation"
         android:backgroundTint="@color/green1"
-        />
+        tools:ignore="VisualLintButtonSize" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_reportLocation"
@@ -69,19 +69,20 @@
         app:layout_constraintTop_toBottomOf="@id/btn_viewTrusted"
         app:layout_constraintBottom_toTopOf="@id/btn_logout"
         android:backgroundTint="@color/green1"
-        />
+        tools:ignore="VisualLintButtonSize" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="65dp"
-        app:cornerRadius="10dp"
-        android:textSize="15sp"
-        android:text="@string/log_out"
-        app:layout_constraintTop_toBottomOf="@id/btn_reportLocation"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:backgroundTint="@color/red"
-        />
+        android:text="@string/log_out"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_reportLocation"
+        tools:ignore="VisualLintButtonSize" />
 <!--    TODO PROFILE, FIRE EMERGENCY , view reports-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

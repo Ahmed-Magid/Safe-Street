@@ -48,9 +48,6 @@
             android:exported="false"
             android:label="@string/title_activity_create_trip" />
         <activity
-            android:name=".views.AddTrustedActivity"
-            android:exported="false" />
-        <activity
             android:name=".views.voicesample.VoiceParagraphs"
             android:exported="false" />
         <activity
