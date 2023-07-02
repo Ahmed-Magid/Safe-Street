@@ -37,7 +37,7 @@ class WhileInTrip : AppCompatActivity() {
         fireEmergencyButton = findViewById(R.id.FireEmergency)
         //take timeInSeconds from CreateTripActivity
         val timeInSeconds = intent.getIntExtra("time", 0)
-
+        Log.d("WhileInTripTime", "time in seconds:$timeInSeconds")
         countdownTimer = object : CountDownTimer(timeInSeconds * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // Update the timerTextView with the remaining time
@@ -65,7 +65,6 @@ class WhileInTrip : AppCompatActivity() {
         fireEmergencyButton.setOnClickListener {
 //            val intent = Intent(this, Emergencies::class.java)
 //            startActivity(intent)
-            Log.d("WhileInTrip", "timeInSeconds:${timeInSeconds}")
         }
 
         val repository = Repository()

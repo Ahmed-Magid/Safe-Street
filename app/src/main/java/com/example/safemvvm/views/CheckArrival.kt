@@ -1,22 +1,28 @@
 package com.example.safemvvm.views
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.media.RingtoneManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
 import com.example.safemvvm.models.EmergenciesEnum
 import com.example.safemvvm.models.EmergencyFired
+import com.example.safemvvm.models.EndTripBody
+import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.viewmodels.CheckArrivalViewModel
+import com.example.safemvvm.viewmodels.CheckArrivalViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.button.MaterialButton
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Location
-import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,6 +37,7 @@ class CheckArrival : AppCompatActivity() {
     private val countDownInterval: Long = 1000
     private val REQUEST_LOCATION_PERMISSION = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var viewModel: CheckArrivalViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,15 +82,59 @@ class CheckArrival : AppCompatActivity() {
         // Start the countdown timer
         countdownTimer.start()
 
-        // Set a click listener for the "Yes" button
-        yesButton.setOnClickListener {
-            // Stop the countdown timer if the user clicks "Yes"
-            countdownTimer.cancel()
-        }
-
         // Get the FusedLocationProviderClient instance
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
+        val repository = Repository()
+        val viewModelFactory = CheckArrivalViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(CheckArrivalViewModel::class.java)
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token", null)
+        val customerId = localDB.getInt("userId", -1)
+        val tripId = localDB.getInt("tripId", -1)
+
+        viewModel.endTripResponse.observe(this) { response ->
+            if (response.isSuccessful && response.body() != null) {
+                Log.d("checkArrival", "checkArrival: ${response.body()}  success" )
+                countdownTimer.cancel()
+                localDB.edit().apply {
+                    putInt("tripId",tripId)
+                    apply()
+                }
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            else if(response.message().toString().contains("Trip not Found") ){
+                Log.d("checkArrival", "checkArrival:Trip not Found" )
+                Toast.makeText(this, "Trip not found", Toast.LENGTH_LONG).show()
+                localDB.edit().apply {
+                    putInt("tripId",tripId)
+                    apply()
+                }
+                val intent = Intent(this, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+            else {
+                Log.d("endTrip", "endTrip: ${response.errorBody()} testing" )
+                //Long Toast
+                Toast.makeText(this, "Error: ${response.errorBody()}", Toast.LENGTH_LONG).show()
+            }
+        }
+
+
+        // Set a click listener for the "Yes" button
+        //countdownTimer.cancel()
+        yesButton.setOnClickListener {
+            viewModel.endTrip("Bearer $token" , EndTripBody(tripId, customerId))
+        }
+
     }
+
+
+
 
     private fun updateCountdownText() {
         val seconds = (timeLeftInMillis / 1000).toInt()

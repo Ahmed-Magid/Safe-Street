@@ -201,6 +201,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                     //pass time in seconds to WhileInTripActivity
                     timeInSeconds = (data.remainingTime * 60).toInt()
                     intent.putExtra("time", timeInSeconds)
+                    Log.d("CreateTripActivityTime", "time in seconds:$timeInSeconds.toString()")
                     val intent = Intent(this, WhileInTrip::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)

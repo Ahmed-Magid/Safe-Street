@@ -76,7 +76,7 @@ class Repository {
         return RetrofitInstanceSpring.api.cancelTrip(token, id, tripId)
     }
 
-    suspend fun checkIngoingTrip(token:String, id:Int): Response<MainResponse>{
-        return  RetrofitInstanceSpring.api.checkIngoingTrip(token, id)
+    suspend fun checkIngoingTrip(token: String, id:Int): Response<MainResponse>{
+        return RetrofitInstanceSpring.api.checkIngoingTrip(token, id)
     }
 }
