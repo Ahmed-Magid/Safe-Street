@@ -25,9 +25,9 @@ class WhileInTripViewModel (private val repository: Repository): ViewModel() {
         }
     }
 
-    fun cancelTrip(token: String , id : Int, tripId: Int){
+    fun cancelTrip(token: String , id : Int, customerId: Int){
         viewModelScope.launch {
-            val response = repository.cancelTrip(token, id, tripId)
+            val response = repository.cancelTrip(token, id, customerId)
             cancelTripResponse.value = response
         }
     }

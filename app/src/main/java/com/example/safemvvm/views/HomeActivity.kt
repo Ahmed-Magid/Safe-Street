@@ -117,6 +117,7 @@ class HomeActivity : AppCompatActivity() {
                             apply()
                         }
                         val timeInSeconds = (data.remainingTime).toInt()
+                        Log.d("time", timeInSeconds.toString())
                         val intent = Intent(this, WhileInTrip::class.java)
                         intent.putExtra("time", timeInSeconds)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK

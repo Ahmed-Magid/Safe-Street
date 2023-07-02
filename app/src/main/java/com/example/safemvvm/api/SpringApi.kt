@@ -95,7 +95,7 @@ interface SpringApi {
     suspend fun cancelTrip(
         @Header("Authorization") token: String,
         @Query("id") id: Int,
-        @Query("tripId") tripId: Int
+        @Query("customerId") customerId: Int
     ): Response<MainResponse>
 
     @PUT("trip/extendTrip")
