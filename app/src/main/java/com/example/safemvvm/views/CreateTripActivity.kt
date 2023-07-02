@@ -229,7 +229,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
-                viewModel.addTrip("Bearer $token", Trip(userId, timeInSeconds / 60, source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
+                viewModel.addTrip("Bearer $token", Trip(userId, timeInSeconds, source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
             }
             else{
                 Toast.makeText(this, "Please select a destination", Toast.LENGTH_SHORT).show()

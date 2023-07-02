@@ -21,6 +21,7 @@ import com.example.safemvvm.viewmodels.EmergenciesViewModelFactory
 import com.example.safemvvm.viewmodels.HomeViewModel
 import com.example.safemvvm.viewmodels.HomeViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -31,9 +32,7 @@ class Emergencies : AppCompatActivity() {
     private val REQUEST_LOCATION_PERMISSION = 1
     lateinit var emergencyFired: EmergencyFired
     lateinit var emergencyType : EmergenciesEnum
-    val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
-    val token = localDB.getString("token","empty")
-    val userId = localDB.getInt("userId",-1)
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -42,6 +41,8 @@ class Emergencies : AppCompatActivity() {
         val repository = Repository()
         val viewModelFactory = EmergenciesViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(EmergenciesViewModel::class.java)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         val kidnappingButton = findViewById<Button>(R.id.btn_kidnapping)
         val harassmentButton = findViewById<Button>(R.id.btn_harassment)
@@ -114,12 +115,16 @@ class Emergencies : AppCompatActivity() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
+                    val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+                    val token = localDB.getString("token","empty")
+                    val userId = localDB.getInt("userId",-1)
                     val latitude = location.latitude
                     val longitude = location.longitude
                     val time = System.currentTimeMillis()
                     val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
                     val formattedTime = dateFormat.format(time)
                     emergencyFired = EmergencyFired(location, formattedTime, emergencyType)
+                    println(emergencyFired.type.toString())
                     viewModel.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, emergencyFired.type.toString()))
                     Toast.makeText(this, "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ",Toast.LENGTH_LONG).show()
                     Log.d("TAG", "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ")

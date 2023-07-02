@@ -5,5 +5,15 @@ enum class EmergenciesEnum {
     HARASSMENT,
     FIRE,
     CAR_FAULT,
-    UserDidntArrive
+    UserDidntArrive;
+
+    override fun toString(): String {
+        return when (this) {
+            KIDNAPPING -> "Kidnapping"
+            HARASSMENT -> "Harassment"
+            FIRE -> "Fire"
+            CAR_FAULT -> "Car Fault"
+            UserDidntArrive -> "User Didn't Arrive"
+        }
+    }
 }
