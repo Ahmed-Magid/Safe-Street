@@ -5,30 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.HomeActivity"
-    android:padding="50dp">
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:src="@drawable/logo"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_createTrip"
+        app:layout_constraintBottom_toTopOf="@id/FireEmergency"
         android:contentDescription="@string/logo" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_logout"
+        android:id="@+id/FireEmergency"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         app:cornerRadius="10dp"
         android:textSize="15sp"
-        android:text="Log Out"
+        android:text="@string/fire_emergency"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintBottom_toTopOf="@id/btn_createTrip"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:backgroundTint="@color/green1"
         />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_createTrip"
         android:layout_width="match_parent"
@@ -36,7 +42,7 @@
         app:cornerRadius="10dp"
         android:textSize="15sp"
         android:text="@string/create_trip"
-        app:layout_constraintTop_toBottomOf="@id/btn_logout"
+        app:layout_constraintTop_toBottomOf="@id/FireEmergency"
         app:layout_constraintBottom_toTopOf="@id/btn_viewTrusted"
         android:backgroundTint="@color/green1"
         />
@@ -61,10 +67,21 @@
         android:textSize="15sp"
         android:text="@string/report_location"
         app:layout_constraintTop_toBottomOf="@id/btn_viewTrusted"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_logout"
         android:backgroundTint="@color/green1"
         />
 
-<!--    TODO PROFILE, FIRE EMERGENCY , LOGOUT, view reports-->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:cornerRadius="10dp"
+        android:textSize="15sp"
+        android:text="@string/log_out"
+        app:layout_constraintTop_toBottomOf="@id/btn_reportLocation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:backgroundTint="@color/red"
+        />
+<!--    TODO PROFILE, FIRE EMERGENCY , view reports-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -95,4 +95,5 @@
     <string name="add">add</string>
     <string name="this_is_a_name">Name</string>
     <string name="this_is_email">Email</string>
+    <string name="log_out">Log Out</string>
 </resources>
