@@ -13,6 +13,7 @@ import retrofit2.Response
 class HomeViewModel(private val repository: Repository): ViewModel() {
     val logoutResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
     val numOfContactsResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+    val checkIngoingTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
 
 
     fun logout(token : String, idBody: IdBody){
@@ -25,6 +26,12 @@ class HomeViewModel(private val repository: Repository): ViewModel() {
         viewModelScope.launch {
             val response = repository.getNumOfTrusted(token, id)
             numOfContactsResponse.value = response
+        }
+    }
+    fun checkIngoingTrip(token: String, id : Int){
+        viewModelScope.launch {
+            val response = repository.checkIngoingTrip(token, id)
+            checkIngoingTripResponse.value = response
         }
     }
 }

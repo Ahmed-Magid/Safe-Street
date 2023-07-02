@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
 import com.example.safemvvm.R.*
 import com.example.safemvvm.models.IdBody
+import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.HomeViewModel
 import com.example.safemvvm.viewmodels.HomeViewModelFactory
@@ -37,6 +38,7 @@ class HomeActivity : AppCompatActivity() {
 
         viewModel.getNumOfTrusted("Bearer $token",userId)
 
+        viewModel.checkIngoingTrip("Bearer $token",userId)
         viewModel.numOfContactsResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
                 val responseMessage = response.body()?.message
@@ -46,6 +48,7 @@ class HomeActivity : AppCompatActivity() {
                     Log.d("Arwa success to num of contacts","$data")
                     if(data == 0) {
                         Toast.makeText(this, "please add trusted contacts", Toast.LENGTH_LONG).show()
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         Intent(this,ViewTrustedContacts::class.java).also { startActivity(it) }
                     }
                 }else {
@@ -54,7 +57,8 @@ class HomeActivity : AppCompatActivity() {
                         "Arwa num of contacts auth error",
                         responseMessage.toString()
                     )
-
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    Intent(this,Login::class.java).also { startActivity(it) }
                 }
             } else {
                 Toast.makeText(
@@ -70,8 +74,9 @@ class HomeActivity : AppCompatActivity() {
         viewModel.logoutResponse.observe(this) { response ->
             if (response.isSuccessful || response.code()==403 || response.code()==410) {
                 Log.d("Home001","${response.code()}")
+                Toast.makeText(this,response.message(),Toast.LENGTH_LONG).show()
                 val intent = Intent(this, Login::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             } else {
                 Log.d("Home002","${response.code()}")
@@ -84,10 +89,44 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
+        viewModel.checkIngoingTripResponse.observe(this){ response ->
+            if (response.isSuccessful && response.body() != null) {
+                val responseMessage = response.body()?.message
+                if(responseMessage == "Executed Successfully"){
+                    if(response.body()!!.data != null){
+                        Log.d("MainActivity", "trip is ongoing")
+                        val data = Gson().fromJson(response.body()?.data.toString(), TripResponse::class.java)
+                        localDB.edit().apply {
+                            putInt("tripId",data.id)
+                            apply()
+                        }
+                        val timeInSeconds = (data.remainingTime * 60).toInt()
+                        intent.putExtra("time", timeInSeconds)
+                        val intent = Intent(this, WhileInTrip::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
+                }else if(responseMessage == "Time ended Are you Ok?"){
+                    val intent = Intent(this, CheckArrival::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }else{
+                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
+            } else{
+                Log.d("MainActivity", "no success")
+            }
+        }
+
         val buttonLogout = findViewById<Button>(id.btn_logout)
         buttonLogout.setOnClickListener {
 
             if (token != null) {
+                //mahmoud
+                //disable button until response
                 viewModel.logout("Bearer $token", IdBody(userId))
             }
         }

@@ -44,7 +44,7 @@ class AddReportActivity : AppCompatActivity() {
             if (response.isSuccessful && response.body() != null) {
                 Toast.makeText(this, "Report Submitted", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, HomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
         }

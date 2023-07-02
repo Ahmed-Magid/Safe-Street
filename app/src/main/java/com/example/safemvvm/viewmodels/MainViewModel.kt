@@ -20,10 +20,5 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     }
 
 
-    fun checkIngoingTrip(token: String, id : Int){
-        viewModelScope.launch {
-            val response = repository.checkIngoingTrip(token, id)
-            checkIngoingTripResponse.value = response
-        }
-    }
+
 }

@@ -26,7 +26,9 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(MainViewModel::class.java)
 
-
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token","empty")
+        val userId = localDB.getInt("userId",-1)
         val buttonClick = findViewById<Button>(R.id.btn_start)
 
         viewModel.tokenCheckResponse.observe(this) { response ->
@@ -36,10 +38,13 @@ class MainActivity : AppCompatActivity() {
                 if(responseMessage == "Executed Successfully"){
                     Log.d("002","correct token he is logged in")
                     val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }else {
                     Log.d("003","userId isn’t the same for the logged in account")
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, Login::class.java)
+                    startActivity(intent)
                 }
             } else {
                 Log.d("006", response.errorBody().toString())
@@ -60,34 +65,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+//        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
 
-        viewModel.checkIngoingTripResponse.observe(this){ response ->
-            if (response.isSuccessful && response.body() != null) {
-                val responseMessage = response.body()?.message
-                if(responseMessage == "Executed Successfully"){
-                    Log.d("MainActivity", "trip is ongoing")
-                    val data = Gson().fromJson(response.body()?.data.toString(), TripResponse::class.java)
-                    localDB.edit().apply {
-                        putInt("tripId",data.id)
-                        apply()
-                    }
-                    val timeInSeconds = (data.remainingTime * 60).toInt()
-                    intent.putExtra("time", timeInSeconds)
-                    val intent = Intent(this, WhileInTrip::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                }
-            } else{
-                Log.d("MainActivity", "no success")
-            }
-        }
+
 
 
         buttonClick.setOnClickListener {
-            val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
-            val token = localDB.getString("token","empty")
-            val userId = localDB.getInt("userId",-1)
+
             //val idBody = IdBody(localDB.getInt("userId",-1))
 
             if(userId == -1){
@@ -101,7 +85,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d("007", "$userId")
                 //val idBody = IdBody(userId)
                 if (token != null) {
-                    viewModel.checkIngoingTrip("Bearer $token",userId)
                     viewModel.checkToken("Bearer $token",userId)
                 }else{
                     val intent = Intent(this, Login::class.java)

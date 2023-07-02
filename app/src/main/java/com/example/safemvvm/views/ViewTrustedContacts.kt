@@ -159,6 +159,7 @@ class ViewTrustedContacts : AppCompatActivity(),  AddTrustedAdapter.OnItemClickL
                 if(response.code()==403 || response.code()==410){
                     Log.d("deleteTrusted006", "code is 403 or 410")
                     val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }else{
                     Toast.makeText(
