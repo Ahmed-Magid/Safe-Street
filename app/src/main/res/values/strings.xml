@@ -90,4 +90,9 @@
     <string name="time">Time</string>
     <string name="please_confirm_you_arrived_to_your_destination">Please confirm you arrived to your destination?</string>
     <string name="danger">Danger</string>
+    <string name="contact_email">Add Contact Email</string>
+    <string name="contact_name">Contact Name</string>
+    <string name="add">add</string>
+    <string name="this_is_a_name">Name</string>
+    <string name="this_is_email">Email</string>
 </resources>
