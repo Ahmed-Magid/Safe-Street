@@ -14,6 +14,7 @@ import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.HomeViewModel
 import com.example.safemvvm.viewmodels.HomeViewModelFactory
+import com.example.safemvvm.views.voicesample.VoiceParagraphs
 import com.google.gson.Gson
 
 class HomeActivity : AppCompatActivity() {
@@ -25,6 +26,10 @@ class HomeActivity : AppCompatActivity() {
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token","empty")
         val userId = localDB.getInt("userId",-1)
+        val savedVoice = localDB.getBoolean("saved",false)
+        if(!savedVoice){
+            Intent(this,VoiceParagraphs::class.java).also { startActivity(it) }
+        }
 
         val repository = Repository()
         val viewModelFactory = HomeViewModelFactory(repository)

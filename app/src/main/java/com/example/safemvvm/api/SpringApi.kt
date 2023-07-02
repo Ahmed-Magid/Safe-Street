@@ -101,4 +101,7 @@ interface SpringApi {
         @Header("Authorization") token: String,
         @Query("id") id: Int
     ): Response<MainResponse>
+
+    @POST("customer/setVoice")
+    suspend fun setSaved(@Header("Authorization") token: String,@Query("saved") saved: Int,@Query("id") id: Int): Response<MainResponse>
 }

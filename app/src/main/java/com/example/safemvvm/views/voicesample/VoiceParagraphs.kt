@@ -18,11 +18,16 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.example.safemvvm.R
+import com.example.safemvvm.models.LoginResponse
 import com.example.safemvvm.models.User
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.RegistrationViewModel
 import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
+import com.example.safemvvm.viewmodels.VoiceParagraphViewModel
+import com.example.safemvvm.viewmodels.VoiceParagraphViewModelFactory
+import com.example.safemvvm.views.HomeActivity
 import com.example.safemvvm.views.Login
+import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -30,7 +35,7 @@ import okhttp3.RequestBody
 import java.io.File
 
 class VoiceParagraphs : AppCompatActivity() {
-    private lateinit var viewModel: RegistrationViewModel
+    private lateinit var viewModel: VoiceParagraphViewModel
     private val fragmentList = listOf(Paragraph1(), Paragraph2(), Paragraph3(), Paragraph4())
     private var isRecording = false
     private lateinit var mediaRecorder: MediaRecorder
@@ -67,31 +72,52 @@ class VoiceParagraphs : AppCompatActivity() {
 
         }
 
-        val user = intent.getSerializableExtra("userInfo") as User
         val repository = Repository()
-        val viewModelFactory = RegistrationViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(RegistrationViewModel::class.java)
-        //TODO remove tags in logs with names at end of the project
-        viewModel.registerResponse.observe(this) { response ->
+        val viewModelFactory = VoiceParagraphViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(VoiceParagraphViewModel::class.java)
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+
+        viewModel.savedResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
                 val responseMessage = response.body()?.message
 
-                if (responseMessage == "Created Successfully") {
-                    Toast.makeText(
-                        this,
-                        "Please check your email for account activation.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Log.d("Arwa success reg", responseMessage)
-                    Intent(this, Login::class.java).also { startActivity(it) }
+                if (responseMessage == "Executed Successfully") {
+                    Toast.makeText(this, "Audio Saved", Toast.LENGTH_SHORT).show()
+                    Intent(this, HomeActivity::class.java).also { startActivity(it) }
                 } else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     Log.d(
                         "Arwa success reach but error in fields",
                         responseMessage.toString()
                     )
-
                 }
+            } else {
+                Toast.makeText(
+                    this,
+                    "setSaved Error Please Try Again",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d("Arwa not success", response.errorBody().toString())
+                Log.d("Arwa not success", "${response.code()}")
+            }
+        }
+
+
+        viewModel.trainResponse.observe(this) { response ->
+            if (response.isSuccessful) {
+                Toast.makeText(
+                    this,
+                    "Voice Added Successfully",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d("Arwa success reg", "hello")
+                recordFiles.forEach { it.delete() }
+                localDB.edit().apply {
+                    putBoolean("saved",true)
+                    apply()
+                }
+                localDB.getString("token","")
+                    ?.let { viewModel.setSaved("Bearer $it",1,localDB.getInt("userId",-1)) }
             } else {
                 Toast.makeText(
                     this,
@@ -111,11 +137,21 @@ class VoiceParagraphs : AppCompatActivity() {
             if (currentItem < fragmentList.size - 1) {
                 viewPager.currentItem = currentItem + 1
             } else if (currentItem == fragmentList.size - 1) {
-                viewModel.register(user)
-                recordFiles.forEach { it.delete() }
+                val records: List<MultipartBody.Part> = recordFiles.map { file ->
+                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                    MultipartBody.Part.createFormData("records", file.name, requestFile)
+                }
+                viewModel.train(records,localDB.getInt("userId",-1))
+
+                // Flask End Point
+                // To be Moved to flask response and setSaved in spring boot
+
+                // **************
+
+                /*viewModel.register(user)
                 val intent = Intent(this, Login::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(intent)
+                startActivity(intent)*/
             }
         }
 

@@ -41,6 +41,7 @@ class Login : AppCompatActivity() {
                     localDB.edit().apply {
                         putString("token", data.token)
                         putInt("userId",data.id)
+                        putBoolean("saved",data.savedVoice)
                         apply()
                     }
                     Intent(this,HomeActivity::class.java).also { startActivity(it) }

@@ -51,6 +51,9 @@ class Repository {
     suspend fun train(records: List<MultipartBody.Part>, userId: Int): Response<Unit> {
         return RetrofitInstanceFlask.api.train(records, userId)
     }
+    suspend fun setSaved(token: String,saved: Int, userId: Int): Response<MainResponse> {
+        return RetrofitInstanceSpring.api.setSaved(token,saved, userId)
+    }
 
     suspend fun predict(record: MultipartBody.Part, userId: Int): Response<Boolean> {
         return RetrofitInstanceFlask.api.predict(record, userId)

@@ -21,7 +21,7 @@
     <string name="phone_number">Phone Number*</string>
     <string name="sign_up_password">Password*</string>
     <string name="repeat_password">Repeat Password*</string>
-    <string name="sign_up_next">Next</string>
+    <string name="sign_up_next">Sign Up</string>
     <string name="sign_in_instead">Sign in instead?</string>
     <string name="one_more_step">One more step…</string>
     <string name="add_users_as_your_trusted_contacts">add users as your trusted contacts</string>
