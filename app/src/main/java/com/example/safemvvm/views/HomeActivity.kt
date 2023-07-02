@@ -162,6 +162,11 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, AddTripActivity::class.java)
             startActivity(intent)
         }*/
+        val buttonFireEmergency = findViewById<Button>(id.FireEmergency)
+        buttonFireEmergency.setOnClickListener {
+            val intent = Intent(this, Emergencies::class.java)
+            startActivity(intent)
+        }
         val buttonViewTrustedContact = findViewById<Button>(id.btn_viewTrusted)
         buttonViewTrustedContact.setOnClickListener {
             val intent = Intent(this, ViewTrustedContacts::class.java)

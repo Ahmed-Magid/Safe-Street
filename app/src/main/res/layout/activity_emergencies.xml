@@ -28,7 +28,7 @@
         android:textColor="@color/blue1"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/alert"
-        app:layout_constraintBottom_toTopOf="@id/btn_harrasment"
+        app:layout_constraintBottom_toTopOf="@id/btn_harassment"
         android:backgroundTint="@color/grey1"
         app:icon="@drawable/hostage"
         app:iconGravity="end"
@@ -36,7 +36,7 @@
         app:iconTint="@color/blue1" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_harrasment"
+        android:id="@+id/btn_harassment"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         app:cornerRadius="10dp"
@@ -59,7 +59,7 @@
         android:textSize="20sp"
         android:text="fire"
         android:textColor="@color/blue1"
-        app:layout_constraintTop_toBottomOf="@id/btn_harrasment"
+        app:layout_constraintTop_toBottomOf="@id/btn_harassment"
         app:layout_constraintBottom_toTopOf="@id/btn_carFault"
         android:backgroundTint="@color/grey1"
         app:icon="@drawable/fire"
