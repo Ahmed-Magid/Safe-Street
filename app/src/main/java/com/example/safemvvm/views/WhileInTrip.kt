@@ -78,20 +78,20 @@ class WhileInTrip : AppCompatActivity() {
 
         viewModel.endTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
-                Log.d("endTrip", "endTrip: ${response.body()}  success" )
+                Log.d("endTrip001", "endTrip: ${response.body()}  success" )
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
             else if(response.message().toString().contains("Trip not Found") ){
-                Log.d("endTrip", "Trip not Found" )
+                Log.d("endTrip002", "Trip not Found" )
                 Toast.makeText(this, "Trip not found", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, HomeActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }
             else {
-                Log.d("endTrip", "endTrip: ${response.errorBody()} testing" )
+                Log.d("endTrip003", "endTrip: ${response.errorBody()} testing" )
                 //Long Toast
                 Toast.makeText(this, "Error: ${response.errorBody()}", Toast.LENGTH_LONG).show()
             }
@@ -146,11 +146,30 @@ class WhileInTrip : AppCompatActivity() {
 
 
         viewModel.cancelTripResponse.observe(this) { response ->
-            if (response.isSuccessful) {
-                Log.d("cancelTrip", "cancelTrip: ${response.body()}  success" )
-                val intent = Intent(this, HomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+            if (response.isSuccessful && response.body() != null) {
+                val responseMessage = response.body()?.message
+                if (responseMessage == "Deleted Successfully") {
+                    Log.d("cancelTrip001", "cancelTrip: ${response.body()}  success" )
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                } else if (responseMessage == "Authentication Error") {
+                    Log.d("cancelTrip002", "cancelTrip: ${response.body()}" )
+                    Toast.makeText(this, "Session Expired", Toast.LENGTH_LONG).show()
+                    localDB.edit().apply {
+                        putString("token", "empty")
+                        apply()
+                    }
+                    val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                } else {
+                    Log.d("cancelTrip003", "cancelTrip: ${response.body()}" )
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
+
             } else {
                 Log.d("cancelTrip", "cancelTrip: ${response.errorBody()} testing" )
                 //Long Toast

@@ -117,8 +117,8 @@ class HomeActivity : AppCompatActivity() {
                             apply()
                         }
                         val timeInSeconds = (data.remainingTime * 60).toInt()
-                        intent.putExtra("time", timeInSeconds)
                         val intent = Intent(this, WhileInTrip::class.java)
+                        intent.putExtra("time", timeInSeconds)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                     }
@@ -152,6 +152,7 @@ class HomeActivity : AppCompatActivity() {
                 //remove name from add trusted contact
                 //add fire emergency button in home
                 // change profile button image
+                // Check arrival add No button to extend
                 buttonLogout.isEnabled = false
                 viewModel.logout("Bearer $token", IdBody(userId))
             }

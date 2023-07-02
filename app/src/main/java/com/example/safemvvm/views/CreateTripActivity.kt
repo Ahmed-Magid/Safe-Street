@@ -199,10 +199,10 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                     Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_LONG).show()
                     //pass time in seconds to WhileInTripActivity
-                    timeInSeconds = (data.remainingTime * 60).toInt()
-                    Log.d("CreateTripActivityTime", "time in seconds:$timeInSeconds.toString()")
+                    val remainingTime = (data.remainingTime).toInt()
+                    Log.d("CreateTripActivityTime", "time in seconds:$remainingTime")
                     val intent = Intent(this, WhileInTrip::class.java)
-                    intent.putExtra("time", timeInSeconds)
+                    intent.putExtra("time", remainingTime)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                     Log.d("CreateTripActivity", "onCreate: ${response.body()}")
