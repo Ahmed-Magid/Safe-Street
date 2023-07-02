@@ -44,7 +44,9 @@ class Login : AppCompatActivity() {
                         putBoolean("saved",data.savedVoice)
                         apply()
                     }
-                    Intent(this,HomeActivity::class.java).also { startActivity(it) }
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                 }else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     Log.d(

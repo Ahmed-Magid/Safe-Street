@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("007",token.toString())
                 Log.d("007", "$userId")
                 //val idBody = IdBody(userId)
-                if (token != null) {
+                if (token != "empty") {
                     viewModel.checkToken("Bearer $token",userId)
                 }else{
                     val intent = Intent(this, Login::class.java)

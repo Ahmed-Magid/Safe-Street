@@ -29,8 +29,9 @@ class HomeActivity : AppCompatActivity() {
         val userId = localDB.getInt("userId",-1)
         val savedVoice = localDB.getBoolean("saved",false)
         if(!savedVoice){
+            val intent = Intent(this, VoiceParagraphs::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-            Intent(this,VoiceParagraphs::class.java).also { startActivity(it) }
+            startActivity(intent)
         }
 
         val repository = Repository()
@@ -49,8 +50,9 @@ class HomeActivity : AppCompatActivity() {
                     Log.d("Arwa success to num of contacts","$data")
                     if(data == 0) {
                         Toast.makeText(this, "please add trusted contacts", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this, ViewTrustedContacts::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        Intent(this,ViewTrustedContacts::class.java).also { startActivity(it) }
+                        startActivity(intent)
                     }
                 }else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
@@ -58,8 +60,9 @@ class HomeActivity : AppCompatActivity() {
                         "Arwa num of contacts auth error",
                         responseMessage.toString()
                     )
+                    val intent = Intent(this, Login::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    Intent(this,Login::class.java).also { startActivity(it) }
+                    startActivity(intent)
                 }
             } else {
                 Toast.makeText(
@@ -83,7 +86,10 @@ class HomeActivity : AppCompatActivity() {
         viewModel.logoutResponse.observe(this) { response ->
             if (response.isSuccessful || response.code()==403 || response.code()==410) {
                 Log.d("Home001","${response.code()}")
-                Toast.makeText(this,response.message(),Toast.LENGTH_LONG).show()
+                localDB.edit().apply {
+                    putString("token", "empty")
+                    apply()
+                }
                 val intent = Intent(this, Login::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
@@ -144,6 +150,8 @@ class HomeActivity : AppCompatActivity() {
                 //mahmoud
                 //loading icon for train model and logout
                 //remove name from add trusted contact
+                //add fire emergency button in home
+                // change profile button image
                 buttonLogout.isEnabled = false
                 viewModel.logout("Bearer $token", IdBody(userId))
             }

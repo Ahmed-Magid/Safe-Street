@@ -83,16 +83,18 @@ class VoiceParagraphs : AppCompatActivity() {
 
                 if (responseMessage == "Executed Successfully") {
                     Toast.makeText(this, "Audio Saved", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, HomeActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    Intent(this, HomeActivity::class.java).also { startActivity(it) }
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     Log.d(
                         "Arwa success reach but error in fields",
                         responseMessage.toString()
                     )
+                    val intent = Intent(this, Login::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    Intent(this, Login::class.java).also { startActivity(it) }
+                    startActivity(intent)
                 }
             } else {
                 Log.d("Arwa not success", response.errorBody().toString())

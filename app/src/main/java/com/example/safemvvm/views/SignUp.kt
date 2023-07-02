@@ -38,7 +38,8 @@ class SignUp : AppCompatActivity() {
                         Toast.LENGTH_LONG
                     ).show()
                     Log.d("Arwa success reg", responseMessage)
-                    Intent(this, Login::class.java).also { startActivity(it) }
+                    val intent = Intent(this, Login::class.java)
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     Log.d(
