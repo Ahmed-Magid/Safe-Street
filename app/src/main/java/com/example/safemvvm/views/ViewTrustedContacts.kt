@@ -66,17 +66,24 @@ class ViewTrustedContacts : AppCompatActivity(),  AddTrustedAdapter.OnItemClickL
                 }else {
                     Log.d("getTrusted003","success but not retrieved")
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    if(responseMessage == "Authentication Error"){
+                        val intent = Intent(this, Login::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
                 }
             } else {
                 Log.d("getTrusted006", response.errorBody().toString())
                 if(response.code()==403 || response.code()==410){
                     Log.d("Trusted006", "code is 403 or 410")
+                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
                     val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }else{
                     Toast.makeText(
                         this,
-                        "something went wrong please try again laterr",
+                        "something went wrong please try again later",
                         Toast.LENGTH_LONG
                     ).show()
                     Log.d("getTrusted004", response.errorBody().toString())
@@ -102,19 +109,25 @@ class ViewTrustedContacts : AppCompatActivity(),  AddTrustedAdapter.OnItemClickL
 
                 }else {
                     Log.d("Trusted003","success but not added")
-
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    if(responseMessage == "Authentication Error"){
+                        val intent = Intent(this, Login::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
                 }
             } else {
                 Log.d("Trusted006", response.errorBody().toString())
                 if(response.code()==403 || response.code()==410){
                     Log.d("Trusted006", "code is 403 or 410")
+                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
                     val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }else{
                     Toast.makeText(
                         this,
-                        "something went wrong please try again laterr",
+                        "something went wrong please try again later",
                         Toast.LENGTH_LONG
                     ).show()
                     Log.d("Trusted004", response.errorBody().toString())
@@ -153,18 +166,24 @@ class ViewTrustedContacts : AppCompatActivity(),  AddTrustedAdapter.OnItemClickL
                 }else {
                     Log.d("deleteTrusted003","success but not deleted")
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    if(responseMessage == "Authentication Error"){
+                        val intent = Intent(this, Login::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
                 }
             } else {
                 Log.d("deleteTrusted006", response.errorBody().toString())
                 if(response.code()==403 || response.code()==410){
-                    Log.d("deleteTrusted006", "code is 403 or 410")
+                    Log.d("Trusted006", "code is 403 or 410")
+                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
                     val intent = Intent(this, Login::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }else{
                     Toast.makeText(
                         this,
-                        "something went wrong please try again laterr",
+                        "something went wrong please try again later",
                         Toast.LENGTH_LONG
                     ).show()
                     Log.d("deleteTrusted004", response.errorBody().toString())

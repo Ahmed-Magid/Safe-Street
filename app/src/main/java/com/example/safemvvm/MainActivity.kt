@@ -49,7 +49,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.d("006", response.errorBody().toString())
                 if(response.code()==403 || response.code()==410){
-                    Log.d("006", "code is 403 or 410")
+                    Log.d("Trusted006", "code is 403 or 410")
+                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
                     val intent = Intent(this, Login::class.java)
                     startActivity(intent)
                 }else{

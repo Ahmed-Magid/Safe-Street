@@ -29,6 +29,7 @@ class HomeActivity : AppCompatActivity() {
         val userId = localDB.getInt("userId",-1)
         val savedVoice = localDB.getBoolean("saved",false)
         if(!savedVoice){
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             Intent(this,VoiceParagraphs::class.java).also { startActivity(it) }
         }
 
@@ -68,8 +69,16 @@ class HomeActivity : AppCompatActivity() {
                 ).show()
                 Log.d("Arwa not success noc", response.errorBody().toString())
                 Log.d("Arwa not success noc", "${response.code()}")
+                if(response.code()==403 || response.code()==410){
+                    Log.d("Profile006", "code is 403 or 410")
+                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
             }
         }
+        val buttonLogout = findViewById<Button>(id.btn_logout)
 
         viewModel.logoutResponse.observe(this) { response ->
             if (response.isSuccessful || response.code()==403 || response.code()==410) {
@@ -87,6 +96,7 @@ class HomeActivity : AppCompatActivity() {
                 ).show()
 
             }
+            buttonLogout.isEnabled = true
         }
 
         viewModel.checkIngoingTripResponse.observe(this){ response ->
@@ -118,15 +128,23 @@ class HomeActivity : AppCompatActivity() {
                 }
             } else{
                 Log.d("MainActivity", "no success")
+                if(response.code()==403 || response.code()==410){
+                    Log.d("Profile006", "code is 403 or 410")
+                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
             }
         }
 
-        val buttonLogout = findViewById<Button>(id.btn_logout)
         buttonLogout.setOnClickListener {
 
             if (token != null) {
                 //mahmoud
-                //disable button until response
+                //loading icon for train model and logout
+                //remove name from add trusted contact
+                buttonLogout.isEnabled = false
                 viewModel.logout("Bearer $token", IdBody(userId))
             }
         }

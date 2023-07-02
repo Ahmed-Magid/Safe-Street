@@ -55,6 +55,9 @@ class Profile : AppCompatActivity() {
                 }else {
                     Log.d("Profile003","userId isn’t the same for the logged in account")
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
                 }
             } else {
                 Log.d("Profile008", response.errorBody().toString())
@@ -62,6 +65,7 @@ class Profile : AppCompatActivity() {
                     Log.d("Profile006", "code is 403 or 410")
                     Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
                     val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     startActivity(intent)
                 }else{
                     Toast.makeText(

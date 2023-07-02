@@ -83,6 +83,7 @@ class VoiceParagraphs : AppCompatActivity() {
 
                 if (responseMessage == "Executed Successfully") {
                     Toast.makeText(this, "Audio Saved", Toast.LENGTH_SHORT).show()
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                     Intent(this, HomeActivity::class.java).also { startActivity(it) }
                 } else {
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
@@ -90,15 +91,19 @@ class VoiceParagraphs : AppCompatActivity() {
                         "Arwa success reach but error in fields",
                         responseMessage.toString()
                     )
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    Intent(this, Login::class.java).also { startActivity(it) }
                 }
             } else {
-                Toast.makeText(
-                    this,
-                    "setSaved Error Please Try Again",
-                    Toast.LENGTH_LONG
-                ).show()
                 Log.d("Arwa not success", response.errorBody().toString())
                 Log.d("Arwa not success", "${response.code()}")
+                if(response.code()==403 || response.code()==410){
+                    Log.d("Profile006", "code is 403 or 410")
+                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, Login::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
             }
         }
 
@@ -108,7 +113,7 @@ class VoiceParagraphs : AppCompatActivity() {
                 Toast.makeText(
                     this,
                     "Voice Added Successfully",
-                    Toast.LENGTH_LONG
+                    Toast.LENGTH_SHORT
                 ).show()
                 Log.d("Arwa success reg", "hello")
                 recordFiles.forEach { it.delete() }
