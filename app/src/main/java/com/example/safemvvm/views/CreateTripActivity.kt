@@ -49,7 +49,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
-class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback, OnCircleClickListener {
+class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var viewModel: CreateTripViewModel
     private val TAG = "com.example.safemvvm.views.CreateTripActivity"
     private lateinit var mMap: GoogleMap
@@ -233,10 +233,9 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback, OnCircleClic
                             CircleOptions()
                                 .center(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
                                 .radius(70.0)
-                                //.fillColor(Color.parseColor("#330000FF"))
                                 .fillColor(Color.HSVToColor(80, floatArrayOf(color.toFloat(), 1.0f, 1.0f)))
                                 .strokeColor(Color.TRANSPARENT)
-                                .clickable(true)
+                                //.clickable(true)
                         )
 
                     }
@@ -298,7 +297,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback, OnCircleClic
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap.setOnCircleClickListener(this)
+        //mMap.setOnCircleClickListener(this)
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -399,9 +398,9 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback, OnCircleClic
         }
     }
 
-    override fun onCircleClick(circle: Circle) {
-        Toast.makeText(this, "${circle.center.latitude} ${circle.center.longitude}", Toast.LENGTH_LONG).show()
-    }
+//    override fun onCircleClick(circle: Circle) {
+//        Toast.makeText(this, "${circle.center.latitude} ${circle.center.longitude}", Toast.LENGTH_LONG).show()
+//    }
 }
 
 object PolylineDecoder {
