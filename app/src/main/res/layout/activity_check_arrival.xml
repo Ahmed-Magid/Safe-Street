@@ -58,7 +58,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/alertTime"
+        app:layout_constraintBottom_toTopOf="@id/no"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/no"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:cornerRadius="10dp"
+        android:textSize="15sp"
+        android:text="@string/no_extend_time"
+        android:backgroundTint="@color/green1"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yes"
         />
 
 

@@ -96,4 +96,5 @@
     <string name="this_is_a_name">Name</string>
     <string name="this_is_email">Email</string>
     <string name="log_out">Log Out</string>
+    <string name="no_extend_time">No, extend time</string>
 </resources>
