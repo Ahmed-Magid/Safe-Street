@@ -11,10 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
 import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.models.ExtendTripBody
+import com.example.safemvvm.models.LoginResponse
+import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.WhileInTripViewModel
 import com.example.safemvvm.viewmodels.WhileInTripViewModelFactory
 import com.google.android.material.button.MaterialButton
+import com.google.gson.Gson
 
 class WhileInTrip : AppCompatActivity() {
     // TODO : tell user when they close the app and open it that they're currently in a trip
@@ -26,7 +29,6 @@ class WhileInTrip : AppCompatActivity() {
     private lateinit var extendTimerButton: MaterialButton
     private lateinit var iArrivedButton: MaterialButton
     private lateinit var fireEmergencyButton: MaterialButton
-    private var secondsToAdd = 0
     private val MINUTES_TO_ADD = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,8 @@ class WhileInTrip : AppCompatActivity() {
             override fun onFinish() {
                 // Do something when the countdown timer finishes
                 timerTextView.text = getString(R.string.timer_finished)
+                val intent = Intent(this@WhileInTrip, CheckArrival::class.java)
+                startActivity(intent)
             }
         }
 
@@ -115,10 +119,10 @@ class WhileInTrip : AppCompatActivity() {
         extendTimerButton.setOnClickListener {
             countdownTimer.cancel()
             // Extract the current time left from the timerTextView
-            val currentTimeLeft = timerTextView.text.toString().split(" ")[2].toInt()
-
-            // Add 5 minutes (300 seconds) to the current time left
-            secondsToAdd = (currentTimeLeft + MINUTES_TO_ADD) * 60
+//            val currentTimeLeft = timerTextView.text.toString().split(" ")[2].toInt()
+//
+//            // Add 5 minutes (300 seconds) to the current time left
+//            secondsToAdd = (currentTimeLeft + MINUTES_TO_ADD) * 60
             viewModel.extendTrip("Bearer $token", ExtendTripBody(tripId, customerId, MINUTES_TO_ADD))
 
             // Start a new countdown timer with the updated time left
@@ -130,8 +134,9 @@ class WhileInTrip : AppCompatActivity() {
                 val responseMessage = response.body()?.message
                 if (responseMessage == "Executed Successfully") {
                     Log.d("extendTrip001", "extendTrip: ${response.body()}  success" )
+                    val data = Gson().fromJson(response.body()?.data.toString(), TripResponse::class.java)
 
-                    countdownTimer = object : CountDownTimer(secondsToAdd * 1000L, 1000) {
+                    countdownTimer = object : CountDownTimer(data.remainingTime * 1000L, 1000) {
                         override fun onTick(millisUntilFinished: Long) {
                             val minutesLeft = (millisUntilFinished / 1000) / 60
                             val secondsLeft = (millisUntilFinished / 1000) % 60
