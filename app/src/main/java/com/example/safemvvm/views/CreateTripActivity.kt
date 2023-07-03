@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.MainActivity
 import com.example.safemvvm.R
-import com.example.safemvvm.models.IdBody
+import com.example.safemvvm.models.Location
 import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
@@ -24,10 +24,15 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnCircleClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -36,6 +41,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,7 +49,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
 
-class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
+class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback, OnCircleClickListener {
     private lateinit var viewModel: CreateTripViewModel
     private val TAG = "com.example.safemvvm.views.CreateTripActivity"
     private lateinit var mMap: GoogleMap
@@ -60,7 +66,26 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
     var mode = "driving"
     val departureTime = System.currentTimeMillis() / 1000
     val trafficModel = "best_guess"
+    private val polylines = mutableListOf<Polyline>()
+    private val markers = mutableListOf<Marker>()
 
+    private fun clear() {
+        clearPolylines()
+        clearMarkers()
+    }
+    private fun clearPolylines() {
+        for (polyline in polylines) {
+            polyline.remove()
+        }
+        polylines.clear()
+    }
+
+    private fun clearMarkers() {
+        for (marker in markers) {
+            marker.remove()
+        }
+        markers.clear()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_trip)
@@ -93,10 +118,11 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 destination = place.latLng
 
                 if(destination != null && source != null) {
-                    mMap.clear()
+                    clear()
                     calculateDistance()
-                    mMap.addMarker(MarkerOptions().position(source!!))
+                    mMap.addMarker(MarkerOptions().position(source!!))?.let { markers.add(it) }
                     mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
+                        ?.let { markers.add(it) }
                 }
 
                 // Move the camera to the selected place
@@ -138,6 +164,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 if (location != null) {
                     source = LatLng(location.latitude, location.longitude)
                     mMap.addMarker(MarkerOptions().position(source!!))
+                        ?.let { it1 -> markers.add(it1) }
                     val cameraUpdate = CameraUpdateFactory.newLatLngZoom(source!!, 18f)
                     mMap.animateCamera(cameraUpdate)
                 }
@@ -146,12 +173,13 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val resetButton = findViewById<Button>(R.id.reset_button)
         resetButton.setOnClickListener {
-            mMap.clear()
+            clear()
             destination = null
             val timeTextView = findViewById<TextView>(R.id.timeTextView)
             timeTextView.text = "Time: "
             timeInSeconds = 0
             mMap.addMarker(MarkerOptions().position(source!!))
+                ?.let { it1 -> markers.add(it1) }
         }
 
         val walking = findViewById<Button>(R.id.walk_button)
@@ -160,10 +188,12 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             val modeText = findViewById<TextView>(R.id.mode)
             modeText.text = "W"
             if(destination != null && source != null) {
-                mMap.clear()
+                clear()
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
+                    ?.let { it1 -> markers.add(it1) }
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
+                    ?.let { markers.add(it) }
             }
         }
 
@@ -173,10 +203,12 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             val modeText = findViewById<TextView>(R.id.mode)
             modeText.text = "D"
             if(destination != null && source != null) {
-                mMap.clear()
+                clear()
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
+                    ?.let { it1 -> markers.add(it1) }
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
+                    ?.let { markers.add(it) }
             }
         }
 
@@ -187,6 +219,30 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)
         val userId = localDB.getInt("userId", -1)
+
+        viewModel.getAllLocationsWithScoreResponse.observe(this) { response ->
+            if (response.isSuccessful && response.body() != null) {
+                if (response.body()!!.data != null) {
+                    val data: List<Location> = Gson().fromJson(
+                        response.body()?.data.toString(),
+                        object : TypeToken<List<Location>>() {}.type
+                    )
+                    data.filter { it.averageScore >= 1.0 }.forEach {
+                        val color = 90 - ((it.averageScore - 1) * 30)
+                        mMap.addCircle(
+                            CircleOptions()
+                                .center(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
+                                .radius(70.0)
+                                //.fillColor(Color.parseColor("#330000FF"))
+                                .fillColor(Color.HSVToColor(80, floatArrayOf(color.toFloat(), 1.0f, 1.0f)))
+                                .strokeColor(Color.TRANSPARENT)
+                                .clickable(true)
+                        )
+
+                    }
+                }
+            }
+        }
 
         viewModel.addTripResponse.observe(this) { response ->
             if (response.isSuccessful && response.body() != null) {
@@ -225,10 +281,12 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         val confirm = findViewById<Button>(R.id.confirm_button)
         confirm.setOnClickListener {
             if(destination != null && source != null) {
-                mMap.clear()
+                clear()
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
+                    ?.let { it1 -> markers.add(it1) }
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
+                    ?.let { markers.add(it) }
                 viewModel.addTrip("Bearer $token", Trip(userId, timeInSeconds, source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
             }
             else{
@@ -240,6 +298,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.setOnCircleClickListener(this)
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -256,6 +315,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 val currentLatLng = LatLng(location.latitude, location.longitude)
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, DEFAULT_ZOOM))
                 mMap.addMarker(MarkerOptions().position(currentLatLng).title("Current Location"))
+                    ?.let { markers.add(it) }
                 source = currentLatLng
             }
         }
@@ -265,21 +325,28 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this, "Please set your current location first", Toast.LENGTH_SHORT).show()
             } else if (destination == null) {
                 destination = latLng
-                mMap.addMarker(MarkerOptions().position(latLng).title("Destination"))
+                mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
+                    ?.let { markers.add(it) }
 
                 // Calculate the distance between the source and destination using the Directions API
                 calculateDistance()
             }
             else{
-                mMap.clear()
+                clear()
                 destination = latLng
                 mMap.addMarker(MarkerOptions().position(source!!))
-                mMap.addMarker(MarkerOptions().position(latLng).title("Destination"))
+                    ?.let { it1 -> markers.add(it1) }
+                mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
+                    ?.let { markers.add(it) }
 
                 // Calculate the distance between the source and destination using the Directions API
                 calculateDistance()
             }
         }
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token", null)
+        val userId = localDB.getInt("userId", -1)
+        viewModel.getAllLocationsWithScore("Bearer $token", userId)
     }
 
 
@@ -324,12 +391,16 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                                 .addAll(decodedPolyline)
                                 .width(5f)
                                 .color(Color.BLUE)
-                            mMap.addPolyline(polylineOptions)
+                            polylines.add(mMap.addPolyline(polylineOptions))
                         }
                     }
                 }
             }
         }
+    }
+
+    override fun onCircleClick(circle: Circle) {
+        Toast.makeText(this, "${circle.center.latitude} ${circle.center.longitude}", Toast.LENGTH_LONG).show()
     }
 }
 

@@ -21,13 +21,16 @@
         tools:targetApi="31">
         <activity
             android:name=".views.CheckArrival"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.WhileInTrip"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.Emergencies"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -46,38 +49,49 @@
         <activity
             android:name=".views.CreateTripActivity"
             android:exported="false"
-            android:label="@string/title_activity_create_trip" />
+            android:label="@string/title_activity_create_trip"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.voicesample.VoiceParagraphs"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.ReportLocationMap"
             android:exported="false"
-            android:label="@string/title_activity_report_location_map" />
+            android:label="@string/title_activity_report_location_map"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.SignUp"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.AddReportActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.HomeActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.SignUpTrusted"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.Profile"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.ViewTrustedContacts"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.Login"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
