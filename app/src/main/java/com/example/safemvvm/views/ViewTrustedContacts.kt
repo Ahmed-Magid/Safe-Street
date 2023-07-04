@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -136,7 +137,7 @@ class ViewTrustedContacts : AppCompatActivity(),  AddTrustedAdapter.OnItemClickL
 
             }
         }
-        val buttonAddTrusted = findViewById<FloatingActionButton>(R.id.addButton)
+        val buttonAddTrusted = findViewById<Button>(R.id.addButton)
         buttonAddTrusted.setOnClickListener {
             val etcontactEmail = findViewById<EditText>(R.id.et_contactEmail)
             val contactEmail = etcontactEmail.text.toString()
