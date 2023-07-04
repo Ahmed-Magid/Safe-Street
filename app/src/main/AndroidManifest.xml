@@ -46,6 +46,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBCJXuU6WB-ARQgtiDBl7KRhZsSrvwdYvk" />
 
+        <meta-data
+            android:name="com.google.cloud.speech.v1.SpeechClient"
+            android:value="res/raw/credential.json" />
+
         <activity
             android:name=".views.CreateTripActivity"
             android:exported="false"

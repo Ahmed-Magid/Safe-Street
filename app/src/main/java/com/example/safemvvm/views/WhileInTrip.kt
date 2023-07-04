@@ -4,8 +4,11 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -13,6 +16,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,8 +30,18 @@ import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.WhileInTripViewModel
 import com.example.safemvvm.viewmodels.WhileInTripViewModelFactory
 import com.google.android.material.button.MaterialButton
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.cloud.speech.v1.RecognitionAudio
+import com.google.cloud.speech.v1.RecognitionConfig
+import com.google.cloud.speech.v1.RecognizeRequest
+import com.google.cloud.speech.v1.SpeechClient
+import com.google.cloud.speech.v1.SpeechSettings
 import com.google.gson.Gson
+import com.google.protobuf.ByteString
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.nio.file.Files
 
 class WhileInTrip : AppCompatActivity() {
     // TODO : tell user when they close the app and open it that they're currently in a trip
@@ -45,97 +59,14 @@ class WhileInTrip : AppCompatActivity() {
     private lateinit var mediaRecorder: MediaRecorder
     private lateinit var outputFile: File
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_while_in_trip)
 
         checkAndRequestPermissions()
 
-        // Create SpeechRecognizer instance
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
-
-        // Set up RecognitionListener
-        val recognitionListener = object : RecognitionListener {
-            override fun onReadyForSpeech(params: Bundle?) {
-                // Called when the speech recognition engine is ready for audio input
-                startRecording()
-                println("Ready")
-            }
-
-            override fun onBeginningOfSpeech() {
-                // Called when the user has started speaking
-
-                println("Began speaking")
-            }
-
-            override fun onRmsChanged(rmsdB: Float) {
-                // Called when the RMS dB value of the audio input changes
-            }
-
-            override fun onBufferReceived(buffer: ByteArray?) {
-                // Called when a partial recognition result is available
-                buffer?.let {
-                    print("Buffer here")
-                    // Perform some operations on the audio buffer
-                    // ...
-                }
-            }
-
-            override fun onEndOfSpeech() {
-                // Called when the user has finished speaking
-                println("End here")
-            }
-
-            override fun onError(error: Int) {
-                // Called when an error occurs during speech recognition
-                println("Error")
-                speechRecognizer.startListening(speechRecognizerIntent)
-                stopRecording()
-                outputFile.delete()
-
-            }
-
-            override fun onResults(results: Bundle?) {
-                // Called when the final recognition results are available
-                val speechResults = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                val result = speechResults?.get(0)
-                println(result)
-                if (result != null && result.contains("الحقوني")) {
-                    println("FIRE EMERGENCY NOWWWWWWWWWWWWWWWWW")
-                    // Predict
-                }
-//                speechResults?.let {
-//                    // Process the recognized speech results
-//                    print(it)
-//                }
-                stopRecording()
-                outputFile.delete()
-                speechRecognizer.startListening(speechRecognizerIntent)
-            }
-
-            override fun onPartialResults(partialResults: Bundle?) {
-                // Called when partial recognition results are available
-                val speechResults = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                println(speechResults)
-//                speechResults?.let {
-//                    // Process the recognized speech results
-//                    print(it)
-//                }
-            }
-
-            override fun onEvent(eventType: Int, params: Bundle?) {
-                // Called when a speech recognition event occurs
-            }
-        }
-
-        speechRecognizer.setRecognitionListener(recognitionListener)
-
-        // Start speech recognition
-        speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US") // Set the language to Arabic
-
-        speechRecognizer.startListening(speechRecognizerIntent)
+        startRecording()
 
         // Initialize the views
         timerTextView = findViewById(R.id.timer)
@@ -337,31 +268,85 @@ class WhileInTrip : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun startRecording() {
-        println("Start Recording")
-        mediaRecorder = MediaRecorder()
-        mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+        println("Started")
         val outputDir = getExternalFilesDir(null)
-        outputFile = File.createTempFile("helpMessage", ".mp4", outputDir)
-        mediaRecorder.setOutputFile(outputFile.absolutePath)
+        outputFile = File.createTempFile("helpMessage", ".3gp", outputDir)
+//        val outputFile = File(Environment.getExternalStorageDirectory(), "recording.3gp")
+        val mediaRecorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB)
+            //setAudioSamplingRate(16000)
+            setOutputFile(outputFile.absolutePath)
+            setMaxDuration(5000) // 5 seconds
+        }
         mediaRecorder.prepare()
         mediaRecorder.start()
+        // Wait for 5 seconds
+        Handler(Looper.getMainLooper()).postDelayed({
+            mediaRecorder.stop()
+            mediaRecorder.release()
+            println("Stopped")
+            println(outputFile.absolutePath)
+            if (outputDir != null) {
+                outputDir.listFiles()?.let { println("Audio Files: ${it.size}") }
+            }
+            // Send the recording for transcription
+            sendRecordingForTranscription(outputFile)
+        }, 5000)
     }
 
-    private fun stopRecording() {
-        println("Stop Recording")
-        println(outputFile)
-        mediaRecorder.stop()
-        mediaRecorder.reset()
-        mediaRecorder.release()
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun sendRecordingForTranscription(file: File) {
+        // Create a SpeechClient using your authentication credentials
+        val credentials = GoogleCredentials.fromStream(resources.openRawResource(R.raw.credential))
+        val speechSettings = SpeechSettings.newBuilder().setCredentialsProvider { credentials }.build()
+        val speechClient = SpeechClient.create(speechSettings)
+
+        // Read the audio file
+        val audioData = Files.readAllBytes(file.toPath())
+        val audioBytes = ByteString.copyFrom(audioData)
+
+        // Build the recognition request
+        val recognitionConfig = RecognitionConfig.newBuilder()
+            .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
+            .setSampleRateHertz(16000)
+            .setLanguageCode("en-US")
+            .build()
+        println(recognitionConfig.toString())
+        val audio = RecognitionAudio.newBuilder()
+            .setContent(audioBytes)
+            .build()
+        val request = RecognizeRequest.newBuilder()
+            .setConfig(recognitionConfig)
+            .setAudio(audio)
+            .build()
+
+        // Send the recognition request
+        val response = speechClient.recognize(request)
+        println(response)
+
+        // Process the transcription
+        val results = response.resultsList
+        if (results.isNotEmpty()) {
+            val transcription = results[0].alternativesList[0].transcript
+            println("User said: $transcription")
+            if (transcription.contains("help", ignoreCase = true)) {
+                // Execute the action for help
+                println("User said: HELP")
+            } else {
+                // Repeat the process
+                println("Repeating")
+                startRecording()
+            }
+        } else {
+            println("Result is empty")
+            startRecording()
+        }
+
+        speechClient.close()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Release SpeechRecognizer resources
-        speechRecognizer.destroy()
-    }
 }
