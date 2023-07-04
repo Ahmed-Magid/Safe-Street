@@ -84,7 +84,7 @@ class ViewReports : AppCompatActivity() {
                 } else {
                     Log.d("LocationReports004", "${response.errorBody()}" )
                     Log.d("LocationReports005", "${response.body()}" )
-                    Log.d("LocationReports005", "${response.code()}" )
+                    Log.d("LocationReports006", "${response.code()}" )
                     if(response.code()==403 || response.code()==410){
                         Log.d("LocationReports006", "code is 403 or 410")
                         Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
