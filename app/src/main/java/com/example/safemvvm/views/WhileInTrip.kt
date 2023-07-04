@@ -3,6 +3,8 @@ package com.example.safemvvm.views
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.AudioFormat
+import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
@@ -38,6 +40,7 @@ import com.google.cloud.speech.v1.SpeechClient
 import com.google.cloud.speech.v1.SpeechSettings
 import com.google.gson.Gson
 import com.google.protobuf.ByteString
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -268,25 +271,67 @@ class WhileInTrip : AppCompatActivity() {
         }
     }
 
+    private val SAMPLE_RATE = 16000
+    private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
+    private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
+    private val BUFFER_SIZE = 2 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startRecording() {
         println("Started")
         val outputDir = getExternalFilesDir(null)
         outputFile = File.createTempFile("helpMessage", ".3gp", outputDir)
 //        val outputFile = File(Environment.getExternalStorageDirectory(), "recording.3gp")
-        val mediaRecorder = MediaRecorder().apply {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("TAG", "Record audio permission not granted")
+            return
+        }
+        val audioRecord = AudioRecord(
+            MediaRecorder.AudioSource.MIC,
+            SAMPLE_RATE,
+            CHANNEL_CONFIG,
+            AUDIO_FORMAT,
+            BUFFER_SIZE
+        )
+        val audioBuffer = ByteArray(BUFFER_SIZE)
+        audioRecord.startRecording()
+
+        val outputStream = ByteArrayOutputStream()
+
+        while (true) {
+            val numBytes = audioRecord.read(audioBuffer, 0, BUFFER_SIZE)
+            outputStream.write(audioBuffer, 0, numBytes)
+
+            // Check if recording should stop
+            // Implement your own logic here, e.g., based on a button press or a specific duration
+
+            // Example: Stop recording after 5 seconds
+            if (outputStream.size() >= SAMPLE_RATE * 5) {
+                break
+            }
+        }
+
+
+
+    /*.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_WB)
-            //setAudioSamplingRate(16000)
+            setAudioEncoder(MediaRecorder.AudioEncoder.)
+            setAudioSamplingRate(16000)
             setOutputFile(outputFile.absolutePath)
-            setMaxDuration(5000) // 5 seconds
-        }
-        mediaRecorder.prepare()
-        mediaRecorder.start()
+            setMaxDuration(5000) // 5 seconds*/
+//        }
+       /* mediaRecorder.prepare()
+        mediaRecorder.start()*/
         // Wait for 5 seconds
         Handler(Looper.getMainLooper()).postDelayed({
-            mediaRecorder.stop()
+            audioRecord.stop()
+            audioRecord.release()
+            println("Stopped")
+            println(outputFile.absolutePath)
+            val audioData = outputStream.toByteArray()
+            // Pass the audio data to the speech-to-text API for recognition
+            sendRecordingForTranscription(audioData)
+            /*mediaRecorder.stop()
             mediaRecorder.release()
             println("Stopped")
             println(outputFile.absolutePath)
@@ -294,28 +339,27 @@ class WhileInTrip : AppCompatActivity() {
                 outputDir.listFiles()?.let { println("Audio Files: ${it.size}") }
             }
             // Send the recording for transcription
-            sendRecordingForTranscription(outputFile)
+            sendRecordingForTranscription(outputFile)*/
         }, 5000)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun sendRecordingForTranscription(file: File) {
+    private fun sendRecordingForTranscription(file: ByteArray) {
         // Create a SpeechClient using your authentication credentials
         val credentials = GoogleCredentials.fromStream(resources.openRawResource(R.raw.credential))
         val speechSettings = SpeechSettings.newBuilder().setCredentialsProvider { credentials }.build()
         val speechClient = SpeechClient.create(speechSettings)
 
         // Read the audio file
-        val audioData = Files.readAllBytes(file.toPath())
-        val audioBytes = ByteString.copyFrom(audioData)
+//        val audioData = Files.readAllBytes(file.toPath())
+        val audioBytes = ByteString.copyFrom(file)
 
         // Build the recognition request
         val recognitionConfig = RecognitionConfig.newBuilder()
             .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
-            .setSampleRateHertz(16000)
-            .setLanguageCode("en-US")
+            .setSampleRateHertz(SAMPLE_RATE)
+            .setLanguageCode("ar")
             .build()
-        println(recognitionConfig.toString())
         val audio = RecognitionAudio.newBuilder()
             .setContent(audioBytes)
             .build()
