@@ -3,48 +3,28 @@ package com.example.safemvvm.views
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.AudioFormat
-import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
-import android.speech.RecognitionListener
-import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.managers.SpeechToTextService
 import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.models.ExtendTripBody
-import com.example.safemvvm.models.LoginResponse
 import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.WhileInTripViewModel
 import com.example.safemvvm.viewmodels.WhileInTripViewModelFactory
 import com.google.android.material.button.MaterialButton
-import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.speech.v1.RecognitionAudio
-import com.google.cloud.speech.v1.RecognitionConfig
-import com.google.cloud.speech.v1.RecognizeRequest
-import com.google.cloud.speech.v1.SpeechClient
-import com.google.cloud.speech.v1.SpeechSettings
 import com.google.gson.Gson
-import com.google.protobuf.ByteString
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.nio.file.Files
 
 class WhileInTrip : AppCompatActivity() {
     // TODO : tell user when they close the app and open it that they're currently in a trip
@@ -62,14 +42,16 @@ class WhileInTrip : AppCompatActivity() {
     private lateinit var mediaRecorder: MediaRecorder
     private lateinit var outputFile: File
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_while_in_trip)
 
         checkAndRequestPermissions()
 
-        startRecording()
+        val voiceService = Intent(this, SpeechToTextService::class.java)
+        startService(voiceService)
+
 
         // Initialize the views
         timerTextView = findViewById(R.id.timer)
@@ -99,6 +81,7 @@ class WhileInTrip : AppCompatActivity() {
                 timerTextView.text = getString(R.string.timer_finished)
                 val intent = Intent(this@WhileInTrip, CheckArrival::class.java)
                 startActivity(intent)
+                stopService(voiceService)
             }
         }
 
@@ -260,6 +243,7 @@ class WhileInTrip : AppCompatActivity() {
             localDB.getInt("tripId", -1).let { tripId ->
                 viewModel.cancelTrip("Bearer $token" , tripId, customerId )
             }
+            stopService(voiceService)
         }
 
     }
@@ -270,127 +254,136 @@ class WhileInTrip : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(permission), 0)
         }
     }
-
-    private val SAMPLE_RATE = 16000
-    private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
-    private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
-    private val BUFFER_SIZE = 2 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun startRecording() {
-        println("Started")
-        val outputDir = getExternalFilesDir(null)
-        outputFile = File.createTempFile("helpMessage", ".3gp", outputDir)
+//
+//    private val SAMPLE_RATE = 16000
+//    private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
+//    private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
+//    private val BUFFER_SIZE = 2 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
+//    private lateinit var audioRecord: AudioRecord
+//    private lateinit var speechClient: SpeechClient
+//    private val mainHandler = Handler(Looper.getMainLooper())
+//
+//    private fun startRecording() {
+//        println("Started")
+//        val outputDir = getExternalFilesDir(null)
+//        //outputFile = File.createTempFile("helpMessage", ".3gp", outputDir)
 //        val outputFile = File(Environment.getExternalStorageDirectory(), "recording.3gp")
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("TAG", "Record audio permission not granted")
-            return
-        }
-        val audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.MIC,
-            SAMPLE_RATE,
-            CHANNEL_CONFIG,
-            AUDIO_FORMAT,
-            BUFFER_SIZE
-        )
-        val audioBuffer = ByteArray(BUFFER_SIZE)
-        audioRecord.startRecording()
-
-        val outputStream = ByteArrayOutputStream()
-
-        while (true) {
-            val numBytes = audioRecord.read(audioBuffer, 0, BUFFER_SIZE)
-            outputStream.write(audioBuffer, 0, numBytes)
-
-            // Check if recording should stop
-            // Implement your own logic here, e.g., based on a button press or a specific duration
-
-            // Example: Stop recording after 5 seconds
-            if (outputStream.size() >= SAMPLE_RATE * 5) {
-                break
-            }
-        }
-
-
-
-    /*.apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setAudioEncoder(MediaRecorder.AudioEncoder.)
-            setAudioSamplingRate(16000)
-            setOutputFile(outputFile.absolutePath)
-            setMaxDuration(5000) // 5 seconds*/
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+//            Log.e("TAG", "Record audio permission not granted")
+//            return
 //        }
-       /* mediaRecorder.prepare()
-        mediaRecorder.start()*/
-        // Wait for 5 seconds
-        Handler(Looper.getMainLooper()).postDelayed({
-            audioRecord.stop()
-            audioRecord.release()
-            println("Stopped")
-            println(outputFile.absolutePath)
-            val audioData = outputStream.toByteArray()
-            // Pass the audio data to the speech-to-text API for recognition
-            sendRecordingForTranscription(audioData)
-            /*mediaRecorder.stop()
-            mediaRecorder.release()
-            println("Stopped")
-            println(outputFile.absolutePath)
-            if (outputDir != null) {
-                outputDir.listFiles()?.let { println("Audio Files: ${it.size}") }
-            }
-            // Send the recording for transcription
-            sendRecordingForTranscription(outputFile)*/
-        }, 5000)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun sendRecordingForTranscription(file: ByteArray) {
-        // Create a SpeechClient using your authentication credentials
-        val credentials = GoogleCredentials.fromStream(resources.openRawResource(R.raw.credential))
-        val speechSettings = SpeechSettings.newBuilder().setCredentialsProvider { credentials }.build()
-        val speechClient = SpeechClient.create(speechSettings)
-
-        // Read the audio file
-//        val audioData = Files.readAllBytes(file.toPath())
-        val audioBytes = ByteString.copyFrom(file)
-
-        // Build the recognition request
-        val recognitionConfig = RecognitionConfig.newBuilder()
-            .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
-            .setSampleRateHertz(SAMPLE_RATE)
-            .setLanguageCode("ar")
-            .build()
-        val audio = RecognitionAudio.newBuilder()
-            .setContent(audioBytes)
-            .build()
-        val request = RecognizeRequest.newBuilder()
-            .setConfig(recognitionConfig)
-            .setAudio(audio)
-            .build()
-
-        // Send the recognition request
-        val response = speechClient.recognize(request)
-        println(response)
-
-        // Process the transcription
-        val results = response.resultsList
-        if (results.isNotEmpty()) {
-            val transcription = results[0].alternativesList[0].transcript
-            println("User said: $transcription")
-            if (transcription.contains("help", ignoreCase = true)) {
-                // Execute the action for help
-                println("User said: HELP")
-            } else {
-                // Repeat the process
-                println("Repeating")
-                startRecording()
-            }
-        } else {
-            println("Result is empty")
-            startRecording()
-        }
-
-        speechClient.close()
-    }
+//        audioRecord = AudioRecord(
+//            MediaRecorder.AudioSource.MIC,
+//            SAMPLE_RATE,
+//            CHANNEL_CONFIG,
+//            AUDIO_FORMAT,
+//            BUFFER_SIZE
+//        )
+//        val audioBuffer = ByteArray(BUFFER_SIZE)
+//        audioRecord.startRecording()
+//
+//        val outputStream = ByteArrayOutputStream()
+//
+//        while (true) {
+//            val numBytes = audioRecord.read(audioBuffer, 0, BUFFER_SIZE)
+//            outputStream.write(audioBuffer, 0, numBytes)
+//
+//            // Check if recording should stop
+//            // Implement your own logic here, e.g., based on a button press or a specific duration
+//
+//            // Example: Stop recording after 5 seconds
+//            if (outputStream.size() >= SAMPLE_RATE * 5) {
+//                audioRecord.stop()
+//                audioRecord.release()
+//                val audioData = outputStream.toByteArray()
+//                // Pass the audio data to the speech-to-text API for recognition
+//                sendRecordingForTranscription(audioData)
+//                break
+//            }
+//        }
+//
+//
+//
+//    /*.apply {
+//            setAudioSource(MediaRecorder.AudioSource.MIC)
+//            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+//            setAudioEncoder(MediaRecorder.AudioEncoder.)
+//            setAudioSamplingRate(16000)
+//            setOutputFile(outputFile.absolutePath)
+//            setMaxDuration(5000) // 5 seconds*/
+////        }
+//       /* mediaRecorder.prepare()
+//        mediaRecorder.start()*/
+//        // Wait for 5 seconds
+////        Handler(Looper.getMainLooper()).postDelayed({
+////            audioRecord.stop()
+////            audioRecord.release()
+////            println("Stopped")
+////            println(outputFile.absolutePath)
+////            val audioData = outputStream.toByteArray()
+////            // Pass the audio data to the speech-to-text API for recognition
+////            sendRecordingForTranscription(audioData)
+////            /*mediaRecorder.stop()
+////            mediaRecorder.release()
+////            println("Stopped")
+////            println(outputFile.absolutePath)
+////            if (outputDir != null) {
+////                outputDir.listFiles()?.let { println("Audio Files: ${it.size}") }
+////            }
+////            // Send the recording for transcription
+////            sendRecordingForTranscription(outputFile)*/
+////        }, 5000)
+//    }
+//
+//
+//    private fun sendRecordingForTranscription(bytes: ByteArray) {
+//        // Create a SpeechClient using your authentication credentials
+//        val credentials = GoogleCredentials.fromStream(resources.openRawResource(R.raw.credential))
+//        val speechSettings = SpeechSettings.newBuilder().setCredentialsProvider { credentials }.build()
+//        val speechClient = SpeechClient.create(speechSettings)
+//
+//        // Read the audio bytes
+////        val audioData = Files.readAllBytes(bytes.toPath())
+//        val audioBytes = ByteString.copyFrom(bytes)
+//
+//        // Build the recognition request
+//        val recognitionConfig = RecognitionConfig.newBuilder()
+//            .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
+//            .setSampleRateHertz(SAMPLE_RATE)
+//            .setLanguageCode("en-US")
+//            .build()
+//        val audio = RecognitionAudio.newBuilder()
+//            .setContent(audioBytes)
+//            .build()
+//        val request = RecognizeRequest.newBuilder()
+//            .setConfig(recognitionConfig)
+//            .setAudio(audio)
+//            .build()
+//
+//        // Send the recognition request
+//        val response = speechClient.recognize(request)
+//        println(response)
+//
+//        // Process the transcription
+//        val results = response.resultsList
+//        if (results.isNotEmpty()) {
+//            val transcription = results[0].alternativesList[0].transcript
+//            println("User said: $transcription")
+//            if (transcription.contains("help", ignoreCase = true)) {
+//                // Execute the action for help
+//                println("Fire Emergency Here")
+//                startRecording()
+//            } else {
+//                // Repeat the process
+//                println("Repeating")
+//                startRecording()
+//            }
+//        } else {
+//            println("Result is empty")
+//            startRecording()
+//        }
+//
+//        speechClient.close()
+//    }
 
 }

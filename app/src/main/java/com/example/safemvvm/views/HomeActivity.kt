@@ -154,6 +154,7 @@ class HomeActivity : AppCompatActivity() {
                 //add fire emergency button in home
                 // change profile button image
                 // Check arrival add No button to extend
+                // disable buttons to stop multiple firing
                 buttonLogout.isEnabled = false
                 viewModel.logout("Bearer $token", IdBody(userId))
             }
