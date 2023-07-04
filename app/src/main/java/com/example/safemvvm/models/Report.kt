@@ -9,5 +9,7 @@ data class Report(
     val category: String,
     val longitude: String,
     val latitude: String,
-): Serializable
+    val firstName: String = "",
+    val lastName: String = "",
+)
 
