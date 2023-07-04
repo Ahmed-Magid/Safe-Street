@@ -114,8 +114,8 @@ interface SpringApi {
     suspend fun getLocationReports(
         @Header("Authorization") token: String,
         @Query("id") id: Int,
-        @Query("longitude") longitude: Double,
-        @Query("latitude") latitude: Double
+        @Query("longitude") longitude: String,
+        @Query("latitude") latitude: String
     ): Response<MainResponse>
 
     @GET("report/listAllLocationWithScore")

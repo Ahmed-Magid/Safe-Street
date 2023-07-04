@@ -13,14 +13,12 @@ import com.example.safemvvm.R
 import com.example.safemvvm.R.*
 import com.example.safemvvm.models.Report
 import com.example.safemvvm.repository.Repository
-import com.example.safemvvm.viewmodels.ReportViewModel
-import com.example.safemvvm.viewmodels.ReportViewModelFactory
-import com.example.safemvvm.viewmodels.TrustedContactViewModel
-import com.example.safemvvm.viewmodels.TrustedContactViewModelFactory
+import com.example.safemvvm.viewmodels.AddReportViewModel
+import com.example.safemvvm.viewmodels.AddReportViewModelFactory
 import com.google.android.gms.maps.model.LatLng
 
 class AddReportActivity : AppCompatActivity() {
-    private lateinit var viewModel: ReportViewModel
+    private lateinit var viewModel: AddReportViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_add_report)
@@ -30,8 +28,8 @@ class AddReportActivity : AppCompatActivity() {
         autocompleteTV.setAdapter(arrayAdapter)
         val buttonSubmitReport = findViewById<Button>(R.id.btn_submitReport)
         val repository = Repository()
-        val viewModelFactory = ReportViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(ReportViewModel::class.java)
+        val viewModelFactory = AddReportViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(AddReportViewModel::class.java)
         val location = intent.getParcelableExtra<LatLng>("location")
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)

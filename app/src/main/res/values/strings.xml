@@ -97,4 +97,9 @@
     <string name="this_is_email">Email</string>
     <string name="log_out">Log Out</string>
     <string name="no_extend_time">No, extend time</string>
+    <string name="add_report">Add report</string>
+    <string name="view_reports">View reports</string>
+    <string name="location">Location</string>
+    <string name="clear">Clear</string>
+    <string name="ok">OK</string>
 </resources>

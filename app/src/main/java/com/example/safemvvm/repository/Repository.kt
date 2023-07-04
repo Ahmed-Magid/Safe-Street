@@ -14,9 +14,6 @@ import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.User
 import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.Query
 
 class Repository {
     suspend fun register(user: User): Response<MainResponse> {
@@ -89,7 +86,7 @@ class Repository {
         return RetrofitInstanceSpring.api.checkIngoingTrip(token, id)
     }
 
-    suspend fun getLocationReports(token: String, id: Int, longitude: Double, latitude: Double): Response<MainResponse> {
+    suspend fun getLocationReports(token: String, id: Int, longitude: String, latitude: String): Response<MainResponse> {
         return RetrofitInstanceSpring.api.getLocationReports(token, id, longitude, latitude)
     }
 

@@ -5,12 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.safemvvm.models.MainResponse
 import com.example.safemvvm.models.Report
-import com.example.safemvvm.models.User
 import com.example.safemvvm.repository.Repository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-class ReportViewModel(private val repository: Repository): ViewModel() {
+class AddReportViewModel(private val repository: Repository): ViewModel() {
     val addReportResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
 
     fun addReport(token: String, report: Report){
@@ -19,5 +18,6 @@ class ReportViewModel(private val repository: Repository): ViewModel() {
             addReportResponse.value = response
         }
     }
+
 
 }

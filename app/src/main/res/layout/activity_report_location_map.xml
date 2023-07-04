@@ -32,13 +32,40 @@
         android:padding="10dp"
         >
 
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/add_report"
+            android:checked="true"
+            android:textColor="@color/white"
+            android:background="@drawable/textview_bg"
+            map:layout_constraintLeft_toLeftOf="parent"
+            map:layout_constraintRight_toLeftOf="@id/checkBox2"
+            map:layout_constraintBottom_toTopOf="@id/CurrLocation"
+            />
+
+        <CheckBox
+            android:id="@+id/checkBox2"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:text="@string/view_reports"
+            android:checked="false"
+            android:textColor="@color/white"
+            android:background="@drawable/textview_bg"
+            map:layout_constraintRight_toRightOf="parent"
+            map:layout_constraintLeft_toRightOf="@id/checkBox1"
+            map:layout_constraintBottom_toTopOf="@id/confirm_button"
+            />
+
+
         <Button
             android:id="@+id/CurrLocation"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="Location"
-            map:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/location"
             map:layout_constraintLeft_toLeftOf="parent"
+            map:layout_constraintBottom_toBottomOf="parent"
             android:backgroundTint="@color/green1"
             />
 
@@ -46,11 +73,11 @@
             android:id="@+id/reset_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="Clear"
+            android:text="@string/clear"
             android:layout_toEndOf="@+id/CurrLocation"
-            map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintLeft_toRightOf="@id/CurrLocation"
             map:layout_constraintRight_toLeftOf="@id/confirm_button"
+            map:layout_constraintBottom_toBottomOf="parent"
             android:backgroundTint="@color/green1"
             />
 
@@ -58,12 +85,12 @@
             android:id="@+id/confirm_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="OK"
+            android:text="@string/ok"
             android:layout_toEndOf="@+id/reset_button"
-            map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintLeft_toRightOf="@id/reset_button"
             android:backgroundTint="@color/green1"
             map:layout_constraintRight_toRightOf="parent"
+            map:layout_constraintBottom_toBottomOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

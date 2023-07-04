@@ -1,6 +1,6 @@
 package com.example.safemvvm.models
 
-
+import java.io.Serializable
 
 
 data class Report(
@@ -9,5 +9,5 @@ data class Report(
     val category: String,
     val longitude: String,
     val latitude: String,
-)
+): Serializable
 
