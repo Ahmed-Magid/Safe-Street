@@ -4,85 +4,309 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.HomeActivity"
-    android:paddingLeft="50dp"
-    android:paddingRight="50dp"
-    android:paddingBottom="10dp"
-    android:paddingTop="10dp">
+    tools:context=".views.HomeActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:src="@drawable/logo"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+    <!-- Menu Button -->
+    <ImageButton
+        android:id="@+id/menu_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:src="@drawable/ic_menu"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/FireEmergency"
-        android:contentDescription="@string/logo" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/FireEmergency"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        app:cornerRadius="10dp"
-        android:textSize="15sp"
-        android:text="@string/fire_emergency"
-        app:layout_constraintTop_toBottomOf="@id/logo"
-        app:layout_constraintBottom_toTopOf="@id/btn_createTrip"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:backgroundTint="@color/green1"
-        tools:ignore="VisualLintButtonSize" />
+        android:layout_marginTop="16dp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_createTrip"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        app:cornerRadius="10dp"
-        android:textSize="15sp"
-        android:text="@string/create_trip"
-        app:layout_constraintTop_toBottomOf="@id/FireEmergency"
-        app:layout_constraintBottom_toTopOf="@id/btn_viewTrusted"
-        android:backgroundTint="@color/green1"
-        tools:ignore="VisualLintButtonSize" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_viewTrusted"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        app:cornerRadius="10dp"
-        android:textSize="15sp"
-        android:text="@string/trusted_contact"
-        app:layout_constraintTop_toBottomOf="@id/btn_createTrip"
-        app:layout_constraintBottom_toTopOf="@id/btn_reportLocation"
-        android:backgroundTint="@color/green1"
-        tools:ignore="VisualLintButtonSize" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_reportLocation"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        app:cornerRadius="10dp"
-        android:textSize="15sp"
-        android:text="@string/report_location"
-        app:layout_constraintTop_toBottomOf="@id/btn_viewTrusted"
-        app:layout_constraintBottom_toTopOf="@id/btn_logout"
-        android:backgroundTint="@color/green1"
-        tools:ignore="VisualLintButtonSize" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:backgroundTint="@color/red"
-        android:text="@string/log_out"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        app:cornerRadius="10dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_reportLocation"
-        tools:ignore="VisualLintButtonSize" />
-<!--    TODO PROFILE, FIRE EMERGENCY , view reports-->
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/menu_button">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+
+            android:text="@string/fire_an_emergency_and_notify_your_trusted_contacts_instantly"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+        <!-- First row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- First icon and caption -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:id="@+id/carFault"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/circular_background"
+                    android:src="@drawable/car_fault" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_fault"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Second icon and caption -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/circular_background"
+                    android:src="@drawable/harrasment" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/harassment"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Second row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Third icon and caption -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/circular_background"
+                    android:src="@drawable/fire" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fire"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Fourth icon and caption -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/circular_background"
+                    android:src="@drawable/robbery" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/robbery"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Third row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!-- Fifth icon and caption -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/circular_background"
+                    android:src="@drawable/kidnapping" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kidnapping"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- Sixth icon and caption -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/circular_background"
+                    android:src="@drawable/murder" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/murder"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Menu Container -->
+    <LinearLayout
+        android:id="@+id/menu_container"
+        android:layout_width="300dp"
+        android:elevation="8dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="16dp"
+        android:background="@color/grey1"
+        android:visibility="gone"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/menu_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/menu_image" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+            <!-- Profile Option -->
+            <TextView
+                android:id="@+id/profile_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="8dp"
+                android:text="@string/profile" />
+
+            <!-- Trusted Contacts Option -->
+            <TextView
+                android:id="@+id/trusted_contacts_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="8dp"
+                android:text="@string/trusted_contacts" />
+
+            <TextView
+                android:id="@+id/create_trip_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="8dp"
+                android:text="@string/create_trip" />
+
+            <!-- Reports Option -->
+            <TextView
+                android:id="@+id/reports_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_margin="8dp"
+                android:text="@string/reports" />
+
+            <!-- Logout Option -->
+            <TextView
+                android:id="@+id/logout_option"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:layout_margin="8dp"
+                android:text="@string/log_out" />
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

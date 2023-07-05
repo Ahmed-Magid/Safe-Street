@@ -4,8 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
@@ -20,9 +24,27 @@ import com.google.gson.Gson
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var viewModel: HomeViewModel
+
+
+    private lateinit var menuButton: ImageButton
+    private lateinit var menuContainer: LinearLayout
+    private lateinit var profileOption: TextView
+    private lateinit var trustedContactsOption: TextView
+    private lateinit var reportsOption: TextView
+    private lateinit var logoutOption: TextView
+    private lateinit var createTripOption: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_home)
+
+        // Find views
+        menuButton = findViewById(R.id.menu_button)
+        menuContainer = findViewById(R.id.menu_container)
+        profileOption = findViewById(R.id.profile_option)
+        trustedContactsOption = findViewById(R.id.trusted_contacts_option)
+        reportsOption = findViewById(R.id.reports_option)
+        logoutOption = findViewById(R.id.logout_option)
+        createTripOption = findViewById(R.id.create_trip_option)
 
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token","empty")
@@ -81,7 +103,7 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
-        val buttonLogout = findViewById<Button>(id.btn_logout)
+
 
         viewModel.logoutResponse.observe(this) { response ->
             if (response.isSuccessful || response.code()==403 || response.code()==410) {
@@ -102,7 +124,7 @@ class HomeActivity : AppCompatActivity() {
                 ).show()
 
             }
-            buttonLogout.isEnabled = true
+            logoutOption.isEnabled = true
         }
 
         viewModel.checkIngoingTripResponse.observe(this){ response ->
@@ -145,7 +167,7 @@ class HomeActivity : AppCompatActivity() {
             }
         }
 
-        buttonLogout.setOnClickListener {
+        logoutOption.setOnClickListener {
 
             if (token != null) {
                 //mahmoud
@@ -155,8 +177,9 @@ class HomeActivity : AppCompatActivity() {
                 // change profile button image
                 // Check arrival add No button to extend
                 // disable buttons to stop multiple firing
-                buttonLogout.isEnabled = false
+                logoutOption.isEnabled = false
                 viewModel.logout("Bearer $token", IdBody(userId))
+                toggleMenu()
             }
         }
 
@@ -165,30 +188,40 @@ class HomeActivity : AppCompatActivity() {
             val intent = Intent(this, AddTripActivity::class.java)
             startActivity(intent)
         }*/
-        val buttonFireEmergency = findViewById<Button>(id.FireEmergency)
-        buttonFireEmergency.setOnClickListener {
-            val intent = Intent(this, Emergencies::class.java)
-            startActivity(intent)
+
+        menuButton.setOnClickListener {
+            toggleMenu()
         }
-        val buttonViewTrustedContact = findViewById<Button>(id.btn_viewTrusted)
-        buttonViewTrustedContact.setOnClickListener {
+
+        trustedContactsOption.setOnClickListener {
             val intent = Intent(this, ViewTrustedContacts::class.java)
             startActivity(intent)
+            toggleMenu()
         }
-        val imageViewLogo = findViewById<ImageView>(id.logo)
-        imageViewLogo.setOnClickListener {
+
+        profileOption.setOnClickListener {
             val intent = Intent(this, Profile::class.java)
             startActivity(intent)
+            toggleMenu()
         }
-        val buttonCreatetrip = findViewById<Button>(R.id.btn_createTrip)
-        buttonCreatetrip.setOnClickListener {
+        createTripOption.setOnClickListener {
             val intent = Intent(this, CreateTripActivity::class.java)
             startActivity(intent)
+            toggleMenu()
         }
-        val buttonReportActivity = findViewById<Button>(R.id.btn_reportLocation)
-        buttonReportActivity.setOnClickListener {
+        reportsOption.setOnClickListener {
             val intent = Intent(this, ReportLocationMap::class.java)
             startActivity(intent)
+            toggleMenu()
+        }
+    }
+
+    private fun toggleMenu() {
+        if (menuContainer.visibility == View.VISIBLE) {
+
+            menuContainer.visibility = View.GONE
+        } else {
+            menuContainer.visibility = View.VISIBLE
         }
     }
 }
