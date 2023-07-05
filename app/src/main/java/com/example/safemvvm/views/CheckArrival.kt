@@ -36,7 +36,7 @@ class CheckArrival : AppCompatActivity() {
     private lateinit var yesButton: MaterialButton
     private lateinit var noButton: MaterialButton
     private lateinit var emergencyType: EmergenciesEnum
-    private lateinit var emergencyFired: EmergencyFired
+    //private lateinit var emergencyFired: EmergencyFired
     private lateinit var countdownTimer: CountDownTimer
     private var timeLeftInMillis: Long = 10000 // 10 seconds countdown timer
     private val countDownInterval: Long = 1000
@@ -252,7 +252,7 @@ class CheckArrival : AppCompatActivity() {
                     val customerId = localDB.getInt("userId", -1)
 
                     // Create a new EmergencyFired object with the location, time, and emergency type
-                    emergencyFired = EmergencyFired(location, formattedTime, emergencyType)
+                    //emergencyFired = EmergencyFired(location, formattedTime, emergencyType)
 
                     // Display a toast message with the location and time information
                     val latitude = location.latitude

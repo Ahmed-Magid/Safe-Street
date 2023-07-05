@@ -15,7 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
-import com.example.safemvvm.managers.SpeechToTextService
+import com.example.safemvvm.services.SpeechToTextService
 import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.models.ExtendTripBody
 import com.example.safemvvm.models.TripResponse
@@ -50,7 +50,16 @@ class WhileInTrip : AppCompatActivity() {
         checkAndRequestPermissions()
 
         val voiceService = Intent(this, SpeechToTextService::class.java)
+        val repository = Repository()
+        val viewModelFactory = WhileInTripViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(WhileInTripViewModel::class.java)
         startService(voiceService)
+
+        viewModel.predictResponse.observe(this) {response ->
+            if (response.isSuccessful && response.body() != null) {
+                println("Prediction: ${response.body()}")
+            }
+        }
 
 
         // Initialize the views
@@ -94,9 +103,7 @@ class WhileInTrip : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val repository = Repository()
-        val viewModelFactory = WhileInTripViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(WhileInTripViewModel::class.java)
+
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)
         val customerId = localDB.getInt("userId", -1)

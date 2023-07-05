@@ -7,7 +7,8 @@ enum class EmergenciesEnum {
     CAR_FAULT,
     ROBBERY,
     MURDER,
-    UserDidntArrive;
+    UserDidntArrive,
+    IN_DANGER;
 
     override fun toString(): String {
         return when (this) {
@@ -18,6 +19,7 @@ enum class EmergenciesEnum {
             ROBBERY -> "Robbery"
             MURDER -> "Murder"
             UserDidntArrive -> "UserDidntArrive"
+            IN_DANGER -> "InDanger"
         }
     }
 }

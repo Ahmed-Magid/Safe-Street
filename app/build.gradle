@@ -4,7 +4,10 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+
+
 android {
+
     namespace 'com.example.safemvvm'
     compileSdk 33
 
@@ -42,7 +45,6 @@ android {
         viewBinding true
     }
 }
-
 dependencies {
     implementation 'androidx.core:core-ktx:1.10.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'

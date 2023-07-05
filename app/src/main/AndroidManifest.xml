@@ -23,7 +23,7 @@
             android:name=".views.ViewReports"
             android:exported="false" />
 
-        <service android:name=".managers.SpeechToTextService" />
+        <service android:name=".services.SpeechToTextService" />
 
         <activity
             android:name=".views.CheckArrival"

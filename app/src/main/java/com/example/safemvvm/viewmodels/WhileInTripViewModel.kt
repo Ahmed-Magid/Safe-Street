@@ -9,12 +9,15 @@ import com.example.safemvvm.models.MainResponse
 import com.example.safemvvm.models.Trip
 import com.example.safemvvm.repository.Repository
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import retrofit2.Response
+import java.io.Serializable
 
 class WhileInTripViewModel (private val repository: Repository): ViewModel() {
     val endTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
     val cancelTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
     val extendTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+    val predictResponse: MutableLiveData<Response<String>> = MutableLiveData()
 
 
     //end trip
@@ -36,6 +39,13 @@ class WhileInTripViewModel (private val repository: Repository): ViewModel() {
         viewModelScope.launch {
             val response = repository.extendTrip(token, extendTripBody)
             extendTripResponse.value = response
+        }
+    }
+
+    fun predict(record: MultipartBody.Part, userId: Int) {
+        viewModelScope.launch {
+            val response = repository.predict(record, userId)
+            predictResponse.value = response
         }
     }
 }

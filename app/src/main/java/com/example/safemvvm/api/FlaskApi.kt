@@ -20,5 +20,5 @@ interface FlaskApi {
     suspend fun predict(
         @Part record: MultipartBody.Part,
         @Query("userId") userId: Int
-    ): Response<Boolean>
+    ): Response<String>
 }

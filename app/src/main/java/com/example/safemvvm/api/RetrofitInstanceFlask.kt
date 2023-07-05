@@ -5,7 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-private const val BASE_URL = "https://flask-app.up.railway.app/" // TODO Deploy Flask
+private const val BASE_URL = "https://flask-app.up.railway.app/"
 object RetrofitInstanceFlask {
 
 
