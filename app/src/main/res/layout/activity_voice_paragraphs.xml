@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VoiceParagraphs"
-    android:padding="50dp"
+    tools:context=".views.voicesample.VoiceParagraphs"
+    android:padding="15dp"
     >
 
     <androidx.viewpager.widget.ViewPager
@@ -17,7 +17,7 @@
 
     <Button
         android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,7 @@
 
     <Button
         android:id="@+id/record"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:text="Record"
         app:layout_constraintBottom_toBottomOf="parent"
