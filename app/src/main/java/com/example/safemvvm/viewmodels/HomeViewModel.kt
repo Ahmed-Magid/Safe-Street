@@ -3,6 +3,7 @@ package com.example.safemvvm.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.safemvvm.models.EmergencyBody
 import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.models.LoginUser
 import com.example.safemvvm.models.MainResponse
@@ -14,6 +15,7 @@ class HomeViewModel(private val repository: Repository): ViewModel() {
     val logoutResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
     val numOfContactsResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
     val checkIngoingTripResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
+    val fireEmergencyResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
 
 
     fun logout(token : String, idBody: IdBody){
@@ -32,6 +34,13 @@ class HomeViewModel(private val repository: Repository): ViewModel() {
         viewModelScope.launch {
             val response = repository.checkIngoingTrip(token, id)
             checkIngoingTripResponse.value = response
+        }
+    }
+
+    fun fireEmergency(token: String, emergencyBody: EmergencyBody){
+        viewModelScope.launch {
+            val response = repository.fireEmergency(token, emergencyBody)
+            fireEmergencyResponse.value = response
         }
     }
 }

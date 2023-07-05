@@ -59,7 +59,7 @@
                 android:padding="10dp">
 
                 <ImageView
-                    android:id="@+id/carFault"
+                    android:id="@+id/iv_carFault"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:background="@drawable/circular_background"
@@ -84,6 +84,7 @@
                 android:padding="10dp">
 
                 <ImageView
+                    android:id="@+id/iv_harassment"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:background="@drawable/circular_background"
@@ -118,6 +119,7 @@
                 android:padding="10dp">
 
                 <ImageView
+                    android:id="@+id/iv_fire"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:background="@drawable/circular_background"
@@ -142,6 +144,7 @@
                 android:padding="10dp">
 
                 <ImageView
+                    android:id="@+id/iv_robbery"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:background="@drawable/circular_background"
@@ -176,6 +179,7 @@
                 android:padding="10dp">
 
                 <ImageView
+                    android:id="@+id/iv_kidnapping"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:background="@drawable/circular_background"
@@ -200,6 +204,7 @@
                 android:padding="10dp">
 
                 <ImageView
+                    android:id="@+id/iv_murder"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:background="@drawable/circular_background"
