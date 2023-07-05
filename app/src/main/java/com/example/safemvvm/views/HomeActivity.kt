@@ -358,9 +358,21 @@ class HomeActivity : AppCompatActivity() {
 
     private fun toggleMenu() {
         if (menuContainer.visibility == View.VISIBLE) {
+            carFaultImage.isClickable = true
+            harasmentImage.isClickable = true
+            fireImage.isClickable = true
+            robberyImage.isClickable = true
+            kidnappingImage.isClickable = true
+            murderImage.isClickable = true
 
             menuContainer.visibility = View.GONE
         } else {
+            carFaultImage.isClickable = false
+            harasmentImage.isClickable = false
+            fireImage.isClickable = false
+            robberyImage.isClickable = false
+            kidnappingImage.isClickable = false
+            murderImage.isClickable = false
             menuContainer.visibility = View.VISIBLE
         }
     }
