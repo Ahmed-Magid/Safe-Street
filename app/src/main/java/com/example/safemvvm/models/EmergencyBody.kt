@@ -4,5 +4,6 @@ data class EmergencyBody(
     val customerId: Int,
     val longitude: Double,
     val latitude: Double,
-    val category: String
+    val category: String,
+    val address: String
 )

@@ -14,9 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.safemvvm.R
 import com.example.safemvvm.models.EmergenciesEnum
+import com.example.safemvvm.models.EmergencyBody
 import com.example.safemvvm.models.EmergencyFired
+import com.example.safemvvm.utils.AddressProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -155,7 +158,10 @@ class CheckEmergency : AppCompatActivity() {
                     emergencyFired = EmergencyFired(location, formattedTime, emergencyType)
                     println(emergencyFired.type.toString())
                     //TODO: go to check emergency first then Send emergency to server
-                    //viewModel.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, emergencyFired.type.toString()))
+//                    viewModel.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, emergencyFired.type.toString(), AddressProvider(this).getAddress(
+//                        LatLng(latitude, longitude), "ar"
+//                    ))
+//                    )
                     // Toast.makeText(this, "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ",Toast.LENGTH_LONG).show()
                     Log.d("TAG", "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ")
 

@@ -25,6 +25,7 @@ import com.example.safemvvm.viewmodels.CheckArrivalViewModel
 import com.example.safemvvm.viewmodels.CheckArrivalViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
@@ -258,7 +259,10 @@ class CheckArrival : AppCompatActivity() {
                     val latitude = location.latitude
                     val longitude = location.longitude
                     val message = "Latitude: $latitude, Longitude: $longitude, $formattedTime, $emergencyType"
-                    viewModel.fireEmergency("Bearer $token", EmergencyBody(customerId, longitude, latitude, emergencyType.toString()))
+//                    viewModel.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, emergencyFired.type.toString(), AddressProvider(this).getAddress(
+//                        LatLng(latitude, longitude), "ar"
+//                    ))
+//                    )
                     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
                     // Log the location and time information

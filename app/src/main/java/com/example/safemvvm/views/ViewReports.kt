@@ -61,6 +61,7 @@ class ViewReports : AppCompatActivity() {
                     if (responseMessage == "Executed Successfully") {
                         Log.d("LocationReports001", " ${response.body()}" )
                         val apiReports: List<Report> = Gson().fromJson(response.body()?.data.toString(), object : TypeToken<List<Report>>() {}.type)
+                        apiReports.forEach { report -> report.reportText = report.reportText.replace("@", " ") }
                         reports.addAll(apiReports)
                         adapter.notifyDataSetChanged()
 

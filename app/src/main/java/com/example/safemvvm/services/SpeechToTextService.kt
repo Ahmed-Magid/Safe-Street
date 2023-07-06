@@ -23,6 +23,7 @@ import com.example.safemvvm.models.EmergencyBody
 import com.example.safemvvm.models.EmergencyFired
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.WhileInTripViewModel
+import com.example.safemvvm.views.CheckEmergency
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.auth.oauth2.GoogleCredentials
@@ -170,8 +171,13 @@ class SpeechToTextService : Service() {
                         val token = localDB.getString("token", "empty")
                         val repository = Repository()
                         if (repository.predict(record, userId).body() == "1") {
-                            getCurrentLocation()
-                            repository.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, EmergenciesEnum.IN_DANGER.toString()))
+//                            getCurrentLocation()
+//                            repository.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, EmergenciesEnum.IN_DANGER.toString()))
+                            val intent = Intent(applicationContext, CheckEmergency::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            intent.putExtra("emergencyType", EmergenciesEnum.IN_DANGER)
+                            startActivity(intent)
+
                         }
 
                         file.delete()
