@@ -3,11 +3,13 @@ package com.example.safemvvm.views
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.speech.SpeechRecognizer
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +17,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.models.EmergenciesEnum
+import com.example.safemvvm.models.EmergencyBody
+import com.example.safemvvm.models.EmergencyFired
 import com.example.safemvvm.services.SpeechToTextService
 import com.example.safemvvm.models.EndTripBody
 import com.example.safemvvm.models.ExtendTripBody
@@ -22,9 +27,12 @@ import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.WhileInTripViewModel
 import com.example.safemvvm.viewmodels.WhileInTripViewModelFactory
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.material.button.MaterialButton
 import com.google.gson.Gson
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class WhileInTrip : AppCompatActivity() {
     // TODO : tell user when they close the app and open it that they're currently in a trip
@@ -41,6 +49,10 @@ class WhileInTrip : AppCompatActivity() {
     private lateinit var speechRecognizerIntent: Intent
     private lateinit var mediaRecorder: MediaRecorder
     private lateinit var outputFile: File
+    private lateinit var emergencyType : EmergenciesEnum
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val REQUEST_LOCATION_PERMISSION = 1
+    lateinit var emergencyFired: EmergencyFired
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +64,62 @@ class WhileInTrip : AppCompatActivity() {
         val voiceService = Intent(this, SpeechToTextService::class.java)
         val repository = Repository()
         val viewModelFactory = WhileInTripViewModelFactory(repository)
+
+        val carFault = findViewById<ImageView>(R.id.iv_carFault)
+        val fire = findViewById<ImageView>(R.id.iv_fire)
+        val harassment = findViewById<ImageView>(R.id.iv_harassment)
+        val kidnapping = findViewById<ImageView>(R.id.iv_kidnapping)
+        val robbery = findViewById<ImageView>(R.id.iv_robbery)
+        val murder = findViewById<ImageView>(R.id.iv_murder)
+
+        carFault.setOnClickListener{
+            emergencyType = EmergenciesEnum.CAR_FAULT
+            val intent = Intent(this, CheckEmergency::class.java)
+            intent.putExtra("emergencyType", emergencyType)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+
+        fire.setOnClickListener {
+            emergencyType = EmergenciesEnum.FIRE
+            val intent = Intent(this, CheckEmergency::class.java)
+            intent.putExtra("emergencyType", emergencyType)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+
+        harassment.setOnClickListener{
+            emergencyType = EmergenciesEnum.HARASSMENT
+            val intent = Intent(this, CheckEmergency::class.java)
+            intent.putExtra("emergencyType", emergencyType)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+
+        kidnapping.setOnClickListener {
+            emergencyType = EmergenciesEnum.KIDNAPPING
+            val intent = Intent(this, CheckEmergency::class.java)
+            intent.putExtra("emergencyType", emergencyType)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+
+        robbery.setOnClickListener {
+            emergencyType = EmergenciesEnum.ROBBERY
+            val intent = Intent(this, CheckEmergency::class.java)
+            intent.putExtra("emergencyType", emergencyType)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+
+        murder.setOnClickListener{
+            emergencyType = EmergenciesEnum.MURDER
+            val intent = Intent(this, CheckEmergency::class.java)
+            intent.putExtra("emergencyType", emergencyType)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+        }
+
         viewModel = ViewModelProvider(this,viewModelFactory).get(WhileInTripViewModel::class.java)
         startService(voiceService)
 
@@ -261,6 +329,52 @@ class WhileInTrip : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(permission), 0)
         }
     }
+
+
+    private fun getCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+            return
+        }
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+                    val token = localDB.getString("token","empty")
+                    val userId = localDB.getInt("userId",-1)
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    val time = System.currentTimeMillis()
+                    val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+                    val formattedTime = dateFormat.format(time)
+                    emergencyFired = EmergencyFired(location, formattedTime, emergencyType)
+                    println(emergencyFired.type.toString())
+                    //TODO: go to check emergency first then Send emergency to server
+                    //viewModel.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, emergencyFired.type.toString()))
+                    // Toast.makeText(this, "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ",Toast.LENGTH_LONG).show()
+                    Log.d("TAG", "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ")
+
+                } else {
+                    Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_LOCATION_PERMISSION -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    getCurrentLocation()
+                } else {
+                    Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
+    }
+
 //
 //    private val SAMPLE_RATE = 16000
 //    private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO

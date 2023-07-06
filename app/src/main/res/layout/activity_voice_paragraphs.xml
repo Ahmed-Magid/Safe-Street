@@ -46,7 +46,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:drawableLeft="@drawable/baseline_mic_24"
-        android:backgroundTint="#FA0606"
+        android:backgroundTint="@color/red"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,19 +5,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.viewmodels.MainViewModel
 import com.example.safemvvm.viewmodels.MainViewModelFactory
 import com.example.safemvvm.views.HomeActivity
 import com.example.safemvvm.views.Login
-import com.example.safemvvm.views.WhileInTrip
-import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
@@ -27,18 +23,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        loadingProgressBar = findViewById<ProgressBar>(R.id.loading_progress_bar)
+        loadingProgressBar = findViewById(R.id.loading_progress_bar)
         loadingProgressBar.visibility = View.VISIBLE
 
         Handler().postDelayed({
             checkToken()
-        }, 2500)
+        }, 5000)
     }
 
     private fun checkToken() {
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", "empty")

@@ -7,22 +7,41 @@
     tools:context=".views.ReportLocationMap">
 
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/autocomplete_fragment"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         map:layout_constraintTop_toTopOf="parent"/>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        map:cameraZoom="14"
-        android:layout_below="@id/autocomplete_fragment"
+        android:layout_height="0dp"
         map:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
-        />
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            map:cameraZoom="14"
+            map:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
+            />
+
+        <ImageView
+            android:id="@+id/my_location_button"
+            android:src="@drawable/ic_my_location"
+            android:layout_gravity="top|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/grey1"
+            android:padding="16dp"
+            android:contentDescription="@string/locationicon" />
+
+    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -30,78 +49,59 @@
         android:layout_height="wrap_content"
         map:layout_constraintBottom_toBottomOf="parent"
         android:padding="10dp"
+        android:background="@drawable/circular_background"
         >
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkBox1"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="@string/add_report"
             android:checked="true"
-            android:textColor="@color/white"
-            android:background="@drawable/textview_bg"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             map:layout_constraintLeft_toLeftOf="parent"
+            map:layout_constraintBottom_toBottomOf="parent"
             map:layout_constraintRight_toLeftOf="@id/checkBox2"
-            map:layout_constraintBottom_toTopOf="@id/CurrLocation"
             />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkBox2"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="@string/view_reports"
             android:checked="false"
-            android:textColor="@color/white"
-            android:background="@drawable/textview_bg"
+            android:textStyle="bold"
+            android:textColor="@color/black"
             map:layout_constraintRight_toRightOf="parent"
             map:layout_constraintLeft_toRightOf="@id/checkBox1"
-            map:layout_constraintBottom_toTopOf="@id/confirm_button"
-            />
-
-
-        <Button
-            android:id="@+id/CurrLocation"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="@string/location"
-            map:layout_constraintLeft_toLeftOf="parent"
             map:layout_constraintBottom_toBottomOf="parent"
-            android:backgroundTint="@color/green1"
             />
 
-        <Button
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/reset_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="@string/clear"
-            android:layout_toEndOf="@+id/CurrLocation"
-            map:layout_constraintLeft_toRightOf="@id/CurrLocation"
-            map:layout_constraintRight_toLeftOf="@id/confirm_button"
-            map:layout_constraintBottom_toBottomOf="parent"
-            android:backgroundTint="@color/green1"
+            map:layout_constraintRight_toRightOf="parent"
+            map:layout_constraintTop_toTopOf="parent"
+            map:layout_constraintLeft_toRightOf="@id/confirm_button"
+            map:layout_constraintBottom_toTopOf="@id/checkBox2"
+            android:backgroundTint="@color/red"
             />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/confirm_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="@string/ok"
-            android:layout_toEndOf="@+id/reset_button"
-            map:layout_constraintLeft_toRightOf="@id/reset_button"
             android:backgroundTint="@color/green1"
-            map:layout_constraintRight_toRightOf="parent"
-            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintRight_toLeftOf="@id/reset_button"
+            map:layout_constraintTop_toTopOf="parent"
+            map:layout_constraintBottom_toTopOf="@id/checkBox1"
+            map:layout_constraintLeft_toLeftOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--
-    <Button
-        android:id="@+id/back"
-        android:layout_width="40dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/baseline_arrow_back_ios_24"
-        map:layout_constraintLeft_toLeftOf="parent"
-        map:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
-        tools:ignore="SpeakableTextPresentCheck" />
-        -->
 </androidx.constraintlayout.widget.ConstraintLayout>

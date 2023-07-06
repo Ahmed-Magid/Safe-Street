@@ -159,7 +159,7 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
 
         val checkBox1 = findViewById<CheckBox>(R.id.checkBox1)
         val checkBox2 = findViewById<CheckBox>(R.id.checkBox2)
-        setCurrentLocation = findViewById<Button>(R.id.CurrLocation)
+        setCurrentLocation = findViewById(R.id.my_location_button)
         resetButton = findViewById<Button>(R.id.reset_button)
         confirm = findViewById<Button>(R.id.confirm_button)
 

@@ -49,6 +49,7 @@ class Emergencies : AppCompatActivity() {
         val fireButton = findViewById<Button>(R.id.btn_fire)
         val carFaultButton = findViewById<Button>(R.id.btn_carFault)
 
+
         kidnappingButton.setOnClickListener {
             emergencyType = EmergenciesEnum.KIDNAPPING
             getCurrentLocation()

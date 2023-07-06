@@ -76,7 +76,7 @@
             android:layout_width="110dp"
             android:layout_height="wrap_content"
             android:text="@string/clearcreatetrip"
-            android:backgroundTint="@color/green1"
+            android:backgroundTint="@color/red"
             android:layout_marginRight="15dp"
             map:layout_constraintBottom_toTopOf="@id/confirm_button"
             map:layout_constraintRight_toRightOf="parent"
