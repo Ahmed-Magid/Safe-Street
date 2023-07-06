@@ -18,6 +18,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:backgroundTint="@color/textColor"
             android:src="@drawable/ic_identity" />
 
         <TextView
@@ -25,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Name"
+            android:text="@string/name"
+            android:textColor="@color/textColor"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -40,6 +42,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:backgroundTint="@color/textColor"
             android:src="@drawable/ic_email" />
 
         <TextView
@@ -47,7 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Email"
+            android:text="@string/emailaddtrusted"
+            android:textColor="@color/textColor"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -61,14 +65,13 @@
 
     </LinearLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
 
         android:id="@+id/btn_deleteContact"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/red"
-
-        android:text="Delete" />
+        android:text="@string/delete" />
 
 </LinearLayout>

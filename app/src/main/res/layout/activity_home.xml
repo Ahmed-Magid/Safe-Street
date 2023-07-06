@@ -225,7 +225,7 @@
         android:elevation="8dp"
         android:layout_height="match_parent"
         android:layout_marginEnd="16dp"
-        android:background="#E8B1BBC4"
+        android:background="#F7B1BBC4"
         android:visibility="gone"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"

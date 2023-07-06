@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             checkToken()
-        }, 5000)
+        }, 2500)
     }
 
     private fun checkToken() {
@@ -93,7 +93,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, HomeActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
-        loadingProgressBar.visibility = View.GONE
         finish()
     }
 

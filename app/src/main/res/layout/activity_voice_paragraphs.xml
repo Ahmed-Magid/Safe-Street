@@ -15,11 +15,11 @@
         app:layout_constraintBottom_toTopOf="@+id/nextButton"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/nextButton"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="@string/nextrecordvoice"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         />
@@ -27,21 +27,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-            android:id="@+id/progress"
+        android:id="@+id/progress"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:text="1/4"
+        android:text="@string/pagenumber"
         android:gravity="center"
         android:layout_marginBottom="10dp"
         android:textSize="25sp"
+        android:textColor="@color/textColor"
         app:layout_constraintLeft_toRightOf="@id/record"
         app:layout_constraintRight_toLeftOf="@id/nextButton"
         />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/record"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:text="Record"
+        android:text="@string/record"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:drawableLeft="@drawable/baseline_mic_24"

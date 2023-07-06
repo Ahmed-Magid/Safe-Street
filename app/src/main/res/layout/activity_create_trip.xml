@@ -14,101 +14,108 @@
         android:layout_height="50dp"
         map:layout_constraintTop_toTopOf="parent"/>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+
+
+    <FrameLayout
+        android:id="@+id/map_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        map:cameraZoom="14"
-        android:layout_below="@id/autocomplete_fragment"
+        android:layout_height="0dp"
         map:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
-        />
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintEnd_toEndOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        map:layout_constraintBottom_toBottomOf="parent"
-        android:padding="10dp"
-        >
-
-        <Button
-            android:id="@+id/CurrLocation"
-            android:layout_width="110dp"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/mapFragment"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Location"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintLeft_toLeftOf="parent"
-            android:backgroundTint="@color/green1"
+            map:cameraZoom="14"
+            map:layout_constraintTop_toBottomOf="@id/autocomplete_fragment"
             />
 
-        <Button
+        <ImageView
+            android:id="@+id/my_location_button"
+            android:src="@drawable/ic_my_location"
+            android:layout_gravity="top|end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/grey1"
+            android:padding="16dp"/>
+
+    </FrameLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintRight_toLeftOf="parent"
+            map:layout_constraintRight_toRightOf="parent"
+            android:padding="10dp"
+            android:background="@drawable/circular_background"
+            >
+
+
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                map:layout_constraintLeft_toLeftOf="parent"
+                map:layout_constraintRight_toLeftOf="@id/reset_button"
+                android:text="@string/arrival_time"
+                android:textColor="@color/black"
+                map:layout_constraintBottom_toTopOf="@id/walk_button"
+                map:layout_constraintTop_toTopOf="parent"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/reset_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="Clear"
-            android:layout_toEndOf="@+id/CurrLocation"
-            map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintLeft_toRightOf="@id/CurrLocation"
-            map:layout_constraintRight_toLeftOf="@id/confirm_button"
+            android:text="@string/clearcreatetrip"
             android:backgroundTint="@color/green1"
+            android:layout_marginRight="15dp"
+            map:layout_constraintBottom_toTopOf="@id/confirm_button"
+            map:layout_constraintRight_toRightOf="parent"
             />
 
-        <Button
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/walk_button"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="@string/walking"
+                map:layout_constraintTop_toBottomOf="@id/timeTextView"
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintLeft_toLeftOf="parent"
+                map:layout_constraintRight_toLeftOf="@id/driving_button"
+                android:backgroundTint="@color/faded"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/driving_button"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:text="@string/driving"
+                map:layout_constraintBottom_toBottomOf="parent"
+                map:layout_constraintRight_toLeftOf="@id/walk_button"
+                map:layout_constraintLeft_toRightOf="@id/confirm_button"
+                android:backgroundTint="@color/green1"
+                />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/confirm_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="OK"
-            android:layout_toEndOf="@+id/reset_button"
+            android:text="@string/confirm"
             map:layout_constraintBottom_toBottomOf="parent"
-            map:layout_constraintLeft_toRightOf="@id/reset_button"
             android:backgroundTint="@color/green1"
             map:layout_constraintRight_toRightOf="parent"
-            />
-
-        <TextView
-            android:id="@+id/timeTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            map:layout_constraintLeft_toLeftOf="parent"
-            android:background="@drawable/textview_bg"
-            android:text="Time: "
-            android:textColor="@color/white"
-            map:layout_constraintBottom_toTopOf="@id/walk_button"
-            android:textSize="20sp"
-            android:padding="5dp"
-            />
-        <Button
-            android:id="@+id/walk_button"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="walking"
-            map:layout_constraintBottom_toTopOf="@id/CurrLocation"
-            map:layout_constraintLeft_toLeftOf="parent"
-            android:backgroundTint="@color/green1"
-            />
-        <Button
-            android:id="@+id/driving_button"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="Driving"
-            android:layout_toEndOf="@id/walk_button"
-            map:layout_constraintLeft_toRightOf="@id/walk_button"
-            map:layout_constraintBottom_toTopOf="@id/reset_button"
-            map:layout_constraintRight_toLeftOf="@id/mode"
-            android:backgroundTint="@color/green1"
-            />
-
-        <Button
-            android:id="@+id/mode"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="D"
-            android:layout_toEndOf="@id/driving_button"
-            map:layout_constraintRight_toRightOf="parent"
-            map:layout_constraintBottom_toTopOf="@id/confirm_button"
             map:layout_constraintLeft_toRightOf="@id/driving_button"
-            android:backgroundTint="@color/green1"
             />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

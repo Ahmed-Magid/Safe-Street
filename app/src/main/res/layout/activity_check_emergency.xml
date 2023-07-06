@@ -4,6 +4,74 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.CheckEmergency">
+    tools:context=".views.CheckEmergency"
+    android:padding="50dp"
+    >
+    <ImageView
+        android:id="@+id/alert"
+        android:layout_width="275dp"
+        android:layout_height="229dp"
+        android:contentDescription="@string/danger"
+        android:src="@drawable/dangersign"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/alertText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/please_confirm_you_arrived_to_your_destination"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textColor="@color/textColor"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alert"
+        app:layout_constraintBottom_toTopOf="@id/alertTime"/>
+
+
+    <TextView
+        android:id="@+id/alertTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/time"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textColor="@color/textColor"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alertText"
+        app:layout_constraintBottom_toTopOf="@id/yes"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/yes"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:cornerRadius="10dp"
+        android:textSize="20dp"
+        android:text="@string/yes"
+        android:backgroundTint="@color/green1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alertTime"
+        app:layout_constraintBottom_toTopOf="@id/no"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/no"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        app:cornerRadius="10dp"
+        android:textSize="20dp"
+        android:text="@string/no_extend_time"
+        android:backgroundTint="@color/green1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yes"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

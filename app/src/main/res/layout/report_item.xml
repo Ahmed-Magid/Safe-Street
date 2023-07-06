@@ -18,6 +18,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:backgroundTint="@color/textColor"
             android:src="@drawable/ic_identity" />
 
         <TextView
@@ -25,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Name: "
+            android:text="@string/namereportitem"
+            android:textColor="@color/textColor"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -43,7 +45,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Category:"
+            android:text="@string/category"
+            android:textColor="@color/textColor"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -60,7 +63,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Report:"
+            android:text="@string/report"
+            android:textColor="@color/textColor"
             android:textSize="16sp" />
 
     </LinearLayout>

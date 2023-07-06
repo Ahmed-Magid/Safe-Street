@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,10 +25,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnCircleClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -143,8 +142,8 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         //works ok
-        val button = findViewById<Button>(R.id.CurrLocation)
-        button.setOnClickListener {
+        val currentLocation = findViewById<ImageView>(R.id.my_location_button)
+        currentLocation.setOnClickListener {
             // Get the user's current location and set it as the source
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -183,10 +182,11 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         val walking = findViewById<Button>(R.id.walk_button)
+        val driving = findViewById<Button>(R.id.driving_button)
         walking.setOnClickListener {
             mode = "walking"
-            val modeText = findViewById<TextView>(R.id.mode)
-            modeText.text = "W"
+            driving.setBackgroundColor(Color.parseColor("#B5324E32"))
+            walking.setBackgroundColor(Color.parseColor("#076107"))
             if(destination != null && source != null) {
                 clear()
                 calculateDistance()
@@ -197,11 +197,10 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        val driving = findViewById<Button>(R.id.driving_button)
         driving.setOnClickListener {
             mode = "driving"
-            val modeText = findViewById<TextView>(R.id.mode)
-            modeText.text = "D"
+            walking.setBackgroundColor(Color.parseColor("#B5324E32"))
+            driving.setBackgroundColor(Color.parseColor("#076107"))
             if(destination != null && source != null) {
                 clear()
                 calculateDistance()
@@ -389,7 +388,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                             val polylineOptions = PolylineOptions()
                                 .addAll(decodedPolyline)
                                 .width(5f)
-                                .color(Color.BLUE)
+                                .color(Color.parseColor("#076107"))
                             polylines.add(mMap.addPolyline(polylineOptions))
                         }
                     }

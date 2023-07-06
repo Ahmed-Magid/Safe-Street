@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Paragraph3"
-    android:padding="50dp">
+    tools:context=".views.voicesample.Paragraph3">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,10 +14,10 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="50sp"
-            android:text="Lorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit amet Lorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit ametLorem ipsum dolor sit amet"
-
+            android:gravity="right"
+            android:textSize="25dp"
+            android:textColor="@color/textColor"
+            android:text="@string/paragraph3"
             />
 
     </ScrollView>
