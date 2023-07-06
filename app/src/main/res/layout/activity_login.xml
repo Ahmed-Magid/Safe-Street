@@ -27,6 +27,7 @@
         android:hint="@string/email"
         app:endIconMode="clear_text"
         app:endIconTint="@color/blue1"
+        multipleLines="false"
         app:layout_constraintBottom_toTopOf="@id/password"
         app:layout_constraintTop_toBottomOf="@id/signIn">
 
@@ -34,6 +35,7 @@
             android:id="@+id/loginEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            multipleLines="false"
             android:textColorHint="#8D6E63" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -47,6 +49,7 @@
         android:hint="@string/password"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/blue1"
+        multipleLines="false"
         app:layout_constraintBottom_toTopOf="@id/btn_signIn"
         app:layout_constraintTop_toBottomOf="@id/email">
 
@@ -54,6 +57,7 @@
             android:id="@+id/loginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            multipleLines="false"
             android:textColorHint="#8D6E63" />
 
     </com.google.android.material.textfield.TextInputLayout>

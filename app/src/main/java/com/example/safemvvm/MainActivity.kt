@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             checkToken()
-        }, 5000)
+        }, 2500)
     }
 
     private fun checkToken() {

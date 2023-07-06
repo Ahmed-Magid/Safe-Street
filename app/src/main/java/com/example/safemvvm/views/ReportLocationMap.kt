@@ -28,6 +28,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.view.View
 import android.widget.CheckBox
+import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.models.Location
 import com.example.safemvvm.models.Report
@@ -54,7 +55,7 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private val AUTOCOMPLETE_REQUEST_CODE = 2
     private val DEFAULT_ZOOM = 15f
-    private lateinit var setCurrentLocation: Button
+    private lateinit var setCurrentLocation: ImageView
     private lateinit var confirm: Button
     private lateinit var resetButton: Button
     private var circles = mutableListOf<Circle>()

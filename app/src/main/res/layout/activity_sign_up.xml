@@ -27,10 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
+        multipleLines="false"
         app:endIconTint="@color/blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_firstname"
+            multipleLines="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -47,11 +49,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
+        multipleLines="false"
         app:endIconTint="@color/blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_lastname"
             android:layout_width="match_parent"
+            multipleLines="false"
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -66,10 +70,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
+        multipleLines="false"
         app:endIconTint="@color/blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_email"
+            multipleLines="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -85,10 +91,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="clear_text"
+        multipleLines="false"
         app:endIconTint="@color/blue1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_phoneNumber"
+            multipleLines="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -104,6 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
         app:endIconMode="password_toggle"
+        multipleLines="false"
         app:endIconTint="@color/blue1">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -127,6 +136,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_repeatPass"
+            multipleLines="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

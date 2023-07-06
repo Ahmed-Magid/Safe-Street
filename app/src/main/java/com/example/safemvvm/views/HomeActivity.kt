@@ -31,17 +31,25 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var logoutOption: TextView
     private lateinit var createTripOption: TextView
     lateinit var emergencyType : EmergenciesEnum
+    private lateinit var carFault : ImageView
+    private lateinit var fire : ImageView
+    private lateinit var harassment : ImageView
+    private lateinit var kidnapping : ImageView
+    private lateinit var robbery : ImageView
+    private lateinit var murder :ImageView
 
-    private val carFault = findViewById<ImageView>(R.id.iv_carFault)
-    private val fire = findViewById<ImageView>(R.id.iv_fire)
-    private val harassment = findViewById<ImageView>(R.id.iv_harassment)
-    private val kidnapping = findViewById<ImageView>(R.id.iv_kidnapping)
-    private val robbery = findViewById<ImageView>(R.id.iv_robbery)
-    private val murder = findViewById<ImageView>(R.id.iv_murder)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        carFault = findViewById(R.id.iv_carFault)
+        fire = findViewById(R.id.iv_fire)
+        harassment = findViewById(R.id.iv_harassment)
+        kidnapping = findViewById(R.id.iv_kidnapping)
+        robbery = findViewById(R.id.iv_robbery)
+        murder = findViewById(R.id.iv_murder)
 
         // Find views
         menuButton = findViewById(R.id.menu_button)
