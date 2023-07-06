@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Safemvvm"
         tools:targetApi="31">
         <activity
+            android:name=".views.CheckEmergency"
+            android:exported="false" />
+        <activity
             android:name=".views.ViewReports"
             android:exported="false" />
 

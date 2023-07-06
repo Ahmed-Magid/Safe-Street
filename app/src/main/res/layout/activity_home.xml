@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/car_fault"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/textColor" />
 
             </LinearLayout>
 
@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/harassment"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/textColor"/>
 
             </LinearLayout>
 
@@ -130,7 +130,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/fire"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/textColor"
+                    />
 
             </LinearLayout>
 
@@ -155,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/robbery"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/textColor" />
 
             </LinearLayout>
 
@@ -190,7 +191,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/kidnapping"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/textColor"
+                    />
 
             </LinearLayout>
 
@@ -215,7 +217,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/murder"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/textColor"
+                    />
 
             </LinearLayout>
 

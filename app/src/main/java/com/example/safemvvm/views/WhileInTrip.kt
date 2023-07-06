@@ -67,7 +67,7 @@ class WhileInTrip : AppCompatActivity() {
         cancelButton = findViewById(R.id.btn_cancel)
         extendTimerButton = findViewById(R.id.ExtendTimer)
         iArrivedButton = findViewById(R.id.IArrived)
-        fireEmergencyButton = findViewById(R.id.FireEmergency)
+        //fireEmergencyButton = findViewById(R.id.FireEmergency)
         //take timeInSeconds from CreateTripActivity
         val timeInSeconds = intent.getIntExtra("time", 0)
         Log.d("WhileInTripTime", "time in seconds:$timeInSeconds")
@@ -98,10 +98,10 @@ class WhileInTrip : AppCompatActivity() {
         countdownTimer.start()
 
         // Set click listener for the FireEmergency button
-        fireEmergencyButton.setOnClickListener {
-            val intent = Intent(this, Emergencies::class.java)
-            startActivity(intent)
-        }
+//        fireEmergencyButton.setOnClickListener {
+//            val intent = Intent(this, Emergencies::class.java)
+//            startActivity(intent)
+//        }
 
 
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
