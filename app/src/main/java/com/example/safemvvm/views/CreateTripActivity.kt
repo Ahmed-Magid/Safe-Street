@@ -103,12 +103,10 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
         autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
-
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
@@ -121,6 +119,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                     mMap.addMarker(MarkerOptions().position(source!!))?.let { markers.add(it) }
                     mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
                         ?.let { markers.add(it) }
+
                 }
 
                 // Move the camera to the selected place
@@ -184,9 +183,10 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         val driving = findViewById<Button>(R.id.driving_button)
         walking.setOnClickListener {
             mode = "walking"
-            driving.setBackgroundColor(Color.parseColor("E242CF42"))
+            driving.setBackgroundColor(Color.parseColor("#E242CF42"))
             driving.setTextColor(Color.parseColor("#5D4037"))
             walking.setBackgroundColor(Color.parseColor("#076107"))
+            walking.setTextColor(Color.WHITE)
             if(destination != null && source != null) {
                 clear()
                 calculateDistance()
@@ -199,9 +199,10 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         driving.setOnClickListener {
             mode = "driving"
-            walking.setBackgroundColor(Color.parseColor("E242CF42"))
+            walking.setBackgroundColor(Color.parseColor("#E242CF42"))
             walking.setTextColor(Color.parseColor("#5D4037"))
             driving.setBackgroundColor(Color.parseColor("#076107"))
+            driving.setTextColor(Color.WHITE)
             if(destination != null && source != null) {
                 clear()
                 calculateDistance()

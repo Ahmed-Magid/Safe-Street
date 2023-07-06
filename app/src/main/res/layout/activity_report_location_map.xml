@@ -35,10 +35,11 @@
             android:id="@+id/my_location_button"
             android:src="@drawable/ic_my_location"
             android:layout_gravity="top|end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/grey1"
-            android:padding="16dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/allcorners"
+            android:layout_margin="10dp"
+            android:padding="10dp"
             android:contentDescription="@string/locationicon" />
 
     </FrameLayout>
