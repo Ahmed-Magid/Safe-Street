@@ -16,7 +16,6 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
         android:layout_marginTop="16dp"/>
 
 
@@ -34,10 +33,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-
             android:text="@string/fire_an_emergency_and_notify_your_trusted_contacts_instantly"
             android:textColor="@color/red"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
 
@@ -60,9 +58,8 @@
 
                 <ImageView
                     android:id="@+id/iv_carFault"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:background="@drawable/circular_background"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:src="@drawable/car_fault" />
 
                 <TextView
@@ -85,9 +82,8 @@
 
                 <ImageView
                     android:id="@+id/iv_harassment"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:background="@drawable/circular_background"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:src="@drawable/harrasment" />
 
                 <TextView
@@ -120,9 +116,8 @@
 
                 <ImageView
                     android:id="@+id/iv_fire"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:background="@drawable/circular_background"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:src="@drawable/fire" />
 
                 <TextView
@@ -146,9 +141,8 @@
 
                 <ImageView
                     android:id="@+id/iv_robbery"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:background="@drawable/circular_background"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:src="@drawable/robbery" />
 
                 <TextView
@@ -181,9 +175,8 @@
 
                 <ImageView
                     android:id="@+id/iv_kidnapping"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:background="@drawable/circular_background"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:src="@drawable/kidnapping" />
 
                 <TextView
@@ -207,9 +200,8 @@
 
                 <ImageView
                     android:id="@+id/iv_murder"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:background="@drawable/circular_background"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:src="@drawable/murder" />
 
                 <TextView
@@ -233,7 +225,7 @@
         android:elevation="8dp"
         android:layout_height="match_parent"
         android:layout_marginEnd="16dp"
-        android:background="@color/grey1"
+        android:background="#E8B1BBC4"
         android:visibility="gone"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -267,6 +259,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_margin="8dp"
+                android:textColor="@color/textColor"
                 android:text="@string/profile" />
 
             <!-- Trusted Contacts Option -->
@@ -278,6 +271,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_margin="8dp"
+                android:textColor="@color/textColor"
                 android:text="@string/trusted_contacts" />
 
             <TextView
@@ -288,6 +282,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_margin="8dp"
+                android:textColor="@color/textColor"
                 android:text="@string/create_trip" />
 
             <!-- Reports Option -->
@@ -299,6 +294,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_margin="8dp"
+                android:textColor="@color/textColor"
                 android:text="@string/reports" />
 
             <!-- Logout Option -->

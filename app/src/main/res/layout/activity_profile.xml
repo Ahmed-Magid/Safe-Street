@@ -21,6 +21,7 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:backgroundTint="@color/textColor"
             android:src="@drawable/ic_identity" />
 
         <TextView
@@ -28,7 +29,9 @@
             android:layout_height="wrap_content"
             android:text="User Profile"
             android:textStyle="bold"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            android:textColor="@color/textColor"
+            />
 
     </LinearLayout>
 
@@ -47,6 +50,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:backgroundTint="@color/textColor"
                 android:src="@drawable/ic_name" />
 
             <TextView
@@ -55,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Name"
+                android:textColor="@color/textColor"
                 android:textStyle="bold"
                 android:textSize="24sp" />
 
@@ -78,6 +83,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:backgroundTint="@color/textColor"
                 android:src="@drawable/ic_email" />
 
             <TextView
@@ -86,6 +92,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Email"
+                android:textColor="@color/textColor"
                 android:textStyle="bold"
                 android:textSize="24sp"/>
 
@@ -109,6 +116,7 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:backgroundTint="@color/textColor"
                 android:src="@drawable/ic_phone" />
 
             <TextView
@@ -117,6 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="Phone Number"
+                android:textColor="@color/textColor"
                 android:textStyle="bold"
                 android:textSize="24sp"/>
 

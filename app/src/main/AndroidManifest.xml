@@ -85,10 +85,6 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".views.SignUpTrusted"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".views.Profile"
             android:exported="false"
             android:screenOrientation="portrait" />
