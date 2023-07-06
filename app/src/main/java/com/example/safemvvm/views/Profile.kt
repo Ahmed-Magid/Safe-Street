@@ -47,9 +47,9 @@ class Profile : AppCompatActivity() {
                 if(responseMessage == "Executed Successfully"){
                     Log.d("Profile002","got profile success")
                     val data = Gson().fromJson(response.body()?.data.toString(), PersonalInfoResponse::class.java)
-                    name.text = name.text.toString() +" "+ data.firstname +" "+ data.lastname
-                    email.text = email.text.toString() +" "+ data.email
-                    phoneNumber.text = phoneNumber.text.toString()+" " + data.phoneNumber
+                    name.text = data.firstname +" "+ data.lastname
+                    email.text = data.email
+                    phoneNumber.text = data.phoneNumber
 
                   //TODO
                 }else {
