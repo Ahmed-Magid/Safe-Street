@@ -1,6 +1,7 @@
 package com.example.safemvvm.views
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.media.RingtoneManager
@@ -12,11 +13,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
 import com.example.safemvvm.models.EmergenciesEnum
 import com.example.safemvvm.models.EmergencyBody
 import com.example.safemvvm.models.EmergencyFired
+import com.example.safemvvm.repository.Repository
 import com.example.safemvvm.utils.AddressProvider
+import com.example.safemvvm.viewmodels.EmergenciesViewModel
+import com.example.safemvvm.viewmodels.EmergenciesViewModelFactory
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -25,10 +30,10 @@ import java.util.Locale
 
 
 class CheckEmergency : AppCompatActivity() {
-
+    private lateinit var viewModel: EmergenciesViewModel
     private lateinit var alertTimeTextView: TextView
     private lateinit var countdownTimer: CountDownTimer
-    private var timeLeftInMillis: Long = 10000 // 10 seconds countdown timer
+    private var timeLeftInMillis: Long = 5000 // 5 seconds countdown timer
     private val countDownInterval: Long = 1000
     private lateinit var emergencyType : EmergenciesEnum
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -39,6 +44,9 @@ class CheckEmergency : AppCompatActivity() {
         setContentView(R.layout.activity_check_emergency)
         // Get the FusedLocationProviderClient instance
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        val repository = Repository()
+        val viewModelFactory = EmergenciesViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(EmergenciesViewModel::class.java)
         // Play a notification sound for 5 seconds when the activity is created
         val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
@@ -73,10 +81,14 @@ class CheckEmergency : AppCompatActivity() {
 
             override fun onFinish() {
                 // Get the user's current location and system current time if the timer finishes
-                emergencyType = EmergenciesEnum.UserDidntArrive
+                emergencyType = intent.getSerializableExtra("emergencyType") as EmergenciesEnum
                 getCurrentLocation()
+                val intent = Intent(this@CheckEmergency, HomeActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
         }
+        countdownTimer.start()
 
 
         val yes = findViewById<Button>(R.id.yes)
@@ -85,11 +97,17 @@ class CheckEmergency : AppCompatActivity() {
             emergencyType = intent.getSerializableExtra("emergencyType") as EmergenciesEnum
             countdownTimer.cancel()
             getCurrentLocation()
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
 
         val no = findViewById<Button>(R.id.no)
         no.setOnClickListener {
             countdownTimer.cancel()
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
         }
 
 
@@ -147,7 +165,7 @@ class CheckEmergency : AppCompatActivity() {
         fusedLocationClient.lastLocation
             .addOnSuccessListener { location: Location? ->
                 if (location != null) {
-                    val localDB = getSharedPreferences("localDB", AppCompatActivity.MODE_PRIVATE)
+                    val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
                     val token = localDB.getString("token","empty")
                     val userId = localDB.getInt("userId",-1)
                     val latitude = location.latitude
@@ -158,11 +176,11 @@ class CheckEmergency : AppCompatActivity() {
                     emergencyFired = EmergencyFired(location, formattedTime, emergencyType)
                     println(emergencyFired.type.toString())
                     //TODO: go to check emergency first then Send emergency to server
-//                    viewModel.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, emergencyFired.type.toString(), AddressProvider(this).getAddress(
-//                        LatLng(latitude, longitude), "ar"
-//                    ))
-//                    )
-                    // Toast.makeText(this, "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ",Toast.LENGTH_LONG).show()
+                    viewModel.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, emergencyFired.type.toString(), AddressProvider(this).getAddress(
+                        LatLng(latitude, longitude), "ar"
+                    ))
+                    )
+                     Toast.makeText(this, "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ",Toast.LENGTH_LONG).show()
                     Log.d("TAG", "Latitude: $latitude, Longitude: $longitude, $formattedTime , $emergencyType ")
 
                 } else {
