@@ -46,7 +46,8 @@
                     android:id="@+id/iv_carFault"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/car_fault" />
+                    android:src="@drawable/car_fault"
+                    android:contentDescription="@string/car_fault" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -70,7 +71,8 @@
                     android:id="@+id/iv_harassment"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/harrasment" />
+                    android:src="@drawable/harrasment"
+                    android:contentDescription="@string/harassment" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -94,7 +96,8 @@
                     android:id="@+id/iv_fire"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/fire" />
+                    android:src="@drawable/fire"
+                    android:contentDescription="@string/fire" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -131,7 +134,8 @@
                     android:id="@+id/iv_robbery"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/robbery" />
+                    android:src="@drawable/robbery"
+                    android:contentDescription="@string/robbery" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -155,7 +159,8 @@
                     android:id="@+id/iv_kidnapping"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/kidnapping" />
+                    android:src="@drawable/kidnapping"
+                    android:contentDescription="@string/kidnapping" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -180,7 +185,8 @@
                     android:id="@+id/iv_murder"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:src="@drawable/murder" />
+                    android:src="@drawable/murder"
+                    android:contentDescription="@string/murder" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -240,7 +246,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ExtendTimer"
-            android:backgroundTint="#BC0000"
+            android:backgroundTint="@color/red"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             />
 

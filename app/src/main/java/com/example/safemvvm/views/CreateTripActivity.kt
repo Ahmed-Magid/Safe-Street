@@ -54,7 +54,6 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private var source: LatLng? = null
     private var destination: LatLng? = null
-    private var time: Double? = null
     private var timeInSeconds = 0
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var autocompleteFragment: AutocompleteSupportFragment
@@ -62,9 +61,9 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
     private val AUTOCOMPLETE_REQUEST_CODE = 2
     private val DEFAULT_ZOOM = 15f
     // Define the mode, departure_time, and traffic_model parameters
-    var mode = "driving"
-    val departureTime = System.currentTimeMillis() / 1000
-    val trafficModel = "best_guess"
+    private var mode = "driving"
+    private val departureTime = System.currentTimeMillis() / 1000
+    private val trafficModel = "best_guess"
     private val polylines = mutableListOf<Polyline>()
     private val markers = mutableListOf<Marker>()
 
@@ -185,7 +184,8 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         val driving = findViewById<Button>(R.id.driving_button)
         walking.setOnClickListener {
             mode = "walking"
-            driving.setBackgroundColor(Color.parseColor("#B5324E32"))
+            driving.setBackgroundColor(Color.parseColor("E242CF42"))
+            driving.setTextColor(Color.parseColor("#5D4037"))
             walking.setBackgroundColor(Color.parseColor("#076107"))
             if(destination != null && source != null) {
                 clear()
@@ -199,7 +199,8 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         driving.setOnClickListener {
             mode = "driving"
-            walking.setBackgroundColor(Color.parseColor("#B5324E32"))
+            walking.setBackgroundColor(Color.parseColor("E242CF42"))
+            walking.setTextColor(Color.parseColor("#5D4037"))
             driving.setBackgroundColor(Color.parseColor("#076107"))
             if(destination != null && source != null) {
                 clear()
@@ -213,7 +214,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val repository = Repository()
         val viewModelFactory = CreateTripViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory).get(CreateTripViewModel::class.java)
+        viewModel = ViewModelProvider(this,viewModelFactory)[CreateTripViewModel::class.java]
 
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)

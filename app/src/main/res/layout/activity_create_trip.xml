@@ -7,7 +7,7 @@
     tools:context=".views.CreateTripActivity">
 
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/autocomplete_fragment"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
         android:layout_width="match_parent"
@@ -37,10 +37,12 @@
             android:id="@+id/my_location_button"
             android:src="@drawable/ic_my_location"
             android:layout_gravity="top|end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/grey1"
-            android:padding="16dp"/>
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/allcorners"
+            android:layout_marginEnd="10dp"
+            android:padding="10dp"
+            android:contentDescription="@string/location" />
 
     </FrameLayout>
 
@@ -67,32 +69,31 @@
                 android:layout_marginStart="20dp"
                 map:layout_constraintTop_toTopOf="parent"
                 android:textSize="25sp"
-                android:textStyle="bold"
                 />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/reset_button"
             android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="@string/clearcreatetrip"
             android:backgroundTint="@color/red"
-            android:layout_marginRight="15dp"
+            android:text="@string/clearcreatetrip"
+            android:textColor="#000000"
+            android:layout_marginEnd="15dp"
             map:layout_constraintBottom_toTopOf="@id/confirm_button"
-            map:layout_constraintRight_toRightOf="parent"
-            />
+            map:layout_constraintRight_toRightOf="parent" />
 
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/walk_button"
-                android:layout_width="110dp"
-                android:layout_height="wrap_content"
-                android:text="@string/walking"
-                map:layout_constraintTop_toBottomOf="@id/timeTextView"
-                map:layout_constraintBottom_toBottomOf="parent"
-                map:layout_constraintLeft_toLeftOf="parent"
-                map:layout_constraintRight_toLeftOf="@id/driving_button"
-                android:backgroundTint="@color/faded"
-                />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/walk_button"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/faded"
+            android:text="@string/walking"
+            android:textColor="#5D4037"
+            map:layout_constraintBottom_toBottomOf="parent"
+            map:layout_constraintLeft_toLeftOf="parent"
+            map:layout_constraintRight_toLeftOf="@id/driving_button" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/driving_button"
                 android:layout_width="110dp"

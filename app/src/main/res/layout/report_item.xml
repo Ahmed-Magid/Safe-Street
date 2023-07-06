@@ -20,7 +20,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_identity"
-            app:tint="@color/textColor" />
+            app:tint="@color/textColor"
+            android:contentDescription="@string/name" />
 
         <TextView
             android:id="@+id/reporterName"

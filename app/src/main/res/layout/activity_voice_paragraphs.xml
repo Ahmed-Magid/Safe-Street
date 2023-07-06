@@ -47,6 +47,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:drawableLeft="@drawable/baseline_mic_24"
         android:backgroundTint="@color/red"
+        android:textColor="@color/black"
         app:iconTint="@color/textColor"
         />
 

@@ -51,7 +51,7 @@
             android:layout_weight="1"
             android:inputType="none"
             android:textColor="@color/textColor"
-            android:backgroundTint="@color/blue2"
+            android:backgroundTint="@color/green2"
             android:background="@drawable/background_dropdown_menu"
             android:text="@string/choose_type_of_emergency"
             android:dropDownListViewStyle="@style/CustomDropdownMenuStyle"
