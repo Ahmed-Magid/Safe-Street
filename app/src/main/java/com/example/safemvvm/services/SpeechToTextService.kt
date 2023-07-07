@@ -54,7 +54,7 @@ class SpeechToTextService : Service() {
     private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
     private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
     private val BUFFER_SIZE = 2 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
-    private val RECORDING_DURATION_MS = 5000L
+    private val RECORDING_DURATION_MS = 2000L
     private val SAFE_WORDS = mutableListOf("الحقوني", "الحقونى", "help", "ساعدوني", "ساعدونى")
     private val RECORDING_INTERVAL_MS = 1000L // Interval between recordings
     private lateinit var timer : Timer
@@ -149,37 +149,27 @@ class SpeechToTextService : Service() {
 
                 SAFE_WORDS.forEach { word ->
                     if (transcript.contains(word, ignoreCase = true)) {
-                        // Execute your action when the keyword is detected
-                        println("FIRE HERE")
-                        val file = generateAudioFile(audioData, getExternalFilesDir(null)?.absolutePath + "/helpMessage.wav")
+                        val file = generateAudioFile(audioData,
+                            getExternalFilesDir(null)?.absolutePath + "/helpMessage.wav")
 
-                        println(file.absolutePath)
-                        val requestFile =
-                            file.let {
-                                RequestBody.create("multipart/form-data".toMediaTypeOrNull(),
-                                    it
-                                )
+                        val requestFile = file.let {
+                                RequestBody.create("multipart/form-data".toMediaTypeOrNull(), it)
                             }
                         val record = requestFile.let {
-                            MultipartBody.Part.createFormData("record", file.name,
-                                it
-                            )
+                            MultipartBody.Part.createFormData("record", file.name, it)
                         }
                         // Predict
                         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
                         val userId = localDB.getInt("userId", -1)
-                        val token = localDB.getString("token", "empty")
                         val repository = Repository()
-                        if (repository.predict(record, userId).body() == "1") {
-//                            getCurrentLocation()
-//                            repository.fireEmergency("Bearer $token", EmergencyBody(userId, longitude, latitude, EmergenciesEnum.IN_DANGER.toString()))
+                        val score = repository.predict(record, userId).body()
+                        println(score)
+                        if (score == "1") {
                             val intent = Intent(applicationContext, CheckEmergency::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             intent.putExtra("emergencyType", EmergenciesEnum.IN_DANGER)
                             startActivity(intent)
-
                         }
-
                         file.delete()
                         return@forEach
                     }

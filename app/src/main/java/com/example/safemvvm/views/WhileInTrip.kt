@@ -208,6 +208,7 @@ class WhileInTrip : AppCompatActivity() {
             extendTimerButton.isEnabled = false
             iArrivedButton.isEnabled = false
             viewModel.endTrip("Bearer $token" , EndTripBody(tripId, customerId))
+            stopService(voiceService)
         }
 
         // Set click listener for the ExtendTimer button

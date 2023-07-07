@@ -19,6 +19,7 @@ import com.example.safemvvm.models.EmergenciesEnum
 import com.example.safemvvm.models.EmergencyBody
 import com.example.safemvvm.models.EmergencyFired
 import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.services.SpeechToTextService
 import com.example.safemvvm.utils.AddressProvider
 import com.example.safemvvm.viewmodels.EmergenciesViewModel
 import com.example.safemvvm.viewmodels.EmergenciesViewModelFactory
@@ -51,6 +52,10 @@ class CheckEmergency : AppCompatActivity() {
         val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
         ringtone.play()
+
+        val voiceServices = Intent(this, SpeechToTextService::class.java)
+        stopService(voiceServices)
+        println("Service Stopped")
 
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)
