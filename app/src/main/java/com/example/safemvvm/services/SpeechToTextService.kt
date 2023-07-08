@@ -167,7 +167,7 @@ class SpeechToTextService : Service() {
                         if (score == "1") {
                             val intent = Intent(applicationContext, CheckEmergency::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                            intent.putExtra("emergencyType", EmergenciesEnum.IN_DANGER)
+                            intent.putExtra("emergencyType", EmergenciesEnum.IN_DANGER.toString())
                             startActivity(intent)
                         }
                         file.delete()

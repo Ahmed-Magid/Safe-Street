@@ -1,19 +1,37 @@
 package com.example.safemvvm.views
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
+import com.example.safemvvm.models.Location
+import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.utils.Navigator
+import com.example.safemvvm.utils.ResponseHandler
+import com.example.safemvvm.viewmodels.ReportLocationMapViewModel
+import com.example.safemvvm.viewmodels.ReportLocationMapViewModelFactory
+import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.OnCircleClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
@@ -21,28 +39,6 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.android.gms.common.api.Status
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.view.View
-import android.widget.CheckBox
-import android.widget.ImageView
-import androidx.lifecycle.ViewModelProvider
-import com.example.safemvvm.models.Location
-import com.example.safemvvm.models.Report
-import com.example.safemvvm.repository.Repository
-import com.example.safemvvm.viewmodels.AddReportViewModel
-import com.example.safemvvm.viewmodels.AddReportViewModelFactory
-import com.example.safemvvm.viewmodels.ReportLocationMapViewModel
-import com.example.safemvvm.viewmodels.ReportLocationMapViewModelFactory
-import com.google.android.gms.maps.GoogleMap.OnCircleClickListener
-import com.google.android.gms.maps.model.Circle
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.Marker
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClickListener {
     private val TAG = "com.example.safemvvm.views.ReportLocationMap"
@@ -103,7 +99,8 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
 
                 if (reportLocation != null) {
                     marker?.remove()
-                    marker = mMap.addMarker(MarkerOptions().position(reportLocation!!).title("Location"))
+                    marker =
+                        mMap.addMarker(MarkerOptions().position(reportLocation!!).title("Location"))
                 }
 
                 // Move the camera to the selected place
@@ -126,36 +123,6 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
         val viewModelFactory = ReportLocationMapViewModelFactory(repository)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ReportLocationMapViewModel::class.java)
-
-        viewModel.getAllLocationsWithScoreResponse.observe(this) { response ->
-            if (response.isSuccessful && response.body() != null) {
-                if (response.body()!!.data != null) {
-                    val data: List<Location> = Gson().fromJson(
-                        response.body()?.data.toString(),
-                        object : TypeToken<List<Location>>() {}.type
-                    )
-                    data.filter { it.averageScore >= 1.0 }.forEach {
-                        val color = 90 - ((it.averageScore - 1) * 30)
-                        circles.add(
-                            mMap.addCircle(
-                                CircleOptions()
-                                    .center(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
-                                    .radius(70.0)
-                                    .fillColor(
-                                        Color.HSVToColor(
-                                            80,
-                                            floatArrayOf(color.toFloat(), 1.0f, 1.0f)
-                                        )
-                                    )
-                                    .strokeColor(Color.TRANSPARENT)
-                                    .clickable(false)
-                            )
-                        )
-
-                    }
-                }
-            }
-        }
 
 
         val checkBox1 = findViewById<CheckBox>(R.id.checkBox1)
@@ -188,6 +155,7 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
                 checkBox1.isChecked = false
                 circles.forEach { it.isClickable = true }
                 isViewing = true
+                marker?.remove()
             } else {
                 setCurrentLocation.visibility = View.VISIBLE
                 resetButton.visibility = View.VISIBLE
@@ -197,7 +165,6 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
         }
 
         setCurrentLocation.setOnClickListener {
-            // Get the user's current location and set it as the source
             if (ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -211,7 +178,6 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
                     this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
                 )
-                return@setOnClickListener
             }
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
@@ -226,16 +192,16 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
             }
         }
 
-
         confirm.setOnClickListener {
             if (reportLocation != null) {
                 marker?.remove()
                 marker = mMap.addMarker(
                     MarkerOptions().position(reportLocation!!).title("Reported Location")
                 )
-                val intent = Intent(this, AddReportActivity::class.java)
-                intent.putExtra("location", reportLocation)
-                startActivity(intent)
+                Navigator(this).to(AddReportActivity::class.java).andPutExtraParcelable(
+                    "location",
+                    reportLocation!!
+                ).andKeepStack()
             } else {
                 Toast.makeText(this, "Please select a location to report", Toast.LENGTH_SHORT)
                     .show()
@@ -247,8 +213,37 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
             marker?.remove()
             reportLocation = null
         }
+        observeResponses()
+    }
 
-
+    private fun observeResponses() {
+        ResponseHandler(this).observeResponse(
+            viewModel.getAllLocationsWithScoreResponse,
+            Array<Location>::class.java,
+            {
+                it.filter { it.averageScore >= 1.0 }.forEach {
+                    val color = 90 - ((it.averageScore - 1) * 30)
+                    circles.add(
+                        mMap.addCircle(
+                            CircleOptions()
+                                .center(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
+                                .radius(70.0)
+                                .fillColor(
+                                    Color.HSVToColor(
+                                        80,
+                                        floatArrayOf(color.toFloat(), 1.0f, 1.0f)
+                                    )
+                                )
+                                .strokeColor(Color.TRANSPARENT)
+                                .clickable(false)
+                        )
+                    )
+                }
+            },
+            {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        )
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -303,9 +298,9 @@ class ReportLocationMap : AppCompatActivity(), OnMapReadyCallback, OnCircleClick
     }
 
     override fun onCircleClick(circle: Circle) {
-        val intent = Intent(this, ViewReports::class.java)
-        intent.putExtra("longitude", circle.center.longitude.toString())
-        intent.putExtra("latitude", circle.center.latitude.toString())
-        startActivity(intent)
+        Navigator(this).to(ViewReports::class.java)
+            .andPutExtraString("longitude", circle.center.longitude.toString())
+            .andPutExtraString("latitude", circle.center.latitude.toString())
+            .andKeepStack()
     }
 }

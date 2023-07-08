@@ -1,6 +1,6 @@
 package com.example.safemvvm.views
+
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
@@ -11,13 +11,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.safemvvm.MainActivity
 import com.example.safemvvm.R
 import com.example.safemvvm.models.Location
 import com.example.safemvvm.models.Trip
 import com.example.safemvvm.models.TripResponse
 import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.utils.LocalDatabaseManager
+import com.example.safemvvm.utils.Navigator
+import com.example.safemvvm.utils.ResponseHandler
 import com.example.safemvvm.viewmodels.CreateTripViewModel
 import com.example.safemvvm.viewmodels.CreateTripViewModelFactory
 import com.google.android.gms.common.api.Status
@@ -39,8 +42,6 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,6 +61,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private val AUTOCOMPLETE_REQUEST_CODE = 2
     private val DEFAULT_ZOOM = 15f
+
     // Define the mode, departure_time, and traffic_model parameters
     private var mode = "driving"
     private val departureTime = System.currentTimeMillis() / 1000
@@ -71,6 +73,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         clearPolylines()
         clearMarkers()
     }
+
     private fun clearPolylines() {
         for (polyline in polylines) {
             polyline.remove()
@@ -84,6 +87,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         markers.clear()
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_trip)
@@ -101,19 +105,27 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             .build(this)
         startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE)
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
+        val mapFragment =
+            supportFragmentManager.findFragmentById(R.id.mapFragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        autocompleteFragment = supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
-        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG))
+        autocompleteFragment =
+            supportFragmentManager.findFragmentById(R.id.autocomplete_fragment) as AutocompleteSupportFragment
+        autocompleteFragment.setPlaceFields(
+            listOf(
+                Place.Field.ID,
+                Place.Field.NAME,
+                Place.Field.LAT_LNG
+            )
+        )
         // Set up a PlaceSelectionListener to handle the response.
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 // Get the LatLng of the selected place
                 destination = place.latLng
 
-                if(destination != null && source != null) {
+                if (destination != null && source != null) {
                     clear()
                     calculateDistance()
                     mMap.addMarker(MarkerOptions().position(source!!))?.let { markers.add(it) }
@@ -133,11 +145,13 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onError(status: Status) {
                 // Handle the error
                 Log.i(TAG, "An error occurred: $status")
-                Toast.makeText(this@CreateTripActivity, "Error: ${status.statusMessage}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@CreateTripActivity,
+                    "Error: ${status.statusMessage}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
-
-
 
         //works ok
         val currentLocation = findViewById<ImageView>(R.id.my_location_button)
@@ -154,7 +168,8 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Request the missing permissions
                 ActivityCompat.requestPermissions(
                     this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+                )
                 return@setOnClickListener
             }
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -187,7 +202,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             driving.setTextColor(Color.parseColor("#5D4037"))
             walking.setBackgroundColor(Color.parseColor("#076107"))
             walking.setTextColor(Color.WHITE)
-            if(destination != null && source != null) {
+            if (destination != null && source != null) {
                 clear()
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
@@ -203,7 +218,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
             walking.setTextColor(Color.parseColor("#5D4037"))
             driving.setBackgroundColor(Color.parseColor("#076107"))
             driving.setTextColor(Color.WHITE)
-            if(destination != null && source != null) {
+            if (destination != null && source != null) {
                 clear()
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
@@ -215,97 +230,59 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val repository = Repository()
         val viewModelFactory = CreateTripViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,viewModelFactory)[CreateTripViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[CreateTripViewModel::class.java]
 
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", null)
         val userId = localDB.getInt("userId", -1)
 
-        viewModel.getAllLocationsWithScoreResponse.observe(this) { response ->
-            if (response.isSuccessful && response.body() != null) {
-                if (response.body()!!.data != null) {
-                    val data: List<Location> = Gson().fromJson(
-                        response.body()?.data.toString(),
-                        object : TypeToken<List<Location>>() {}.type
-                    )
-                    data.filter { it.averageScore >= 1.0 }.forEach {
-                        val color = 90 - ((it.averageScore - 1) * 30)
-                        mMap.addCircle(
-                            CircleOptions()
-                                .center(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
-                                .radius(70.0)
-                                .fillColor(Color.HSVToColor(80, floatArrayOf(color.toFloat(), 1.0f, 1.0f)))
-                                .strokeColor(Color.TRANSPARENT)
-                                //.clickable(true)
-                        )
-
-                    }
-                }
-            }
-        }
-
-        viewModel.addTripResponse.observe(this) { response ->
-            if (response.isSuccessful && response.body() != null) {
-                if(response.body()!!.data != null){
-                    // TODO: Handle successful response
-                    val data = Gson().fromJson(response.body()?.data.toString(), TripResponse::class.java)
-                    localDB.edit().apply {
-                        putInt("tripId",data.id)
-                        apply()
-                    }
-                    Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_LONG).show()
-                    //pass time in seconds to WhileInTripActivity
-                    val remainingTime = (data.remainingTime).toInt()
-                    Log.d("CreateTripActivityTime", "time in seconds:$remainingTime")
-                    val intent = Intent(this, WhileInTrip::class.java)
-                    intent.putExtra("time", remainingTime)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    Log.d("CreateTripActivity", "onCreate: ${response.body()}")
-                }else if(response.body().toString().contains("There is an ingoing trip")){
-                    Toast.makeText(this,"There is an ingoing trip", Toast.LENGTH_LONG).show()
-                    Log.d("CreateTripActivity", "onCreate: ${response.errorBody()}")
-                    val intent = Intent(this, WhileInTrip::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                }
-
-            } else {
-                Log.d("CreateTripActivity", "onCreate: ${response.errorBody()}")
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-            }
-        }
-
         val confirm = findViewById<Button>(R.id.confirm_button)
         confirm.setOnClickListener {
-            if(destination != null && source != null) {
+            if (destination != null && source != null) {
                 clear()
                 calculateDistance()
                 mMap.addMarker(MarkerOptions().position(source!!))
                     ?.let { it1 -> markers.add(it1) }
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
                     ?.let { markers.add(it) }
-                viewModel.addTrip("Bearer $token", Trip(userId, timeInSeconds, source!!.longitude, source!!.latitude, destination!!.longitude, destination!!.latitude))
-            }
-            else{
+                viewModel.addTrip(
+                    "Bearer $token",
+                    Trip(
+                        userId,
+                        timeInSeconds,
+                        source!!.longitude,
+                        source!!.latitude,
+                        destination!!.longitude,
+                        destination!!.latitude
+                    )
+                )
+            } else {
                 Toast.makeText(this, "Please select a destination", Toast.LENGTH_SHORT).show()
             }
-
         }
+        observeResponses()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         //mMap.setOnCircleClickListener(this)
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
 
             // Request location permissions if not already granted
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
-            return
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
         }
 
         // Get the user's last known location
@@ -322,7 +299,8 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.setOnMapClickListener { latLng ->
             if (source == null) {
-                Toast.makeText(this, "Please set your current location first", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please set your current location first", Toast.LENGTH_SHORT)
+                    .show()
             } else if (destination == null) {
                 destination = latLng
                 mMap.addMarker(MarkerOptions().position(destination!!).title("Destination"))
@@ -330,8 +308,7 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 // Calculate the distance between the source and destination using the Directions API
                 calculateDistance()
-            }
-            else{
+            } else {
                 clear()
                 destination = latLng
                 mMap.addMarker(MarkerOptions().position(source!!))
@@ -356,7 +333,8 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         val apiKey = "AIzaSyBCJXuU6WB-ARQgtiDBl7KRhZsSrvwdYvk"
 
         // Build the Directions API request URL
-        val url = "$endpoint?origin=${source!!.latitude},${source!!.longitude}&destination=${destination!!.latitude},${destination!!.longitude}&mode=$mode&departure_time=$departureTime&traffic_model=$trafficModel&key=$apiKey"
+        val url =
+            "$endpoint?origin=${source!!.latitude},${source!!.longitude}&destination=${destination!!.latitude},${destination!!.longitude}&mode=$mode&departure_time=$departureTime&traffic_model=$trafficModel&key=$apiKey"
 
         // Send the Directions API request using OkHttp
         val request = Request.Builder().url(url).build()
@@ -373,14 +351,18 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
                 for (j in 0 until legs.length()) {
                     val steps = legs.getJSONObject(j).getJSONArray("steps")
                     for (k in 0 until steps.length()) {
-                        val polyline = steps.getJSONObject(k).getJSONObject("polyline").getString("points")
+                        val polyline =
+                            steps.getJSONObject(k).getJSONObject("polyline").getString("points")
                         val decodedPolyline = PolylineDecoder.decode(polyline)
 
                         // Display the distance and time values in the UI
                         runOnUiThread {
-                            val distance = legs.getJSONObject(j).getJSONObject("distance").getString("text")
-                            val time = legs.getJSONObject(j).getJSONObject("duration").getString("text")
-                            timeInSeconds = legs.getJSONObject(j).getJSONObject("duration").getInt("value")
+                            val distance =
+                                legs.getJSONObject(j).getJSONObject("distance").getString("text")
+                            val time =
+                                legs.getJSONObject(j).getJSONObject("duration").getString("text")
+                            timeInSeconds =
+                                legs.getJSONObject(j).getJSONObject("duration").getInt("value")
                             val timeTextView = findViewById<TextView>(R.id.timeTextView)
                             timeTextView.text = "Time: $time"
                             Log.d("CreateTripActivity", "calculateTime: $timeInSeconds")
@@ -399,9 +381,46 @@ class CreateTripActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-//    override fun onCircleClick(circle: Circle) {
-//        Toast.makeText(this, "${circle.center.latitude} ${circle.center.longitude}", Toast.LENGTH_LONG).show()
-//    }
+    private fun observeResponses() {
+        ResponseHandler(this).observeResponse(
+            viewModel.getAllLocationsWithScoreResponse,
+            Array<Location>::class.java,
+            {
+                it.filter { it.averageScore >= 1.0 }.forEach {
+                    val color = 90 - ((it.averageScore - 1) * 30)
+                    mMap.addCircle(
+                        CircleOptions()
+                            .center(LatLng(it.latitude.toDouble(), it.longitude.toDouble()))
+                            .radius(70.0)
+                            .fillColor(
+                                Color.HSVToColor(
+                                    80,
+                                    floatArrayOf(color.toFloat(), 1.0f, 1.0f)
+                                )
+                            )
+                            .strokeColor(Color.TRANSPARENT)
+                    )
+                }
+            },
+            {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        )
+        ResponseHandler(this).observeResponse(
+            viewModel.addTripResponse,
+            TripResponse::class.java,
+            {
+                Toast.makeText(this, "Your trip has been confirmed", Toast.LENGTH_LONG).show()
+                LocalDatabaseManager(this).tripId(it.id)
+                Navigator(this).to(WhileInTrip::class.java)
+                    .andPutExtraInt("time", it.remainingTime.toInt()).andClearStack()
+            },
+            {
+                LocalDatabaseManager(this).token("empty").id(-1)
+                Navigator(this).to(Login::class.java).andClearStack()
+            }
+        )
+    }
 }
 
 object PolylineDecoder {

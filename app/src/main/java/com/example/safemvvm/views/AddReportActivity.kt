@@ -1,18 +1,22 @@
 package com.example.safemvvm.views
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.safemvvm.R
-import com.example.safemvvm.R.*
+import com.example.safemvvm.R.array
+import com.example.safemvvm.R.id
+import com.example.safemvvm.R.layout
 import com.example.safemvvm.models.Report
 import com.example.safemvvm.repository.Repository
+import com.example.safemvvm.utils.LocalDatabaseManager
+import com.example.safemvvm.utils.Navigator
+import com.example.safemvvm.utils.ResponseHandler
 import com.example.safemvvm.viewmodels.AddReportViewModel
 import com.example.safemvvm.viewmodels.AddReportViewModelFactory
 import com.google.android.gms.maps.model.LatLng
@@ -37,14 +41,21 @@ class AddReportActivity : AppCompatActivity() {
         buttonSubmitReport.setOnClickListener {
             viewModel.addReport("Bearer $token", Report(userId, findViewById<EditText>(R.id.reportDetails).text.toString(), autocompleteTV.text.toString(), location?.longitude.toString(), location?.latitude.toString()))
         }
+        observeResponses()
+    }
 
-        viewModel.addReportResponse.observe(this) { response ->
-            if (response.isSuccessful && response.body() != null) {
+    private fun observeResponses() {
+        ResponseHandler(this).observeResponse(
+            viewModel.addReportResponse,
+            Any::class.java,
+            {
                 Toast.makeText(this, "Report Submitted", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
+                Navigator(this).to(HomeActivity::class.java).andClearStack()
+            },
+            {
+                LocalDatabaseManager(this).token("empty").id(-1)
+                Navigator(this).to(Login::class.java).andClearStack()
             }
-        }
+        )
     }
 }

@@ -50,7 +50,7 @@ class Repository {
         return  RetrofitInstanceSpring.api.addReport(token, report)
     }
 
-    suspend fun train(records: List<MultipartBody.Part>, userId: Int): Response<Unit> {
+    suspend fun train(records: List<MultipartBody.Part>, userId: Int): Response<String> {
         return RetrofitInstanceFlask.api.train(records, userId)
     }
     suspend fun setSaved(token: String,saved: Int, userId: Int): Response<MainResponse> {

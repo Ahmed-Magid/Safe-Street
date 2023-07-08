@@ -12,7 +12,7 @@ import retrofit2.Response
 
 class RegistrationViewModel(private val repository: Repository): ViewModel() {
     val registerResponse: MutableLiveData<Response<MainResponse>> = MutableLiveData()
-    val trainResponse: MutableLiveData<Response<Unit>> = MutableLiveData()
+    val trainResponse: MutableLiveData<Response<String>> = MutableLiveData()
 
     fun register(user: User){
         viewModelScope.launch {

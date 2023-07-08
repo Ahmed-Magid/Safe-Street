@@ -1,16 +1,14 @@
 package com.example.safemvvm.views.voicesample
 
 import android.Manifest
-import android.content.Intent
 import android.media.MediaRecorder
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -18,17 +16,15 @@ import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import com.example.safemvvm.R
-import com.example.safemvvm.models.LoginResponse
-import com.example.safemvvm.models.User
+import com.example.safemvvm.models.IdBody
 import com.example.safemvvm.repository.Repository
-import com.example.safemvvm.viewmodels.RegistrationViewModel
-import com.example.safemvvm.viewmodels.RegistrationViewModelFactory
+import com.example.safemvvm.utils.LocalDatabaseManager
+import com.example.safemvvm.utils.Navigator
+import com.example.safemvvm.utils.ResponseHandler
 import com.example.safemvvm.viewmodels.VoiceParagraphViewModel
 import com.example.safemvvm.viewmodels.VoiceParagraphViewModelFactory
 import com.example.safemvvm.views.HomeActivity
 import com.example.safemvvm.views.Login
-import com.google.gson.Gson
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -74,67 +70,9 @@ class VoiceParagraphs : AppCompatActivity() {
 
         val repository = Repository()
         val viewModelFactory = VoiceParagraphViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(VoiceParagraphViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(VoiceParagraphViewModel::class.java)
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
-
-        viewModel.savedResponse.observe(this) { response ->
-            if (response.isSuccessful && response.body() != null) {
-                val responseMessage = response.body()?.message
-
-                if (responseMessage == "Executed Successfully") {
-                    Toast.makeText(this, "Audio Saved", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
-                    Log.d(
-                        "Arwa success reach but error in fields",
-                        responseMessage.toString()
-                    )
-                    val intent = Intent(this, Login::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                }
-            } else {
-                Log.d("Arwa not success", response.errorBody().toString())
-                Log.d("Arwa not success", "${response.code()}")
-                if(response.code()==403 || response.code()==410){
-                    Log.d("Profile006", "code is 403 or 410")
-                    Toast.makeText(this, "session expired", Toast.LENGTH_LONG).show()
-                    val intent = Intent(this, Login::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                }
-            }
-        }
-
-
-        viewModel.trainResponse.observe(this) { response ->
-            if (response.isSuccessful) {
-                Toast.makeText(
-                    this,
-                    "Voice Added Successfully",
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("Arwa success reg", "hello")
-                recordFiles.forEach { it.delete() }
-                localDB.edit().apply {
-                    putBoolean("saved",true)
-                    apply()
-                }
-                localDB.getString("token","")
-                    ?.let { viewModel.setSaved("Bearer $it",1,localDB.getInt("userId",-1)) }
-            } else {
-                Toast.makeText(
-                    this,
-                    "something went wrong please try again later",
-                    Toast.LENGTH_LONG
-                ).show()
-                Log.d("Arwa not success", response.errorBody().toString())
-                Log.d("Arwa not success", "${response.code()}")
-            }
-        }
 
         nextButton.setOnClickListener {
             nextButton.isEnabled = false
@@ -145,20 +83,11 @@ class VoiceParagraphs : AppCompatActivity() {
                 viewPager.currentItem = currentItem + 1
             } else if (currentItem == fragmentList.size - 1) {
                 val records: List<MultipartBody.Part> = recordFiles.map { file ->
-                    val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                    val requestFile =
+                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
                     MultipartBody.Part.createFormData("records", file.name, requestFile)
                 }
-                viewModel.train(records,localDB.getInt("userId",-1))
-
-                // Flask End Point
-                // To be Moved to flask response and setSaved in spring boot
-
-                // **************
-
-                /*viewModel.register(user)
-                val intent = Intent(this, Login::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(intent)*/
+                viewModel.train(records, localDB.getInt("userId", -1))
             }
         }
 
@@ -168,20 +97,26 @@ class VoiceParagraphs : AppCompatActivity() {
                 position: Int,
                 positionOffset: Float,
                 positionOffsetPixels: Int
-            ) {
-                // Not needed for this task
-            }
+            ) {}
 
             override fun onPageSelected(position: Int) {
                 progressText.text = "${position + 1}/${fragmentList.size}"
             }
 
-            override fun onPageScrollStateChanged(state: Int) {
-                // Not needed for this task
-            }
+            override fun onPageScrollStateChanged(state: Int) {}
         })
+        observeResponses()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+        val token = localDB.getString("token", "empty")
+        val userId = localDB.getInt("userId", -1)
+        viewModel.logout("Bearer $token", IdBody(userId))
+        recordFiles.forEach { it.delete() }
+        Navigator(this).to(Login::class.java).andClearStack()
+    }
 
     private fun startRecording() {
         mediaRecorder = MediaRecorder()
@@ -199,6 +134,44 @@ class VoiceParagraphs : AppCompatActivity() {
         mediaRecorder.stop()
         mediaRecorder.reset()
         mediaRecorder.release()
+    }
+
+    private fun observeResponses() {
+        ResponseHandler(this).observeResponse(
+            viewModel.savedResponse,
+            Boolean::class.java,
+            {
+                Toast.makeText(this, "Audio Saved", Toast.LENGTH_SHORT).show()
+                Navigator(this).to(HomeActivity::class.java).andClearStack()
+            },
+            {
+                LocalDatabaseManager(this).token("empty").id(-1)
+                Navigator(this).to(Login::class.java).andClearStack()
+            }
+        )
+
+        ResponseHandler(this).observeFlaskResponse(
+            viewModel.trainResponse,
+        ) {
+            recordFiles.forEach { it.delete() }
+            LocalDatabaseManager(this).saved(true)
+            val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
+            val token = localDB.getString("token", "empty")
+            viewModel.setSaved("Bearer $token", 1, localDB.getInt("userId", -1))
+        }
+
+        ResponseHandler(this).observeResponse(
+            viewModel.logoutResponse,
+            Boolean::class.java,
+            {
+                LocalDatabaseManager(this).token("empty").id(-1)
+                Navigator(this).to(Login::class.java).andClearStack()
+            },
+            {
+                LocalDatabaseManager(this).token("empty").id(-1)
+                Navigator(this).to(Login::class.java).andClearStack()
+            }
+        )
     }
 
 

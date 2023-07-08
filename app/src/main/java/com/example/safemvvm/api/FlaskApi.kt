@@ -13,7 +13,7 @@ interface FlaskApi {
     suspend fun train(
         @Part records: List<MultipartBody.Part>,
         @Query("userId") userId: Int
-    ): Response<Unit>
+    ): Response<String>
 
     @POST("/predict")
     @Multipart
