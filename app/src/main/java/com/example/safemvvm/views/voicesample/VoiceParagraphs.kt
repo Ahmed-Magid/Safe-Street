@@ -104,6 +104,7 @@ class VoiceParagraphs : AppCompatActivity() {
                     MultipartBody.Part.createFormData("records", file.name, requestFile)
                 }
                 viewModel.train(records, localDB.getInt("userId", -1))
+                recordButton.isEnabled = false
             }
         }
 
@@ -126,6 +127,10 @@ class VoiceParagraphs : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        if (isRecording) {
+            audioRecord.stop()
+            audioRecord.release()
+        }
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
         val token = localDB.getString("token", "empty")
         val userId = localDB.getInt("userId", -1)
