@@ -54,9 +54,9 @@ class SpeechToTextService : Service() {
     private val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
     private val AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT
     private val BUFFER_SIZE = 2 * AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
-    private val RECORDING_DURATION_MS = 2000L
-    private val SAFE_WORDS = mutableListOf("الحقوني", "الحقونى", "help", "ساعدوني", "ساعدونى")
-    private val RECORDING_INTERVAL_MS = 1000L // Interval between recordings
+    private val RECORDING_DURATION_MS = 5000L
+    private val SAFE_WORDS = mutableListOf("الحقوني", "الحقونى", "هيلب", "ساعدوني", "ساعدونى")
+    private val RECORDING_INTERVAL_MS = 10L // Interval between recordings
     private lateinit var timer : Timer
     private var longitude = 0.0
     private var latitude = 0.0
@@ -170,7 +170,7 @@ class SpeechToTextService : Service() {
                             intent.putExtra("emergencyType", EmergenciesEnum.IN_DANGER.toString())
                             startActivity(intent)
                         }
-                        file.delete()
+                        //file.delete()
                         return@forEach
                     }
                 }

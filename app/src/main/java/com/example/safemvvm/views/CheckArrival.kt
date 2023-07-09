@@ -35,7 +35,6 @@ class CheckArrival : AppCompatActivity() {
     private lateinit var countdownTimer: CountDownTimer
     private var timeLeftInMillis: Long = 10000 // 10 seconds countdown timer
     private val countDownInterval: Long = 1000
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var viewModel: CheckArrivalViewModel
     private val MINUTES_TO_ADD = 5
     val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -94,9 +93,6 @@ class CheckArrival : AppCompatActivity() {
         // Start the countdown timer
         countdownTimer.start()
 
-        // Get the FusedLocationProviderClient instance
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
 
         val repository = Repository()
         val viewModelFactory = CheckArrivalViewModelFactory(repository)
@@ -105,11 +101,13 @@ class CheckArrival : AppCompatActivity() {
         yesButton.setOnClickListener {
             countdownTimer.cancel()
             viewModel.endTrip("Bearer $token" , EndTripBody(tripId, customerId))
+            ringtone.stop()
         }
 
         noButton.setOnClickListener {
             countdownTimer.cancel()
             viewModel.extendTrip("Bearer $token", ExtendTripBody(tripId, customerId, MINUTES_TO_ADD))
+            ringtone.stop()
         }
         observeResponses()
     }

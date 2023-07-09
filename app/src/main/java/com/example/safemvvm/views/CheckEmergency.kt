@@ -26,7 +26,7 @@ class CheckEmergency : AppCompatActivity() {
     private lateinit var viewModel: EmergenciesViewModel
     private lateinit var alertTimeTextView: TextView
     private lateinit var countdownTimer: CountDownTimer
-    private var timeLeftInMillis: Long = 5000 // 5 seconds countdown timer
+    private var timeLeftInMillis: Long = 10000 // 10 seconds countdown timer
     private val countDownInterval: Long = 1000
     private lateinit var emergencyType : String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,7 @@ class CheckEmergency : AppCompatActivity() {
         val repository = Repository()
         val viewModelFactory = EmergenciesViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(EmergenciesViewModel::class.java)
-        // Play a notification sound for 5 seconds when the activity is created
+        // Play a notification sound for 10 seconds when the activity is created
         val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
         ringtone.play()
@@ -94,6 +94,7 @@ class CheckEmergency : AppCompatActivity() {
                     AddressProvider(this).getAddress(
                         it, "ar")))
             }
+            ringtone.stop()
 
         }
 
@@ -101,6 +102,7 @@ class CheckEmergency : AppCompatActivity() {
         no.setOnClickListener {
             countdownTimer.cancel()
             Navigator(this).to(HomeActivity::class.java).andClearStack()
+            ringtone.stop()
         }
         observeResponses()
     }
