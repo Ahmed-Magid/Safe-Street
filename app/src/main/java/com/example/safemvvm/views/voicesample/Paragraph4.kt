@@ -10,7 +10,6 @@ import com.example.safemvvm.R
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 class Paragraph4 : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 

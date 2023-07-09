@@ -101,15 +101,15 @@ class CheckArrival : AppCompatActivity() {
         viewModel = ViewModelProvider(this,viewModelFactory).get(CheckArrivalViewModel::class.java)
 
         yesButton.setOnClickListener {
+            ringtone.stop()
             countdownTimer.cancel()
             viewModel.endTrip("Bearer $token" , EndTripBody(tripId, customerId))
-            ringtone.stop()
         }
 
         noButton.setOnClickListener {
+            ringtone.stop()
             countdownTimer.cancel()
             viewModel.extendTrip("Bearer $token", ExtendTripBody(tripId, customerId, MINUTES_TO_ADD))
-            ringtone.stop()
         }
         observeResponses()
     }
@@ -125,9 +125,9 @@ class CheckArrival : AppCompatActivity() {
             viewModel.fireEmergencyResponse,
             Any::class.java,
             {
+                ringtone.stop()
                 Toast.makeText(this, "Emergency Fired Successfully.", Toast.LENGTH_SHORT).show()
                 Navigator(this).to(HomeActivity::class.java).andClearStack()
-                ringtone.stop()
             },
             {
                 ringtone.stop()
@@ -139,9 +139,9 @@ class CheckArrival : AppCompatActivity() {
             viewModel.endTripResponse,
             Boolean::class.java,
             {
+                ringtone.stop()
                 LocalDatabaseManager(this).tripId(-1)
                 Navigator(this).to(HomeActivity::class.java).andClearStack()
-                ringtone.stop()
             },
             {
                 ringtone.stop()
@@ -153,8 +153,8 @@ class CheckArrival : AppCompatActivity() {
             viewModel.extendTripResponse,
             TripResponse::class.java,
             {
-                Navigator(this).to(WhileInTrip::class.java).andPutExtraInt("time", it.remainingTime.toInt()).andClearStack()
                 ringtone.stop()
+                Navigator(this).to(WhileInTrip::class.java).andPutExtraInt("time", it.remainingTime.toInt()).andClearStack()
             },
             {
                 ringtone.stop()

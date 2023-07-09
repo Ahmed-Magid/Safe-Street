@@ -89,6 +89,7 @@ class CheckEmergency : AppCompatActivity() {
         val yes = findViewById<Button>(R.id.yes)
 
         yes.setOnClickListener {
+            ringtone.stop()
             emergencyType = intent.getStringExtra("emergencyType").toString()
             countdownTimer.cancel()
             LocationProvider(this).getCurrentLocation().thenApply {
@@ -96,15 +97,15 @@ class CheckEmergency : AppCompatActivity() {
                     AddressProvider(this).getAddress(
                         it, "ar")))
             }
-            ringtone.stop()
+
 
         }
 
         val no = findViewById<Button>(R.id.no)
         no.setOnClickListener {
+            ringtone.stop()
             countdownTimer.cancel()
             Navigator(this).to(HomeActivity::class.java).andClearStack()
-            ringtone.stop()
         }
         observeResponses()
     }

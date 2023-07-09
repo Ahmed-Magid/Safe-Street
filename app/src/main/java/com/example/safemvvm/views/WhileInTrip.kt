@@ -27,8 +27,6 @@ import com.example.safemvvm.viewmodels.WhileInTripViewModelFactory
 import com.google.android.material.button.MaterialButton
 
 class WhileInTrip : AppCompatActivity() {
-    // TODO : tell user when they close the app and open it that they're currently in a trip
-    // TODO: timer text view isn't working properly
     private lateinit var viewModel: WhileInTripViewModel
     private lateinit var countdownTimer: CountDownTimer
     private lateinit var timerTextView: TextView
