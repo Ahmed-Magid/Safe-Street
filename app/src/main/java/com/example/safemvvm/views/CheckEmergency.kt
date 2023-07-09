@@ -37,7 +37,7 @@ class CheckEmergency : AppCompatActivity() {
         val viewModelFactory = EmergenciesViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(EmergenciesViewModel::class.java)
         // Play a notification sound for 10 seconds when the activity is created
-        val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         val ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
         ringtone.play()
 

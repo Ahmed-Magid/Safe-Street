@@ -89,12 +89,6 @@ class WhileInTrip : AppCompatActivity() {
         viewModel = ViewModelProvider(this,viewModelFactory).get(WhileInTripViewModel::class.java)
         startService(voiceService)
 
-        viewModel.predictResponse.observe(this) {response ->
-            if (response.isSuccessful && response.body() != null) {
-                println("Prediction: ${response.body()}")
-            }
-        }
-
         timerTextView = findViewById(R.id.timer)
         cancelButton = findViewById(R.id.btn_cancel)
         extendTimerButton = findViewById(R.id.ExtendTimer)
@@ -220,5 +214,11 @@ class WhileInTrip : AppCompatActivity() {
                 Navigator(this).to(Login::class.java).andClearStack()
             }
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val voiceService = Intent(this, SpeechToTextService::class.java)
+        stopService(voiceService)
     }
 }

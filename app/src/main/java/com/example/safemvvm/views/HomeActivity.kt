@@ -104,7 +104,6 @@ class HomeActivity : AppCompatActivity() {
         }
 
         createTripOption.setOnClickListener {
-            LocalDatabaseManager(this).tripId(it.id)
             Navigator(this).to(CreateTripActivity::class.java).andKeepStack()
             toggleMenu()
         }

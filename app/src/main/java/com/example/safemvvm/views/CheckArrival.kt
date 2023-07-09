@@ -149,7 +149,6 @@ class CheckArrival : AppCompatActivity() {
             viewModel.extendTripResponse,
             TripResponse::class.java,
             {
-                LocalDatabaseManager(this).tripId(-1)
                 Navigator(this).to(WhileInTrip::class.java).andPutExtraInt("time", it.remainingTime.toInt()).andClearStack()
                 ringtone.stop()
             },
