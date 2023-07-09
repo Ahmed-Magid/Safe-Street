@@ -204,7 +204,7 @@ class HomeActivity : AppCompatActivity() {
             TripResponse::class.java,
             {
                 if (it.id != -1) {
-                    Navigator(this).to(WhileInTrip::class.java).andPutExtraInt("time", it.remainingTime.toInt()).andClearStack()
+                    Navigator(this).to(WhileInTrip::class.java).andPutExtraInt("time", it.remainingTime.toInt()).andPutExtraInt("tripId", it.id).andClearStack()
                 }
             },
             {

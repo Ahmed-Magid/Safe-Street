@@ -130,7 +130,7 @@ class VoiceParagraphs : AppCompatActivity() {
         val token = localDB.getString("token", "empty")
         val userId = localDB.getInt("userId", -1)
         viewModel.logout("Bearer $token", IdBody(userId))
-        //recordFiles.forEach { it.delete() }
+        recordFiles.forEach { it.delete() }
         Navigator(this).to(Login::class.java).andClearStack()
     }
 
@@ -203,7 +203,7 @@ class VoiceParagraphs : AppCompatActivity() {
         ResponseHandler(this).observeFlaskResponse(
             viewModel.trainResponse,
         ) {
-            //recordFiles.forEach { it.delete() }
+            recordFiles.forEach { it.delete() }
             LocalDatabaseManager(this).saved(true)
             val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
             val token = localDB.getString("token", "empty")

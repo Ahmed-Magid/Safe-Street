@@ -2,6 +2,7 @@ package com.example.safemvvm.views
 
 import android.content.Intent
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.Button
@@ -37,8 +38,9 @@ class CheckEmergency : AppCompatActivity() {
         val viewModelFactory = EmergenciesViewModelFactory(repository)
         viewModel = ViewModelProvider(this,viewModelFactory).get(EmergenciesViewModel::class.java)
         // Play a notification sound for 10 seconds when the activity is created
-        val notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        val ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
+        val defaultNotificationSound: Uri = Uri.parse("android.resource://com.example.safemvvm/raw/alarm")
+
+        val ringtone = RingtoneManager.getRingtone(applicationContext, defaultNotificationSound)
         ringtone.play()
 
         val voiceServices = Intent(this, SpeechToTextService::class.java)

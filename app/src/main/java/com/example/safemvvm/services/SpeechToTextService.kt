@@ -58,15 +58,11 @@ class SpeechToTextService : Service() {
     private val SAFE_WORDS = mutableListOf("الحقوني", "الحقونى", "هيلب", "ساعدوني", "ساعدونى")
     private val RECORDING_INTERVAL_MS = 10L // Interval between recordings
     private lateinit var timer : Timer
-    private var longitude = 0.0
-    private var latitude = 0.0
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var audioRecord: AudioRecord
     private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         startPeriodicRecording()
         return START_STICKY
     }
@@ -170,7 +166,7 @@ class SpeechToTextService : Service() {
                             intent.putExtra("emergencyType", EmergenciesEnum.IN_DANGER.toString())
                             startActivity(intent)
                         }
-                        //file.delete()
+                        file.delete()
                         return@forEach
                     }
                 }
@@ -203,28 +199,6 @@ class SpeechToTextService : Service() {
 
     override fun onBind(p0: Intent?): IBinder? {
         return null
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getCurrentLocation() {
-
-        // Get the user's current location using the FusedLocationProviderClient
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    // Format the current time
-
-                    // Create a new EmergencyFired object with the location, time, and emergency type
-
-                    // Display a toast message with the location and time information
-                    latitude = location.latitude
-                    longitude = location.longitude
-
-                    // Log the location and time information
-                } else {
-                    Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show()
-                }
-            }
     }
 
     override fun onDestroy() {

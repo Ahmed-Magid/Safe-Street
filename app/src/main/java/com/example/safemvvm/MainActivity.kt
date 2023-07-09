@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 progressBar.visibility = View.VISIBLE
                 checkToken()
             } else
-                Toast.makeText(this, "Please grand all permissions to start using Safe St.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please grant all permissions to start using Safe St.", Toast.LENGTH_LONG).show()
         }
         if (isGranted())
             checkToken()

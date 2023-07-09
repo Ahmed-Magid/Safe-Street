@@ -2,6 +2,7 @@ package com.example.safemvvm.views
 
 import android.media.Ringtone
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.widget.TextView
@@ -44,7 +45,8 @@ class CheckArrival : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_check_arrival)
 
-        ringtone = RingtoneManager.getRingtone(applicationContext, notificationSound)
+        val defaultNotificationSound: Uri = Uri.parse("android.resource://com.example.safemvvm/raw/alarm")
+        ringtone = RingtoneManager.getRingtone(applicationContext, defaultNotificationSound)
         ringtone.play()
 
         val localDB = getSharedPreferences("localDB", MODE_PRIVATE)
@@ -128,6 +130,7 @@ class CheckArrival : AppCompatActivity() {
                 ringtone.stop()
             },
             {
+                ringtone.stop()
                 LocalDatabaseManager(this).token("empty").id(-1)
                 Navigator(this).to(Login::class.java).andClearStack()
             }
@@ -141,6 +144,7 @@ class CheckArrival : AppCompatActivity() {
                 ringtone.stop()
             },
             {
+                ringtone.stop()
                 LocalDatabaseManager(this).token("empty").id(-1)
                 Navigator(this).to(Login::class.java).andClearStack()
             }
@@ -153,6 +157,7 @@ class CheckArrival : AppCompatActivity() {
                 ringtone.stop()
             },
             {
+                ringtone.stop()
                 LocalDatabaseManager(this).token("empty").id(-1)
                 Navigator(this).to(Login::class.java).andClearStack()
             }
